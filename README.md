@@ -15,6 +15,13 @@ Status: first draft, not yet run on hardware.
   No dependencies: build on the Pi with
   `g++ -std=c++17 -O2 -Wall -o rover pi/rover.cpp` and put the binary on the PATH.
   Snapshots use the stock `rpicam-still`.
+- `pi/flash-alamode.sh` flashes the aLaMode from the Pi: it pulses the reset on
+  GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
+  `avrdude` and `pinctrl`.
+
+`make deploy` builds and installs `rover` on the Pi. `make upload` compiles the
+firmware here (needs `arduino-cli`; run `make firmware-deps` once) and flashes it
+through the Pi. Both use `PI_HOST`, default `rover.local`.
 
 ## Pins (aLaMode)
 

@@ -1,15 +1,15 @@
 # rover-cam build. `make help` lists targets.
 
 # Pi side
-PI_HOST   ?= rover
+PI_HOST   ?= rover.local
 PI_PREFIX ?= /usr/local
 CXX       ?= g++
 CXXFLAGS  ?= -std=c++17 -O2 -Wall
 
-# Firmware side (aLaMode = Arduino Uno)
+# Firmware side (aLaMode = Arduino Uno, flashed from the Pi over its UART)
 ARDUINO_CLI ?= arduino-cli
+PI_SERIAL   ?= /dev/serial0
 FQBN        ?= arduino:avr:uno
-PORT        ?=
 FW_BUILD    := build/firmware
 FW_HEX      := $(FW_BUILD)/rover.ino.hex
 
@@ -23,7 +23,7 @@ help:
 	@echo "make deploy         copy pi/rover.cpp to PI_HOST=$(PI_HOST), build there, install to $(PI_PREFIX)/bin"
 	@echo "make firmware-deps  install the AVR core, AFMotor and Servo with arduino-cli"
 	@echo "make firmware       compile firmware/rover for $(FQBN) into $(FW_BUILD)"
-	@echo "make upload PORT=…  flash the compiled firmware over PORT"
+	@echo "make upload         copy the firmware to PI_HOST and flash the aLaMode from there"
 	@echo "make clean          remove build output"
 
 pi: pi/rover
@@ -54,10 +54,9 @@ firmware-deps:
 	$(ARDUINO_CLI) core install arduino:avr
 	$(ARDUINO_CLI) lib install "Adafruit Motor Shield library" Servo
 
-upload:
-	@test -n "$(PORT)" || { echo "set PORT, e.g. make upload PORT=/dev/cu.usbserial-XXXX"; exit 2; }
-	$(MAKE) firmware
-	$(ARDUINO_CLI) upload --fqbn $(FQBN) -p $(PORT) --input-dir $(FW_BUILD) firmware/rover
+upload: $(FW_HEX)
+	scp $(FW_HEX) $(PI_HOST):/tmp/rover.ino.hex
+	ssh $(PI_HOST) SERIAL=$(PI_SERIAL) sh -s /tmp/rover.ino.hex < pi/flash-alamode.sh
 
 clean:
 	rm -rf build pi/rover
