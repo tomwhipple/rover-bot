@@ -3,7 +3,7 @@
 A floor rover with a pan camera, so Claude can watch the biped. Separate from the
 `robot` repo on purpose.
 
-Design: https://claude.ai/artifact/6CZh441CZGYS8N1XEr7nu9
+Design: [docs/design.md](docs/design.md)
 
 Status: first draft, not yet run on hardware.
 
