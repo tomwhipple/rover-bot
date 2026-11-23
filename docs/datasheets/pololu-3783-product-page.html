@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8'>
+<meta content='width=device-width, initial-scale=1' name='viewport'>
+<meta content='noindex' name='robots'>
+<link rel="icon" type="image/png" href="https://a.pololu-files.com/assets/favicon_32x32-f40058cd34e1fec5906522ec0c9eb39b303192067c0e353a30796e859ce41106.png" sizes="32x32" />
+<link rel="icon" type="image/png" href="https://a.pololu-files.com/assets/favicon_192x192-52532413e1c353491bfa0a2dd977aacf020e8ca4104064094121739bad21c4bf.png" sizes="192x192" />
+<link rel="icon" type="image/png" href="https://a.pololu-files.com/assets/favicon_96x96-fcf7f6d6568f76d479e5ae1822ded335e0bbd75ab7efd0de7e010bb41fd83e41.png" sizes="96x96" />
+<link rel="icon" type="image/png" href="https://a.pololu-files.com/assets/favicon_16x16-13632635dc6dd0e11ba9a38071e8218d26d62e71f8ebafacd9929c3136117372.png" sizes="16x16" />
+<link rel="apple-touch-icon" type="image/png" href="https://a.pololu-files.com/assets/favicon_96x96-fcf7f6d6568f76d479e5ae1822ded335e0bbd75ab7efd0de7e010bb41fd83e41.png" />
+<link crossorigin='anonymous' href='https://a.pololu-files.com/mirror/maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css' integrity='sha256-AIodEDkC8V/bHBkfyxzolUMw57jeQ9CauwhVW6YJ9CA=' media='all' rel='stylesheet'>
+<link crossorigin='anonymous' href='https://a.pololu-files.com/mirror/cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css' integrity='sha256-2RdmDD1veq0y68SwASxtC7hKE+IBoBLjNLzKS59Ghsk=' media='all' rel='stylesheet'>
+<link crossorigin='anonymous' href='https://a.pololu-files.com/mirror/cdn.jsdelivr.net/jquery.slick/1.6.0/slick-theme.css' integrity='sha256-etrwgFLGpqD4oNAFW08ZH9Bzif5ByXK2lXNHKy7LQGo=' media='all' rel='stylesheet'>
+<link rel="stylesheet" crossorigin="anonymous" href="https://a.pololu-files.com/assets/application-6c47e7bbf8b1d7a9273536f8219c3ef577a02e79df7e2ff8ba23d96132a74463.css" media="all" integrity="sha256-BhRmp00yDGd0h0qY3chly5KMMh6pKFhr4dCg9F/+SnM=" />
+<script crossorigin='anonymous' integrity='sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=' src='https://a.pololu-files.com/mirror/code.jquery.com/jquery-1.12.4.min.js'></script>
+<script crossorigin='anonymous' integrity='sha256-4Cr335oZDYg4Di3OwgUOyqSTri0jUm2+7Gf2kH3zp1I=' src='https://a.pololu-files.com/mirror/cdn.jsdelivr.net/jquery.slick/1.6.0/slick.min.js'></script>
+<script crossorigin='anonymous' integrity='sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=' src='https://a.pololu-files.com/mirror/code.jquery.com/ui/1.12.1/jquery-ui.min.js'></script>
+<link crossorigin='anonymous' href='https://a.pololu-files.com/mirror/code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css' integrity='sha256-RPilbUJ5F7X6DdeTO6VFZ5vl5rO5MJnmSk4pwhWfV8A' media='all' rel='stylesheet'>
+<script class='braintree-gateway' src='https://js.braintreegateway.com/web/3.88.4/js/client.min.js'></script>
+<script class='braintree-gateway' src='https://js.braintreegateway.com/web/3.88.4/js/hosted-fields.min.js'></script>
+<script src="https://a.pololu-files.com/assets/application-e66fa754e0b8e9eae8aee5400dcc87c5ee1d32ff5bab89453abb5e6c323cf188.js" crossorigin="anonymous" integrity="sha256-cxg73x+CuJ9fbknOm5DiNGrnSQBhfh1wqgIN0YnEqoE="></script>
+<script type="importmap" data-turbo-track="reload">{
+  "integrity":
+{"https://a.pololu-files.com/assets/application_module-765f0f526c59caa9c9857c01889e68833710c17121ab6f9093f3a0a809af7bd4.js":"sha256-s+WZHcA06TsuXtPz2xeDSGgG6j+QSXvT2ghPYhJLLow=","https://a.pololu-files.com/assets/price_notification-e46ad505e4a01eb1a311cfc2e3e1bcc1fb6b1df47904cd3266d1c604e186aeef.js":"sha256-dMqQKgrJg+aoe44ZPYCTOrmXPQmzk+4dG1qmmdt6iSA=","https://a.pololu-files.com/assets/stock_notification-f27d00b99405c410cf3c23f1f151c5701276c2577449e2123ab34938e82d92d6.js":"sha256-TXG5Dvr05BAeQMNdQcyJS5Z5IQtw4aqM0HM1/m/QxoE=","https://a.pololu-files.com/assets/email_verification_send_handler-c06bf3ee7010809c6f7e62c9ae106d071a9373dce8c9e6c324c07aeacd069db2.js":"sha256-Rjuw+y6QuyfBGxpXeTICO2/PJRg4iMfzzleu7n7XUz8=","https://a.pololu-files.com/assets/payment_handler-49a20512068cb88565bc275464d6002af52baec06430fbdc9480f530a2c5b9a7.js":"sha256-PmVdEt5BorGjsZxOo7BfGw8aes3BCxnDQvw55paraHo="},
+  "imports": {
+    "application": "https://a.pololu-files.com/assets/application_module-765f0f526c59caa9c9857c01889e68833710c17121ab6f9093f3a0a809af7bd4.js",
+    "price_notification": "https://a.pololu-files.com/assets/price_notification-e46ad505e4a01eb1a311cfc2e3e1bcc1fb6b1df47904cd3266d1c604e186aeef.js",
+    "stock_notification": "https://a.pololu-files.com/assets/stock_notification-f27d00b99405c410cf3c23f1f151c5701276c2577449e2123ab34938e82d92d6.js",
+    "email_verification_send_handler": "https://a.pololu-files.com/assets/email_verification_send_handler-c06bf3ee7010809c6f7e62c9ae106d071a9373dce8c9e6c324c07aeacd069db2.js",
+    "payment_handler": "https://a.pololu-files.com/assets/payment_handler-49a20512068cb88565bc275464d6002af52baec06430fbdc9480f530a2c5b9a7.js",
+    "braintree": "https://js.braintreegateway.com/web/dropin/1.46.1/js/dropin.js"
+  }
+}</script>
+
+<script type="module">import "application"</script>
+<script>
+  if(document.domain.indexOf("pololu-files.com") == -1) {
+    $.ajax({
+    url: "https://www.googletagmanager.com/gtag/js?id=G-G4ENPJ5RV1",
+    dataType: "script"
+    });
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', "G-G4ENPJ5RV1");
+  }
+</script>
+
+<link rel="stylesheet" href="https://a.pololu-files.com/assets/print-ac5d562ac93a31ac3e5c942e261bf17032bf5da61b940dea46300fe83f1e72dc.css" media="print" />
+
+<title>Pololu - 6V, 2.7A Step-Down Voltage Regulator D36V28F6</title>
+
+<meta name="description" content="
+	
+		Output voltage
+		Typical max output current1
+		Input voltage range2
+	
+	
+		6 V
+		 2.7 A
+		 6.3 V – 50 V
+	
+
+Note 1: At 36 V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation. See the output current graphs on the product pages for more information.
+Note 2: Minimum input voltage is subject to dropout voltage considerations; see the dropout voltage section of product pages for more information." />
+<meta name="keywords" content="Pololu,robotics,robot electronics,robot kits,robot parts,ir beacon,servo controller,motor controller,robot sensors,robot chassis,robot gearboxes,robot tires, ball casters, tamiya parts,elenco kits" />
+<meta property="og:url" content="https://www.pololu.com/product-info-merged/3783" />
+<meta property="og:title" content="Pololu - 6V, 2.7A Step-Down Voltage Regulator D36V28F6" />
+<meta property="og:description" content="
+	
+		Output voltage
+		Typical max output current1
+		Input voltage range2
+	
+	
+		6 V
+		 2.7 A
+		 6.3 V – 50 V
+	
+
+Note 1: At 36 V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation. See the output current graphs on the product pages for more information.
+Note 2: Minimum input voltage is subject to dropout voltage considerations; see the dropout voltage section of product pages for more information." />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="627" />
+<meta property="og:image" content="https://a.pololu-files.com/picture/0J10035.1200x627.jpg?66f160b2b6f64dffecc28d6968236097" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:site" content="@Pololu" />
+<meta name="twitter:title" content="Pololu - 6V, 2.7A Step-Down Voltage Regulator D36V28F6" />
+<meta name="twitter:description" content="
+	
+		Output voltage
+		Typical max output current1
+		Input voltage range2
+	
+	
+		6 V
+		 2.7 A
+		 6.3 V – 50 V
+	
+
+Note 1: At 36 V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation. See the output current graphs on the product pages for more information.
+Note 2: Minimum input voltage is subject to dropout voltage considerations; see the dropout voltage section of product pages for more information." />
+<meta name="twitter:image" content="https://a.pololu-files.com/picture/0J10035.1200x627.jpg?66f160b2b6f64dffecc28d6968236097" />
+<script class='structured_data' type='application/ld+json'>
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Voltage Regulators and Power Supplies","item":"https://www.pololu.com/category/84/voltage-regulators-and-power-supplies"},{"@type":"ListItem","position":2,"name":"Step-Down (Buck) Voltage Regulators","item":"https://www.pololu.com/category/131/step-down-buck-voltage-regulators"},{"@type":"ListItem","position":3,"name":"D36V28Fx Step-Down Voltage Regulators","item":"https://www.pololu.com/category/261/d36v28fx-step-down-voltage-regulators"}]}
+</script>
+<script class='structured_data' type='application/ld+json'>
+{"@context":"https://schema.org","@type":"Product","image":"https://a.pololu-files.com/picture/0J10035.600x480.jpg?66f160b2b6f64dffecc28d6968236097","name":"6V, 2.7A Step-Down Voltage Regulator D36V28F6","description":"\n\t\n\t\tOutput voltage\n\t\tTypical max output current1\n\t\tInput voltage range2\n\t\n\t\n\t\t6 V\n\t\t 2.7 A\n\t\t 6.3 V – 50 V\n\t\n\nNote 1: At 36 V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation. See the output current graphs on the product pages for more information.\nNote 2: Minimum input voltage is subject to dropout voltage considerations; see the dropout voltage section of product pages for more information.","sku":3783,"brand":"Pololu","offers":{"@type":"Offer","price":"24.95","priceCurrency":"USD","URL":"https://www.pololu.com/product/3783","availability":"OutOfStock"}}
+</script>
+
+<script src="https://a.pololu-files.com/assets/syntaxhighlight-91017fb9868118fd42306075e0164112dd3d3e16331dc462f55ad4497e7fca3d.js" defer="defer"></script>
+</head>
+
+<body class='product-info-merged'>
+<a href="/"><img width="219" height="69" alt="Pololu Robotics and Electronics" class="logo" style="max-width: 230px;" src="https://a.pololu-files.com/assets/header_pololu_no_padding-e37eb899d2ec2ded9153a53ad9e0e6e12861f762e2c3bafb4ca40e79a85d149e.png" /></a>
+<hr id='product-info-merged-header-hr'>
+<h2 id="breadcrumbs"><a href="/category/84/voltage-regulators-and-power-supplies">Voltage Regulators and Power Supplies</a> &raquo; <a href="/category/131/step-down-buck-voltage-regulators">Step-Down (Buck) Voltage Regulators</a> &raquo; <a href="/category/261/d36v28fx-step-down-voltage-regulators">D36V28Fx Step-Down Voltage Regulators</a> &raquo;</h2>
+<h1 id="page_title">6V, 2.7A Step-Down Voltage Regulator D36V28F6</h1>
+<div id='product-info-merged-main-picture'>
+<a class="noscript-fallback" href="https://a.pololu-files.com/picture/0J10035.1200.jpg?66f160b2b6f64dffecc28d6968236097"><img alt="" title="Click to zoom" id="main_picture_img" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10035&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10035.98x98.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10035.600x480.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10035.1200.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J10059&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, top view with labels.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10059.98x98.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10059.600x480.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10059.1200.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J11662&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, bottom view with dimensions.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11662.98x98.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11662.600x480.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11662.1200.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J10047&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, with included hardware.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10047.98x98.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10047.600x480.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10047.1200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J10041&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, top view\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10041.98x98.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10041.600x480.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10041.1200.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J11665&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, bottom view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11665.98x98.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11665.600x480.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11665.1200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J10048&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, side view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10048.98x98.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10048.600x480.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10048.1200.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;longest_side&quot;:1200},{&quot;id&quot;:&quot;0J10052&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical efficiency of Step-Down Voltage Regulator D36V28F6.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10052.98x98.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10052.600x480.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10052.1200.png?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;longest_side&quot;:600},{&quot;id&quot;:&quot;0J10056&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical maximum continuous output current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10056.98x98.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10056.600x480.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10056.1200.png?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;longest_side&quot;:600},{&quot;id&quot;:&quot;0J10057&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical quiescent current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10057.98x98.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10057.600x480.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10057.1200.png?298c239630829d31baadff85598d4c1a&quot;,&quot;longest_side&quot;:600},{&quot;id&quot;:&quot;0J10058&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical dropout voltage of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10058.98x98.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10058.600x480.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10058.1200.png?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10035" data-picture-longest-side="1200" data-gallery-id="main-pictures" src="https://a.pololu-files.com/picture/0J10035.600x480.jpg?66f160b2b6f64dffecc28d6968236097" /></a>
+</div>
+<p>
+This is a merged information page for Item #3783.
+<br>
+<a href="/product/3783">View normal product page</a>.
+</p>
+<p>
+<b>Pololu item #:</b>
+3783
+<br>
+<b>Brand:</b>
+<a href="/brands/pololu">Pololu</a>
+<br>
+<b>Status:</b>
+Rationed (Active and Preferred)&nbsp;<a class="fa fa-question-circle" data-lightbox-link="true" data-lightbox-height="21rem" data-lightbox-width="27rem" href="/product-status-overview"></a>
+<br>
+<a title="RoHS 3 compliant" data-lightbox-link="true" data-lightbox-height="17rem" data-lightbox-width="25rem" href="/compliance/rohs3-compliant"><img style="width: 76px; height: 16px; min-width: 76px;" alt="RoHS 3 compliant" src="https://a.pololu-files.com/assets/rohs3_compliant_yes-cde9d1a22538fcb174660dfa52f6fb93f93fcdfcf99e282ad9cf792ffa8f3124.png" /></a>
+</p>
+<br class='clear'>
+<table class="active_controller_comparison">
+	<tr>
+		<th>Output voltage</th>
+		<th>Typical max output current<sup>1</sup></th>
+		<th>Input voltage range<sup>2</sup></th>
+	</tr>
+	<tr>
+		<td>6&nbsp;V</td>
+		<td> 2.7&nbsp;A</td>
+		<td> 6.3&nbsp;V&nbsp;&ndash;&nbsp;50&nbsp;V</td>
+	</tr>
+</table>
+<p><small>Note 1: At 36&nbsp;V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation. See the output current graphs on the product pages for more information.</small><br>
+<small>Note 2: Minimum input voltage is subject to dropout voltage considerations; see the dropout voltage section of product pages for more information.</small></p>
+
+<p>Alternatives available with variations in these parameter(s):
+<a class="select_by_specification_link" data-lightbox-link="true" data-lightbox-height="20rem" data-lightbox-width="50rem" href="/catalog/select-by-specification?parameters=0J145&amp;product=3783&amp;products=3781"><span class='select_by_specification_parameter'>output type</span>
+<span class="select_by_specification_main_link">Select variant&#8230;</span>
+</a></p>
+<p class='compare_link'>
+<span class="compare"><a href="/search/compare/261"><img alt="" src="https://a.pololu-files.com/assets/compare-cd658e4a1effbb8bf041401c86b9bef3949f6946b740d13b04703d381ec5594b.png" /></a><a title="Compare all products in D36V28Fx Step-Down Voltage Regulators" href="/search/compare/261">Compare all products in D36V28Fx Step-Down Voltage Regulators</a></span>.
+</p>
+<h2 id='product-info-merged-pictures'>Pictures</h2>
+<div class='attached_pictures'>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10035.1200.jpg?66f160b2b6f64dffecc28d6968236097" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10035&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10035.98x98.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10035.600x480.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10035.1200.jpg?66f160b2b6f64dffecc28d6968236097&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10035" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10035.200.jpg?66f160b2b6f64dffecc28d6968236097" /></a></td></tr><tr><th style="max-width: 200px"><p>6V, 2.7A Step-Down Voltage Regulator D36V28F6.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10059.1200.jpg?7e3be4e50163b4241112416a22f4f3d9" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10059&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, top view with labels.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10059.98x98.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10059.600x480.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10059.1200.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10059" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10059.200.jpg?7e3be4e50163b4241112416a22f4f3d9" /></a></td></tr><tr><th style="max-width: 200px"><p>Step-Down Voltage Regulator D36V28Fx, top view with labels.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J11662.1200.jpg?e1b275bea935681af572cd4da7571db0" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J11662&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, bottom view with dimensions.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11662.98x98.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11662.600x480.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11662.1200.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J11662" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J11662.200.jpg?e1b275bea935681af572cd4da7571db0" /></a></td></tr><tr><th style="max-width: 200px"><p>Step-Down Voltage Regulator D36V28Fx, bottom view with dimensions.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10047.1200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10047&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, with included hardware.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10047.98x98.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10047.600x480.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10047.1200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10047" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10047.200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55" /></a></td></tr><tr><th style="max-width: 200px"><p>Step-Down Voltage Regulator D36V28Fx, with included hardware.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10041.1200.jpg?1654c4982f834953d1db3c58496e04d4" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10041&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, top view\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10041.98x98.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10041.600x480.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10041.1200.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10041" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10041.200.jpg?1654c4982f834953d1db3c58496e04d4" /></a></td></tr><tr><th style="max-width: 200px"><p>6V, 2.7A Step-Down Voltage Regulator D36V28F6, top view</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J11665.1200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J11665&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, bottom view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11665.98x98.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11665.600x480.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11665.1200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J11665" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J11665.200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90" /></a></td></tr><tr><th style="max-width: 200px"><p>6V, 2.7A Step-Down Voltage Regulator D36V28F6, bottom view.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10048.1200.jpg?60621f4c32a9796504f4e0881e309f70" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10048&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, side view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10048.98x98.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10048.600x480.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10048.1200.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10048" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10048.200.jpg?60621f4c32a9796504f4e0881e309f70" /></a></td></tr><tr><th style="max-width: 200px"><p>Step-Down Voltage Regulator D36V28Fx, side view.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10052.1200.png?66f64d522ea45f8bd6c222011ba05424" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10052&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical efficiency of Step-Down Voltage Regulator D36V28F6.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10052.98x98.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10052.600x480.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10052.1200.png?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10052" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10052.200.jpg?66f64d522ea45f8bd6c222011ba05424" /></a></td></tr><tr><th style="max-width: 200px"><p>Typical efficiency of Step-Down Voltage Regulator D36V28F6.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10056.1200.png?0926445b7fbfc68ec401c0e387784e72" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10056&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical maximum continuous output current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10056.98x98.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10056.600x480.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10056.1200.png?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10056" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10056.200.jpg?0926445b7fbfc68ec401c0e387784e72" /></a></td></tr><tr><th style="max-width: 200px"><p>Typical maximum continuous output current of Step-Down Voltage Regulator D36V28Fx.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10057.1200.png?298c239630829d31baadff85598d4c1a" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10057&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical quiescent current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10057.98x98.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10057.600x480.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10057.1200.png?298c239630829d31baadff85598d4c1a&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10057" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10057.200.jpg?298c239630829d31baadff85598d4c1a" /></a></td></tr><tr><th style="max-width: 200px"><p>Typical quiescent current of Step-Down Voltage Regulator D36V28Fx.</p></th></tr></table>
+<table class="picture_with_caption center"><tr><td style="max-width: 200px"><a href="https://a.pololu-files.com/picture/0J10058.1200.png?d82af2ce8c565ecbb4fd51fc7720b6d8" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10058&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical dropout voltage of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10058.98x98.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10058.600x480.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10058.1200.png?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10058" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10058.200.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8" /></a></td></tr><tr><th style="max-width: 200px"><p>Typical dropout voltage of Step-Down Voltage Regulator D36V28Fx.</p></th></tr></table>
+</div>
+<br class='clear_both'>
+<br class='clear_both'>
+<br class='clear_both'>
+<div id='product-info-merged-main-description'></div>
+<h2>Overview</h2>
+<table class="picture_with_caption right"><tr><td><a href="https://a.pololu-files.com/picture/0J11662.1200.jpg?e1b275bea935681af572cd4da7571db0" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J11662&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, bottom view with dimensions.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11662.98x98.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11662.600x480.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11662.1200.jpg?e1b275bea935681af572cd4da7571db0&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J11662" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J11662.250.jpg?e1b275bea935681af572cd4da7571db0" /></a></td><p></tr></table>
+<table class="picture_with_caption right"><tr><td style="max-width: 250px"><a href="https://a.pololu-files.com/picture/0J10049.1200.jpg?8477ea245788fbb9371a2d853b1ff727" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10049&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, assembled on breadboard.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10049.98x98.jpg?8477ea245788fbb9371a2d853b1ff727&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10049.600x480.jpg?8477ea245788fbb9371a2d853b1ff727&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10049.1200.jpg?8477ea245788fbb9371a2d853b1ff727&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10049" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10049.250.jpg?8477ea245788fbb9371a2d853b1ff727" /></a></td></tr><tr><th style="max-width: 250px"><p>Step-Down Voltage Regulator D36V28Fx, assembled on breadboard.</p></th></tr></table></p>
+<p>The D36V28Fx family of buck (step-down) voltage regulators generates lower output voltages from input voltages as high as 50&nbsp;V.  They are switching regulators (also called switched-mode power supplies (SMPS) or DC-to-DC converters), which makes them much more efficient than linear voltage regulators, especially when the difference between the input and output voltage is large.  These regulators can typically support continuous output currents between 2&nbsp;A and 4&nbsp;A, depending on the input voltage and output voltage (see the <em>Maximum continuous output current</em> section below).  In general, the available output current is a little higher for the lower-voltage versions than it is for the higher-voltage versions, and it decreases as the input voltage increases.</p>
+<p>This family includes six versions with fixed output voltages ranging from 3.3&nbsp;V to 12&nbsp;V:</p>
+<ul>
+	<li><a href="/product/3781">D36V28F3: Fixed 3.3V output</a></li>
+	<li><a href="/product/3782">D36V28F5: Fixed 5V output</a></li>
+	<li><a href="/product/3783">D36V28F6: Fixed 6V output</a></li>
+	<li><a href="/product/3784">D36V28F7: Fixed 7.5V output</a></li>
+	<li><a href="/product/3785">D36V28F9: Fixed 9V output</a></li>
+	<li><a href="/product/3786">D36V28F12: Fixed 12V output</a></li>
+</ul>
+<p>The regulators have reverse voltage protection up to 40&nbsp;V, output undervoltage and overvoltage protection, over-current protection, and short-circuit protection. A thermal shutdown feature also helps prevent damage from overheating and a soft-start feature limits the inrush current and gradually ramps the output voltage on startup.</p>
+<p>For lower-voltage applications, consider the very similar <a href="/category/307/d30v30fx-step-down-voltage-regulators">D30V30Fx</a> step-down voltage regulators as alternatives.  For higher-power applications, consider the <a href="/category/270/d36v50fx-step-down-voltage-regulators">D36V50Fx</a>, <a href="/category/354/d42v55fx-step-down-voltage-regulators">D42V55Fx</a>, or <a href="/category/370/d42v110fx-step-down-voltage-regulators">D42V110Fx</a> families of step-down voltage regulators.</p>
+<p class="note">We manufacture these boards in-house at our Las Vegas facility, so we can make these regulators with customized components to better meet the needs of your project, such as by customizing the output voltage.  If you are interested in customization, please <a href="/contact">contact us</a>.</p>
+<h2>
+Details for item #3783
+</h2>
+<table class="side_by_side_pics">
+	<tr>
+		<td><table class="picture_with_caption center"><tr><td style="max-width: 300px"><a href="https://a.pololu-files.com/picture/0J10041.1200.jpg?1654c4982f834953d1db3c58496e04d4" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10041&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, top view\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10041.98x98.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10041.600x480.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10041.1200.jpg?1654c4982f834953d1db3c58496e04d4&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10041" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10041.300.jpg?1654c4982f834953d1db3c58496e04d4" /></a></td></tr><tr><th style="max-width: 300px"><p>6V, 2.7A Step-Down Voltage Regulator D36V28F6, top view</p></th></tr></table></td>
+		<td><table class="picture_with_caption center"><tr><td style="max-width: 300px"><a href="https://a.pololu-files.com/picture/0J11665.1200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J11665&quot;,&quot;caption&quot;:&quot;\u003cp\u003e6V, 2.7A Step-Down Voltage Regulator D36V28F6, bottom view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J11665.98x98.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J11665.600x480.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J11665.1200.jpg?dbc4e1ed8b49fc0f926ebca06934ca90&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J11665" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J11665.300.jpg?dbc4e1ed8b49fc0f926ebca06934ca90" /></a></td></tr><tr><th style="max-width: 300px"><p>6V, 2.7A Step-Down Voltage Regulator D36V28F6, bottom view.</p></th></tr></table></td>
+	</tr>
+</table>
+<h3>Features</h3>
+<ul>
+	<li>Input voltage: 6.3&nbsp;V to 50&nbsp;V (minimum input subject to dropout voltage considerations; see the <a href="#dropout">dropout voltage section</a> for details)</li>
+	<li>Output voltage: 6&nbsp;V with 4% accuracy</li>
+	<li>Typical maximum continuous output current: 2&nbsp;A to 4&nbsp;A (see the <a href="#maxcurrent">maximum continuous output current graph</a> below)</li>
+	<li>Typical efficiency of 85% to 95%, depending on input voltage, output voltage, and load (see the <a href="#efficiency">efficiency graph</a> below)</li>
+	<li>Switching frequency: ~500&nbsp;kHz under heavy loads</li>
+	<li>Power-save mode with ultrasonic operation that increases light load efficiency by reducing switching frequency, but keeps it above the audible range (20&nbsp;kHz)</li>
+	<li>2&nbsp;mA to 3&nbsp;mA typical no-load quiescent current (see the <a href="#quiescent">quiescent current graph</a> below)</li>
+	<li>Enable input with precise cutoff threshold for disconnecting the load and putting the regulator into a low-power state that draws approximately 10&nbsp;µA to 20&nbsp;µA per volt on VIN</li>
+	<li>Power-good indicator can be used to tell when the regulator has reached and is maintaining its target output voltage</li>
+	<li>Output undervoltage and overvoltage protection</li>
+	<li>Soft-start feature limits inrush current and gradually ramps output voltage</li>
+	<li>Integrated reverse-voltage protection up to 40&nbsp;V, over-current and short-circuit protection, over-temperature shutoff</li>
+	<li>Compact size:  0.7″&nbsp;&times;&nbsp;0.8″&nbsp;&times;&nbsp;0.345″ (17.8&nbsp;mm &times; 20.3&nbsp;mm &times; 8.8&nbsp;mm)</li>
+	<li>Two 0.086″ mounting holes for #2 or M2 <a href="/category/101/nuts-and-screws">screws</a></li>
+</ul>
+<h3>Connections</h3>
+<table class="picture_with_caption center"><tr><td><a href="https://a.pololu-files.com/picture/0J10059.1200.jpg?7e3be4e50163b4241112416a22f4f3d9" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10059&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, top view with labels.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10059.98x98.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10059.600x480.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10059.1200.jpg?7e3be4e50163b4241112416a22f4f3d9&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10059" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10059.300.jpg?7e3be4e50163b4241112416a22f4f3d9" /></a></td><p></tr></table></p>
+<p>This regulator has six connections: power good (PG), enable (EN), input voltage (VIN), output voltage (VOUT), and two ground (GND) connections.</p>
+<p>The &#8220;power good&#8221; indicator, <strong>PG</strong>, is an open-drain output that goes low when the regulator&#8217;s output voltage either rises more than 20% above or falls more than 10% below the nominal voltage (with hysteresis).  <ins>An external pull-up resistor is required to use this pin.</ins></p>
+<p>The regulator, which is enabled by default, can be put into a low-power sleep state by reducing the voltage on the <strong>EN</strong> pin below 1.2&nbsp;V, and it can be brought out of this state again by increasing the voltage on EN past 1.35&nbsp;V.  The quiescent current draw in this sleep mode is dominated by the current in the 100&nbsp;kΩ pull-up resistor from ENABLE to VIN and in the reverse-voltage protection circuit, which altogether will be between 10&nbsp;µA and 20&nbsp;µA per volt on VIN. The tight tolerance of the enable input allows a precise low-VIN cutoff to be set, such as with the output of an external voltage divider powered by VIN, which is useful for battery powered applications where draining the battery below a particular voltage threshold could permanently damage it.</p>
+<p>The input voltage, <strong>VIN</strong>, powers the regulator.  Voltages up to 50&nbsp;V can be applied to VIN. Generally, the effective lower limit of VIN is VOUT plus the regulator&#8217;s dropout voltage, which varies approximately linearly with the load (see below for <a href="#dropout">graphs of the dropout voltage</a> as a function of the load).</p>
+<p><strong>VOUT</strong> is the regulated output voltage.</p>
+<table class="picture_with_caption center"><tr><td style="max-width: 350px"><a href="https://a.pololu-files.com/picture/0J10047.1200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55" class="noscript-fallback"><img alt="" class="zoomable" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10047&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, with included hardware.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10047.98x98.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10047.600x480.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10047.1200.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10047" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10047.350.jpg?217cf1d436aee5cbde7f9ec7c1ce3f55" /></a></td><p></tr><tr><th style="max-width: 350px"><p>Step-Down Voltage Regulator D36V28Fx, with included hardware.</p></th></tr></table></p>
+<p>The six connections are arranged on a 0.1″ grid for compatibility with solderless <a href="/category/28/solderless-breadboards">breadboards</a>, <a href="/category/19/connectors">connectors</a>, and other prototyping arrangements that use a 0.1″ grid.  The PG connection is the only one not located along the edge of the board.  A 6×1 <a href="/product/965">straight male header strip</a> and a 5×1 <a href="/product/967">right-angle male header strip</a> are included with the regulator; one pin of the straight header can optionally be broken off and soldered into PG.</p>
+<table class="picture_with_caption center"><tr><td style="max-width: 450px"><img alt="" class="" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10048&quot;,&quot;caption&quot;:&quot;\u003cp\u003eStep-Down Voltage Regulator D36V28Fx, side view.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10048.98x98.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10048.600x480.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10048.1200.jpg?60621f4c32a9796504f4e0881e309f70&quot;,&quot;longest_side&quot;:1200}]" data-picture-id="0J10048" data-picture-longest_side="1200" src="https://a.pololu-files.com/picture/0J10048.450.jpg?60621f4c32a9796504f4e0881e309f70" /></td><p></tr><tr><th style="max-width: 450px"><p>Step-Down Voltage Regulator D36V28Fx, side view.</p></th></tr></table></p>
+<h3 id="efficiency">Typical efficiency</h3>
+<p>The efficiency of a voltage regulator, defined as (Power&nbsp;out)/(Power&nbsp;in), is an important measure of its performance, especially when battery life or heat are concerns.</p>
+<table class="picture_with_caption center wide"><tr><td><img alt="" class="wide" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10052&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical efficiency of Step-Down Voltage Regulator D36V28F6.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10052.98x98.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10052.600x480.jpg?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10052.1200.png?66f64d522ea45f8bd6c222011ba05424&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10052" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10052.600.png?66f64d522ea45f8bd6c222011ba05424" /></td><p></tr></table></p>
+<h3 id="maxcurrent">Maximum continuous output current</h3>
+<p>The maximum achievable output current of these regulators varies with the input voltage but also depends on other factors, including the ambient temperature, air flow, and heat sinking. The graph below shows maximum output currents that these regulators can deliver continuously at room temperature in still air and without additional heat sinking.</p>
+<table class="picture_with_caption center wide"><tr><td><img alt="" class="wide" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10056&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical maximum continuous output current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10056.98x98.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10056.600x480.jpg?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10056.1200.png?0926445b7fbfc68ec401c0e387784e72&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10056" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10056.600.png?0926445b7fbfc68ec401c0e387784e72" /></td><p></tr></table></p>
+<p class="note_warning clear">During normal operation, this product can get hot enough to burn you. Take care when handling this product or other components connected to it.</p>
+<h3 id="quiescent">Quiescent current</h3>
+<p>The quiescent current is the current the regulator uses just to power itself, and the graph below shows this for the different regulator versions as a function of the input voltage.  The module&#8217;s EN input can be driven low to put the board into a low-power state where it typically draws between 10&nbsp;&micro;A and 20&nbsp;&micro;A per volt on VIN.</p>
+<table class="picture_with_caption center wide"><tr><td><img alt="" class="wide" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10057&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical quiescent current of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10057.98x98.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10057.600x480.jpg?298c239630829d31baadff85598d4c1a&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10057.1200.png?298c239630829d31baadff85598d4c1a&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10057" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10057.600.png?298c239630829d31baadff85598d4c1a" /></td><p></tr></table></p>
+<h3 id="dropout">Typical dropout voltage</h3>
+<p>The dropout voltage of a step-down regulator is the minimum amount by which the input voltage must exceed the regulator&#8217;s target output voltage in order to ensure the target output can be achieved.  For example, if a 5&nbsp;V regulator has a 1&nbsp;V dropout voltage, the input must be at least 6&nbsp;V to ensure the output is the full 5&nbsp;V.  Generally speaking, the dropout voltage increases as the output current increases.  The graph below shows the dropout voltages for the different members of this regulator family:</p>
+<table class="picture_with_caption center wide"><tr><td><img alt="" class="wide" data-gallery-pictures="[{&quot;id&quot;:&quot;0J10058&quot;,&quot;caption&quot;:&quot;\u003cp\u003eTypical dropout voltage of Step-Down Voltage Regulator D36V28Fx.\u003c/p\u003e&quot;,&quot;url_tiny&quot;:&quot;https://a.pololu-files.com/picture/0J10058.98x98.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_medium&quot;:&quot;https://a.pololu-files.com/picture/0J10058.600x480.jpg?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;url_full&quot;:&quot;https://a.pololu-files.com/picture/0J10058.1200.png?d82af2ce8c565ecbb4fd51fc7720b6d8&quot;,&quot;longest_side&quot;:600}]" data-picture-id="0J10058" data-picture-longest_side="600" src="https://a.pololu-files.com/picture/0J10058.600.png?d82af2ce8c565ecbb4fd51fc7720b6d8" /></td><p></tr></table></p>
+
+<div id='product-info-merged-specifications'>
+<h2>Dimensions</h2>
+<table class='specifications'>
+<tr class='even'>
+<th>
+Size:
+</th>
+<td>
+0.7″ × 0.8″ × 0.345″<sup><a href="#note1">1</a></sup>
+</td>
+</tr>
+<tr class='odd'>
+<th>
+Weight:
+</th>
+<td>
+3.3 g<sup><a href="#note1">1</a></sup>
+</td>
+</tr>
+</table>
+<h2>General specifications</h2>
+<table class='specifications'>
+<tr class='even'>
+<th>
+Minimum operating voltage:
+</th>
+<td>
+6.3 V<sup><a href="#note2">2</a></sup>
+</td>
+</tr>
+<tr class='odd'>
+<th>
+Maximum operating voltage:
+</th>
+<td>
+50 V
+</td>
+</tr>
+<tr class='even'>
+<th>
+Continuous output current:
+</th>
+<td>
+2.7 A<sup><a href="#note3">3</a></sup>
+</td>
+</tr>
+<tr class='odd'>
+<th>
+Output voltage:
+</th>
+<td>
+6 V
+</td>
+</tr>
+<tr class='even'>
+<th>
+Reverse voltage protection?:
+</th>
+<td>
+Y<sup><a href="#note4">4</a></sup>
+</td>
+</tr>
+<tr class='odd'>
+<th>
+Maximum quiescent current:
+</th>
+<td>
+3 mA<sup><a href="#note5">5</a></sup>
+</td>
+</tr>
+<tr class='even'>
+<th>
+Output type:
+</th>
+<td>
+fixed 6V
+</td>
+</tr>
+</table>
+<h2>Identifying markings</h2>
+<table class='specifications'>
+<tr class='even'>
+<th>
+PCB dev codes:
+</th>
+<td>
+reg24a, reg24g
+</td>
+</tr>
+<tr class='odd'>
+<th>
+Other PCB markings:
+</th>
+<td>
+0J11946, 0J13687
+</td>
+</tr>
+</table>
+<h2>Notes:</h2><dl class="specification_notes"><dt><a name="note1"></a>1<dd>Without included optional headers.</dd></dt><dt><a name="note2"></a>2<dd>Subject to dropout voltage considerations.  See the dropout voltage graph under the description tab for more information.</dd></dt><dt><a name="note3"></a>3<dd>Typical max continuous output current at 36&nbsp;V in. Actual achievable continuous output current is a function of input voltage and is limited by thermal dissipation.  See the output current graph under the description tab for more information.</dd></dt><dt><a name="note4"></a>4<dd>To -40&nbsp;V. Connecting supplies over 40&nbsp;V in reverse can damage the device.</dd></dt><dt><a name="note5"></a>5<dd>While enabled with no load.  Can be reduced to under 1&nbsp;mA using the enable pin.</dd></dt></dl>
+
+</div>
+<div class='resources' id='product-info-merged-resources'>
+<h2><!-- attached_files -->File downloads</h2>
+<ul class='resources attached_files'>
+<li class='resource clickable'>
+<h3 class='content_title'><a href="/file/0J1659/d36v28fx-step-down-voltage-regulators-dimensions.pdf">Dimension diagram of the Step-Down Voltage Regulator D36V28Fx</a> (306k pdf)</h3>
+<p></p>
+<div class='clear'></div>
+</li>
+<li class='resource clickable'>
+<h3 class='content_title'><a href="/file/0J1660/d36v28fx-step-down-voltage-regulators.step">3D model of the Step-Down Voltage Regulator D36V28Fx</a> (5MB step)</h3>
+<p></p>
+<div class='clear'></div>
+</li>
+<li class='resource clickable'>
+<h3 class='content_title'><a href="/file/0J1658/reg24g-drill.dxf">Drill guide for the Step-Down Voltage Regulator D36V28Fx</a> (15k dxf)</h3>
+<p>This DXF drawing shows the locations of all of the board&#8217;s holes.</p>
+<div class='clear'></div>
+</li>
+</ul>
+
+</div>
+<h2 id='product-info-merged-faqs'>Frequently-asked questions</h2>
+<p>No FAQs available.</p>
+
+<h2 id='product-info-merged-blog'>On the blog</h2>
+<ul class='web_updates'>
+<li class='web_update clickable'>
+<div class='pic'>
+<a href="/blog/837/new-products-d36v28fx-step-down-voltage-regulators"><img alt="New products: D36V28Fx Step-Down Voltage Regulators" src="https://a.pololu-files.com/picture/0J10089.100.jpg?ff340d6a4d3621d72254d0f67ec4e717" /></a>
+</div>
+<h3 class='content_title'>
+<a href="/blog/837/new-products-d36v28fx-step-down-voltage-regulators">New products: D36V28Fx Step-Down Voltage Regulators</a>
+</h3>
+<span class='author'>
+by
+Ben
+</span>
+<span class='title_time'>
+ - 
+12 April 2019
+
+</span>
+<p class='math'>
+I am happy to announce the release of our newest regulators, the D36V28Fx family of step-down voltage regulators. These regulators support a wide...
+</p>
+<div class='clear'></div>
+</li>
+
+</ul>
+
+
+</body>
+</html>
