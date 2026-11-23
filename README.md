@@ -12,16 +12,17 @@ Status: first draft, not yet run on hardware.
 - `firmware/rover/rover.ino` runs on the aLaMode. Needs the Adafruit Motor Shield
   (v1) library, `AFMotor`. Board type: Arduino Uno.
 - `pi/rover.cpp` is `rover`, a C++ command-line tool for the Pi 4, run over SSH.
-  No dependencies: build on the Pi with
-  `g++ -std=c++17 -O2 -Wall -o rover pi/rover.cpp` and put the binary on the PATH.
+  No dependencies beyond the standard library.
   Snapshots use the stock `rpicam-still`.
 - `pi/flash-alamode.sh` flashes the aLaMode from the Pi: it pulses the reset on
   GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
   `avrdude` and `pinctrl`.
 
-`make deploy` builds and installs `rover` on the Pi. `make upload` compiles the
-firmware here (needs `arduino-cli`; run `make firmware-deps` once) and flashes it
-through the Pi. Both use `PI_HOST`, default `rover.local`.
+Everything builds on the Pi: the Makefile rsyncs `pi/` and `firmware/` to
+`~/rover-cam` there. `make deploy` builds and installs `rover`. `make upload`
+compiles the firmware with `arduino-cli` and flashes it (run `make firmware-deps`
+once first). Arduino's avr-gcc runs on the Pi's arm64 but has no Apple Silicon
+build. All targets use `PI_HOST`, default `rover.local`.
 
 ## Pins (aLaMode)
 

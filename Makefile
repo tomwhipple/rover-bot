@@ -1,30 +1,31 @@
 # rover-cam build. `make help` lists targets.
 
-# Pi side
+# Everything for the rover is built on the Pi, in ~/$(PI_DIR) there.
 PI_HOST   ?= rover.local
+PI_DIR    ?= rover-cam
 PI_PREFIX ?= /usr/local
+PI_SERIAL ?= /dev/serial0
 CXX       ?= g++
 CXXFLAGS  ?= -std=c++17 -O2 -Wall
 
-# Firmware side (aLaMode = Arduino Uno, flashed from the Pi over its UART)
-ARDUINO_CLI ?= arduino-cli
-PI_SERIAL   ?= /dev/serial0
-FQBN        ?= arduino:avr:uno
-FW_BUILD    := build/firmware
-FW_HEX      := $(FW_BUILD)/rover.ino.hex
+# Firmware: aLaMode = Arduino Uno. Arduino ships avr-gcc for the Pi (arm64)
+# but only for Intel Macs, so it compiles on the Pi too.
+FQBN     ?= arduino:avr:uno
+FW_BUILD := $(PI_DIR)/build/firmware
+CLI_URL  := https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_ARM64.tar.gz
 
-.PHONY: all help pi test deploy firmware firmware-deps upload clean
+.PHONY: all help pi test sync deploy firmware firmware-deps upload clean
 
-all: pi firmware
+all: pi
 
 help:
 	@echo "make pi             build pi/rover locally (compile check off the Pi)"
 	@echo "make test           build pi/rover and check its argument handling"
-	@echo "make deploy         copy pi/rover.cpp to PI_HOST=$(PI_HOST), build there, install to $(PI_PREFIX)/bin"
-	@echo "make firmware-deps  install the AVR core, AFMotor and Servo with arduino-cli"
-	@echo "make firmware       compile firmware/rover for $(FQBN) into $(FW_BUILD)"
-	@echo "make upload         copy the firmware to PI_HOST and flash the aLaMode from there"
-	@echo "make clean          remove build output"
+	@echo "make deploy         build pi/rover.cpp on PI_HOST=$(PI_HOST), install to $(PI_PREFIX)/bin"
+	@echo "make firmware-deps  install arduino-cli, the AVR core, AFMotor and Servo on PI_HOST"
+	@echo "make firmware       compile firmware/rover on PI_HOST into ~/$(FW_BUILD)"
+	@echo "make upload         compile on PI_HOST, then flash the aLaMode from there"
+	@echo "make clean          remove the local build"
 
 pi: pi/rover
 
@@ -38,25 +39,21 @@ test: pi/rover
 	@./pi/rover 2>&1 | grep -q '^usage: rover' || { echo "FAIL: usage text missing"; exit 1; }
 	@echo "pi/rover: ok"
 
-deploy:
-	ssh $(PI_HOST) 'mkdir -p ~/src/rover-cam'
-	scp pi/rover.cpp $(PI_HOST):src/rover-cam/rover.cpp
-	ssh $(PI_HOST) 'g++ $(CXXFLAGS) -o src/rover-cam/rover src/rover-cam/rover.cpp && sudo install -m 755 src/rover-cam/rover $(PI_PREFIX)/bin/rover'
+sync:
+	rsync -a --delete --exclude /pi/rover pi firmware $(PI_HOST):$(PI_DIR)/
 
-firmware: $(FW_HEX)
+deploy: sync
+	ssh $(PI_HOST) 'g++ $(CXXFLAGS) -o $(PI_DIR)/pi/rover $(PI_DIR)/pi/rover.cpp && sudo install -m 755 $(PI_DIR)/pi/rover $(PI_PREFIX)/bin/rover'
 
-$(FW_HEX): firmware/rover/rover.ino
-	@command -v $(ARDUINO_CLI) >/dev/null || { echo "$(ARDUINO_CLI) not found (brew install arduino-cli)"; exit 1; }
-	$(ARDUINO_CLI) compile --fqbn $(FQBN) --output-dir $(FW_BUILD) firmware/rover
+firmware: sync
+	ssh $(PI_HOST) 'arduino-cli compile --fqbn $(FQBN) --output-dir $(FW_BUILD) $(PI_DIR)/firmware/rover'
 
 firmware-deps:
-	$(ARDUINO_CLI) core update-index
-	$(ARDUINO_CLI) core install arduino:avr
-	$(ARDUINO_CLI) lib install "Adafruit Motor Shield library" Servo
+	ssh $(PI_HOST) 'command -v arduino-cli >/dev/null || { curl -fsSL $(CLI_URL) | tar -xz -C /tmp arduino-cli && sudo install -m 755 /tmp/arduino-cli /usr/local/bin/; }'
+	ssh $(PI_HOST) 'arduino-cli core update-index && arduino-cli core install arduino:avr && arduino-cli lib install "Adafruit Motor Shield library" Servo'
 
-upload: $(FW_HEX)
-	scp $(FW_HEX) $(PI_HOST):/tmp/rover.ino.hex
-	ssh $(PI_HOST) SERIAL=$(PI_SERIAL) sh -s /tmp/rover.ino.hex < pi/flash-alamode.sh
+upload: firmware
+	ssh $(PI_HOST) SERIAL=$(PI_SERIAL) sh -s $(FW_BUILD)/rover.ino.hex < pi/flash-alamode.sh
 
 clean:
-	rm -rf build pi/rover
+	rm -f pi/rover
