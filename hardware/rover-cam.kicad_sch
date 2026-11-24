@@ -7,7 +7,7 @@
 	(title_block
 		(title "rover-cam wiring")
 		(date "2026-11-24")
-		(rev "A")
+		(rev "B")
 	)
 	(lib_symbols
 		(symbol "Connector:Raspberry_Pi_2_3"
@@ -3292,7 +3292,7 @@
 					)
 				)
 				(pin passive line
-					(at -22.86 -7.62 0)
+					(at -22.86 -12.7 0)
 					(length 2.54)
 					(name "D12_latch"
 						(effects
@@ -3454,7 +3454,7 @@
 					)
 				)
 				(pin passive line
-					(at 22.86 17.78 180)
+					(at 22.86 12.7 180)
 					(length 2.54)
 					(name "SERVO1_S"
 						(effects
@@ -3490,7 +3490,7 @@
 					)
 				)
 				(pin passive line
-					(at 22.86 2.54 180)
+					(at 22.86 7.62 180)
 					(length 2.54)
 					(name "SERVO1_-"
 						(effects
@@ -3667,7 +3667,7 @@
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
 			(property "Reference" "U"
-				(at -15.24 8.89 0)
+				(at -12.7 11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -3678,7 +3678,7 @@
 				)
 			)
 			(property "Value" "HC-SR04"
-				(at -15.24 -8.89 0)
+				(at -12.7 -11.43 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -3723,8 +3723,8 @@
 			)
 			(symbol "HC-SR04_0_1"
 				(rectangle
-					(start -15.24 7.62)
-					(end 15.24 -7.62)
+					(start -12.7 10.16)
+					(end 12.7 -10.16)
 					(stroke
 						(width 0.254)
 						(type default)
@@ -3736,7 +3736,7 @@
 			)
 			(symbol "HC-SR04_1_1"
 				(pin passive line
-					(at -10.16 10.16 270)
+					(at -15.24 -2.54 0)
 					(length 2.54)
 					(name "VCC"
 						(effects
@@ -3754,7 +3754,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 10.16 270)
+					(at -15.24 2.54 0)
 					(length 2.54)
 					(name "Trig"
 						(effects
@@ -3772,7 +3772,7 @@
 					)
 				)
 				(pin passive line
-					(at 10.16 10.16 270)
+					(at -15.24 7.62 0)
 					(length 2.54)
 					(name "Echo"
 						(effects
@@ -3790,7 +3790,7 @@
 					)
 				)
 				(pin passive line
-					(at 0 -10.16 90)
+					(at -15.24 -7.62 0)
 					(length 2.54)
 					(name "GND"
 						(effects
@@ -3810,50 +3810,153 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "rover-cam:USB_C_Plug"
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "J"
+				(at -7.62 6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left bottom)
+				)
+			)
+			(property "Value" "USB_C_Plug"
+				(at -7.62 -6.35 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+					(justify left top)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "USB-C plug on a cut USB-A to C cable (red = VBUS, black = GND)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "USB_C_Plug_0_1"
+				(rectangle
+					(start -7.62 5.08)
+					(end 7.62 -5.08)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "USB_C_Plug_1_1"
+				(pin passive line
+					(at -10.16 2.54 0)
+					(length 2.54)
+					(name "VBUS"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at -10.16 -2.54 0)
+					(length 2.54)
+					(name "GND"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(text "Notes\nVBAT = pack after fuse and switch, 10.5-12.6 V.\nAll grounds are common: run EXT_PWR GND and buck IN- straight\nto the pack negative in heavy wire.\nServo 1 header power is the shield's 5 V logic rail, not EXT_PWR.\n5 A fuse because two stalled motors can exceed 3 A."
 		(exclude_from_sim no)
-		(at 215.9 190.5 0)
+		(at 292.1 190.5 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "1fd807ef-c444-43f9-bbf6-e115e20fa83e")
+		(uuid "2ed2e455-6e34-4320-848b-9875540edb88")
 	)
-	(text "HC-SR04 VCC comes from the A3-A5 header 5 V row\n(the A0-A2 row is 3.3 V)."
+	(text "Pi powered via USB-C (see J2).\nPi Camera v1 on the CSI ribbon."
 		(exclude_from_sim no)
-		(at 127 236.22 0)
+		(at 162.56 153.67 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "722b4374-8d07-41ff-bcad-61049c69547c")
+		(uuid "94863b92-2aec-41fd-87c9-c42e847d312c")
 	)
-	(text "5V-LINK jumper ON: powered from the Pi.\nRESET is capacitor-coupled to GPIO18 on the aLaMode.\nPi-aLaMode and aLaMode-shield links are stacked headers, not wires."
+	(text "Cut USB-A→C cable into the Pi's USB-C;\nred = +5 V, black = GND. Meter it before\nplugging in.\nU1: AKEYSRC 5 V 3 A buck (B0GYJDP96Q)."
 		(exclude_from_sim no)
-		(at 196.85 148.59 0)
+		(at 91.44 134.62 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "9a6607a2-69b4-449e-b3ec-289917113f32")
-	)
-	(text "Pack voltage divider to A0."
-		(exclude_from_sim no)
-		(at 50.8 172.72 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left top)
-		)
-		(uuid "b1d647a0-b5e1-4362-bb81-54a57c5cf179")
+		(uuid "9594ba1f-fbc7-416a-972a-835a7a915a8e")
 	)
 	(text "VBAT: pack after fuse and switch, 10.5-12.6 V.\n5 A fuse: two stalled motors can exceed 3 A."
 		(exclude_from_sim no)
@@ -3864,571 +3967,294 @@
 			)
 			(justify left top)
 		)
-		(uuid "b82cfd22-dfc2-4845-9693-6e3e926ef039")
+		(uuid "a0becac1-efe6-4425-b9b4-a015d739afd9")
 	)
-	(text "+5V goes to the Pi USB-C through a USB-A to C cable\nwith the A end cut off: red = +5 V, black = GND.\nMeter it before plugging in."
+	(text "Pack voltage divider to A0."
 		(exclude_from_sim no)
-		(at 55.88 133.35 0)
+		(at 166.37 172.72 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "f0e038dc-34de-4e58-b7c5-69a390d433e6")
+		(uuid "bc5e9a43-9bf4-46cc-9b7b-625fcb3c4443")
 	)
-	(text "Power enters the Pi via USB-C (see U1).\nPi Camera v1 on the CSI ribbon."
+	(text "5V-LINK jumper ON: powered from the Pi.\nRESET is capacitor-coupled to GPIO18\non the aLaMode.\nPi-aLaMode and aLaMode-shield links\nare stacked headers, not wires."
 		(exclude_from_sim no)
-		(at 116.84 148.59 0)
+		(at 248.92 148.59 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left top)
 		)
-		(uuid "faf47423-37ca-4958-9caa-d02044aa5fe9")
+		(uuid "ea83e80f-edf1-498b-9b28-cfd2d43f28ef")
+	)
+	(text "HC-SR04 VCC comes from the A3-A5 header 5 V row\n(the A0-A2 row is 3.3 V)."
+		(exclude_from_sim no)
+		(at 236.22 200.66 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left top)
+		)
+		(uuid "ebc2812e-8770-4eda-8e06-5496f47bb1ae")
 	)
 	(junction
-		(at 226.06 132.08)
+		(at 307.34 63.5)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "22e3ebc7-7546-438e-ae08-dfd83b66f9c8")
+		(uuid "192e2af6-3f2e-4786-9afe-d0dbcfa6487b")
 	)
 	(junction
-		(at 60.96 198.12)
+		(at 210.82 162.56)
 		(diameter 0)
 		(color 0 0 0 0)
-		(uuid "b876a6e4-710a-4c4d-85b9-fd09ee3069d8")
+		(uuid "1b8623e0-5e69-4487-b65d-c26bc2f03e46")
+	)
+	(junction
+		(at 86.36 55.88)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "2fa89c3e-0a93-4f89-b1d0-04192ccd7715")
+	)
+	(junction
+		(at 132.08 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "49388d23-9de4-4266-acaf-a6712e880562")
+	)
+	(junction
+		(at 144.78 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "4c72610a-581d-49a6-8a3d-7eb76eed2600")
+	)
+	(junction
+		(at 127 119.38)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "58f08934-bd5f-40fb-9d79-e557636619ae")
+	)
+	(junction
+		(at 190.5 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "5a096152-8fa2-4344-938a-9bf8503e09e3")
+	)
+	(junction
+		(at 157.48 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "783f5dcd-49ac-4c18-a30e-7cea04674c91")
+	)
+	(junction
+		(at 259.08 134.62)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "9fa916ba-f9d0-49aa-9b35-c9fdba580f99")
+	)
+	(junction
+		(at 157.48 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "ae47664d-35bf-49c3-b3e4-95a9de4a049e")
+	)
+	(junction
+		(at 350.52 99.06)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c491c5a4-cacb-4fde-88d5-4fbc90abdc04")
+	)
+	(junction
+		(at 254 63.5)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c91d0544-fb0e-4799-a377-a77df659a930")
+	)
+	(junction
+		(at 86.36 114.3)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "d97922f6-1075-453d-a2c7-d9727dc141ea")
+	)
+	(junction
+		(at 345.44 101.6)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "f9b3d8e5-db81-4c25-a557-9fd4cb5c18b9")
 	)
 	(no_connect
-		(at 213.36 121.92)
-		(uuid "0459ff45-298c-4124-8d57-63b8744317fb")
+		(at 165.1 86.36)
+		(uuid "03e25313-6775-49b3-98e9-0a96bf46b899")
 	)
 	(no_connect
-		(at 119.38 96.52)
-		(uuid "09bde527-b2db-4215-ab56-3baa23757a84")
+		(at 165.1 93.98)
+		(uuid "060cc443-67e5-4112-a677-8d3cf98b84b2")
 	)
 	(no_connect
-		(at 223.52 78.74)
-		(uuid "09c2da89-e7b8-436e-a3f1-8a90d81d65b8")
+		(at 165.1 78.74)
+		(uuid "075e22d8-7558-4a56-90b9-e72cca5d69a4")
 	)
 	(no_connect
-		(at 238.76 111.76)
-		(uuid "0ba5a8db-fef7-4d79-be2d-2589d7b6552b")
+		(at 205.74 114.3)
+		(uuid "22b386c4-b9ae-4d49-9a44-5b7c47370533")
 	)
 	(no_connect
-		(at 144.78 68.58)
-		(uuid "17059d44-7244-4fba-a312-10beef3a9f18")
+		(at 246.38 124.46)
+		(uuid "23db98c1-6f4b-463d-b1e3-54a63321c677")
 	)
 	(no_connect
-		(at 160.02 88.9)
-		(uuid "23fad66a-990c-435d-87db-77da39de3638")
+		(at 165.1 121.92)
+		(uuid "2b2f4d8b-cadc-48f9-b2ec-1632eafb25cb")
 	)
 	(no_connect
-		(at 160.02 78.74)
-		(uuid "24c74f6d-c0e8-4fd2-8111-7ae613e8aebb")
+		(at 165.1 114.3)
+		(uuid "34f328ba-40ce-4244-b68d-957bca4a804a")
 	)
 	(no_connect
-		(at 160.02 96.52)
-		(uuid "279e97ef-d387-41b5-b9e6-46f91ac4786a")
+		(at 256.54 81.28)
+		(uuid "35fa4236-ccaa-44c0-8fc9-9f8f8d5c3edd")
 	)
 	(no_connect
-		(at 119.38 88.9)
-		(uuid "2913f59c-fb6b-4390-bcbd-8bd619cc2a48")
+		(at 271.78 119.38)
+		(uuid "3afa101f-c613-4dae-9f33-940b1931b418")
 	)
 	(no_connect
-		(at 238.76 99.06)
-		(uuid "2da6bb1f-51d8-41e3-a526-874e0c439e89")
+		(at 271.78 99.06)
+		(uuid "4597f699-022b-4aa7-990d-e71e68d951cd")
 	)
 	(no_connect
-		(at 213.36 93.98)
-		(uuid "2e1a7d67-cad5-41c9-9896-e08c86e70f5a")
+		(at 165.1 81.28)
+		(uuid "4a6fbf5c-7405-4ca0-9b91-ac38f6550b9a")
 	)
 	(no_connect
-		(at 119.38 99.06)
-		(uuid "38c390b1-29ee-45a7-941f-2416dce58e78")
+		(at 246.38 127)
+		(uuid "694ae3bf-e46b-4212-a791-aa0c88ae16f9")
 	)
 	(no_connect
-		(at 160.02 109.22)
-		(uuid "39e8d373-a01f-44e9-a76c-97d3b4814512")
+		(at 165.1 96.52)
+		(uuid "6d4e0ca1-4ede-4c56-8ea1-27a0e0bd79ef")
 	)
 	(no_connect
-		(at 119.38 116.84)
-		(uuid "3a7c25f7-524b-4eb5-9a49-54c3eddf8082")
+		(at 271.78 124.46)
+		(uuid "6db6eac6-1ff0-4cd8-8825-c19d84ced447")
 	)
 	(no_connect
-		(at 228.6 78.74)
-		(uuid "3e8252e5-a585-4a4f-a4a0-99e5f4f4d1db")
+		(at 165.1 88.9)
+		(uuid "80a546f2-092a-4099-b068-22d4029e0f87")
 	)
 	(no_connect
-		(at 119.38 109.22)
-		(uuid "46b6f77b-210f-4b1e-bdc4-7ccb5e69fe86")
+		(at 205.74 86.36)
+		(uuid "935823b2-7493-44ca-bbb2-961e89f42ced")
 	)
 	(no_connect
-		(at 213.36 116.84)
-		(uuid "4aac2c74-ec52-4fc0-a56b-f0d0cc1a04bd")
+		(at 271.78 96.52)
+		(uuid "93981a4c-dd23-4720-bda5-314886a00300")
 	)
 	(no_connect
-		(at 213.36 114.3)
-		(uuid "4bd5d6ca-e911-4e51-be42-21a3aef1d4dd")
+		(at 271.78 116.84)
+		(uuid "97c035a7-25fb-43b5-9d7a-18833bf9e1b4")
 	)
 	(no_connect
-		(at 119.38 119.38)
-		(uuid "513ebaa5-fb5a-4218-9d06-65c3d6239e33")
+		(at 246.38 101.6)
+		(uuid "987db450-2f09-41a8-b79b-c5011b380b4d")
 	)
 	(no_connect
-		(at 119.38 106.68)
-		(uuid "557d9dab-d09e-4088-add2-011ae8e2ed8b")
+		(at 165.1 109.22)
+		(uuid "9986dc49-5f6f-4c24-9327-0100661d5894")
 	)
 	(no_connect
-		(at 160.02 114.3)
-		(uuid "575d5825-c6ab-4388-9ee5-21247d33e85a")
+		(at 205.74 96.52)
+		(uuid "9c6adf9c-b876-4e27-94cf-b987c207eb6e")
 	)
 	(no_connect
-		(at 238.76 121.92)
-		(uuid "60f2d858-cd88-4dea-b613-746b081ad40d")
+		(at 205.74 101.6)
+		(uuid "9e6cbe36-0f5e-4de5-b7d4-1ddf84fed20c")
 	)
 	(no_connect
-		(at 160.02 121.92)
-		(uuid "65d7ebb8-0abe-47d6-84ed-0afd390da156")
+		(at 205.74 106.68)
+		(uuid "a62e1438-898a-4c7f-98f1-ad7ac6ca2c0d")
 	)
 	(no_connect
-		(at 160.02 106.68)
-		(uuid "6c4bdf07-f6f5-4a41-bd60-70cafac9048e")
+		(at 165.1 106.68)
+		(uuid "a6ebd8e4-fa8b-41d0-9318-24acdfb00a9e")
 	)
 	(no_connect
-		(at 160.02 86.36)
-		(uuid "6e921e8c-9e52-43b1-bb3e-db557773be1e")
+		(at 246.38 116.84)
+		(uuid "a86b3ea6-f8ce-456a-a7b7-8c04fb753c61")
 	)
 	(no_connect
-		(at 238.76 124.46)
-		(uuid "79e8b0cc-4f08-4a66-901b-7ff316442400")
+		(at 180.34 68.58)
+		(uuid "a96dbae6-6458-4ef3-91ab-c543d29e6ace")
 	)
 	(no_connect
-		(at 119.38 86.36)
-		(uuid "7ed1f925-7a4e-4a14-bb0b-6d62fed490c6")
+		(at 246.38 114.3)
+		(uuid "bd5a1301-f367-4793-9184-43b3a1fef942")
 	)
 	(no_connect
-		(at 160.02 81.28)
-		(uuid "8942bd96-c8c2-48c6-af08-b636ed8387c6")
+		(at 246.38 96.52)
+		(uuid "c04a32c0-aa6d-4268-b506-1a978320e63e")
 	)
 	(no_connect
-		(at 160.02 119.38)
-		(uuid "8d654778-4869-48ed-9a77-645b43db183e")
+		(at 246.38 119.38)
+		(uuid "ca483f3c-c546-4d15-b41c-0463b0934b12")
 	)
 	(no_connect
-		(at 160.02 104.14)
-		(uuid "91ef897d-3e39-41d7-86f5-6f92ee4f5969")
+		(at 205.74 111.76)
+		(uuid "cb5ecff0-8fac-41e6-a32c-915aa9bd1f6d")
 	)
 	(no_connect
-		(at 213.36 96.52)
-		(uuid "96e58b45-8f77-484b-8536-057923bc03df")
+		(at 165.1 119.38)
+		(uuid "cf18d243-c98c-4387-82d0-6c514ecba923")
 	)
 	(no_connect
-		(at 238.76 116.84)
-		(uuid "9ab4937c-0c2d-427f-b816-c78f8db71ee5")
+		(at 165.1 104.14)
+		(uuid "d5302f40-76e7-4c5a-ae13-6969c7f0615b")
 	)
 	(no_connect
-		(at 160.02 111.76)
-		(uuid "9bccdd05-7dc1-474b-9fe5-cbab06fa443d")
+		(at 261.62 81.28)
+		(uuid "d89e86a9-8a8a-40b1-8f52-54fa377b0c90")
 	)
 	(no_connect
-		(at 119.38 101.6)
-		(uuid "b73a0589-943e-44c7-bdd8-9ed84b403810")
+		(at 205.74 88.9)
+		(uuid "d8e17aaf-01c3-41f6-bcdf-b38342cacc00")
 	)
 	(no_connect
-		(at 119.38 114.3)
-		(uuid "d228af6f-89b7-4455-a409-441e584aee2f")
+		(at 205.74 116.84)
+		(uuid "db3e5120-3110-48b0-acb3-70bab3bb3027")
 	)
 	(no_connect
-		(at 160.02 99.06)
-		(uuid "df0f6725-a784-4269-b932-d75b66366ac3")
+		(at 205.74 109.22)
+		(uuid "e6049bc5-8c52-4750-ad2e-7fa4fbadd758")
 	)
 	(no_connect
-		(at 160.02 93.98)
-		(uuid "e300a70e-b201-4d7f-bde9-5165cab176f3")
+		(at 205.74 99.06)
+		(uuid "e99e72ce-14e7-4473-8b8e-51ae86736a78")
 	)
 	(no_connect
-		(at 119.38 111.76)
-		(uuid "f0b51521-b33e-4189-a4ae-426fb25c8dd5")
+		(at 165.1 99.06)
+		(uuid "f33c085d-a972-4053-89d6-839b63bbc284")
 	)
 	(no_connect
-		(at 238.76 114.3)
-		(uuid "f562be5d-de11-4fde-9d9b-ca03a304ce0d")
+		(at 165.1 111.76)
+		(uuid "f482278e-0740-440a-8eee-34fb43b25947")
 	)
 	(no_connect
-		(at 238.76 93.98)
-		(uuid "f5edfdfa-d2a6-4d03-936d-94857f2a1118")
+		(at 205.74 119.38)
+		(uuid "f64c0237-a5fe-4664-ba73-69a127faee6a")
 	)
 	(wire
 		(pts
-			(xy 60.96 198.12) (xy 71.12 198.12)
+			(xy 205.74 91.44) (xy 246.38 91.44)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "015fed78-ebaa-4396-ac5c-a02a0d472e73")
-	)
-	(wire
-		(pts
-			(xy 119.38 78.74) (xy 114.3 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "0932f2f8-96e8-44e5-930d-010281c39d09")
-	)
-	(wire
-		(pts
-			(xy 223.52 132.08) (xy 228.6 132.08)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "12817ba0-b74f-4e33-9490-2418d1a22ab0")
-	)
-	(wire
-		(pts
-			(xy 347.98 86.36) (xy 355.6 86.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1570ad15-f73f-4e86-a9fb-091cf31fc3ab")
-	)
-	(wire
-		(pts
-			(xy 35.56 93.98) (xy 35.56 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "163246d9-80f1-427a-b09a-49ad618ea38a")
-	)
-	(wire
-		(pts
-			(xy 35.56 88.9) (xy 35.56 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1813ed96-87c2-4e67-a38b-720128c0b802")
-	)
-	(wire
-		(pts
-			(xy 302.26 91.44) (xy 297.18 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1982972b-fc94-4a90-94b8-9993fb24b7d6")
-	)
-	(wire
-		(pts
-			(xy 76.2 55.88) (xy 88.9 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1c9ee4bf-2fc8-42e0-b9fe-36411092bed8")
-	)
-	(wire
-		(pts
-			(xy 355.6 71.12) (xy 355.6 76.2)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "1ec13fa3-1d34-472e-bc38-a07e4cba1f20")
-	)
-	(wire
-		(pts
-			(xy 35.56 78.74) (xy 35.56 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2219904b-49d3-46c7-b60b-754d6d98d38c")
-	)
-	(wire
-		(pts
-			(xy 347.98 121.92) (xy 370.84 121.92)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2656d01a-4440-44cb-8a0b-a3e6d537124e")
-	)
-	(wire
-		(pts
-			(xy 347.98 71.12) (xy 355.6 71.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3473160b-8d94-4d19-99fd-2bde84f4ddb2")
-	)
-	(wire
-		(pts
-			(xy 119.38 91.44) (xy 114.3 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3799fa6c-8c8a-4418-9431-bfa2208c0375")
-	)
-	(wire
-		(pts
-			(xy 213.36 106.68) (xy 208.28 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "3a5b408c-c5af-4001-b770-f138cae317e6")
-	)
-	(wire
-		(pts
-			(xy 213.36 101.6) (xy 208.28 101.6)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "40d1c127-3938-4631-89e5-d18d6de8b24a")
-	)
-	(wire
-		(pts
-			(xy 152.4 195.58) (xy 152.4 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4981c13b-2dc9-41d8-98f8-dac643247140")
-	)
-	(wire
-		(pts
-			(xy 83.82 114.3) (xy 86.36 114.3)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4b2870f4-a8f0-4f0f-80ec-38899672e523")
-	)
-	(wire
-		(pts
-			(xy 347.98 78.74) (xy 363.22 78.74)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "4dd667e2-90bf-4905-99e4-9ccf5a6774da")
-	)
-	(wire
-		(pts
-			(xy 312.42 63.5) (xy 312.42 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "594eba73-6d16-41d4-ac3d-745437997028")
-	)
-	(wire
-		(pts
-			(xy 139.7 134.62) (xy 139.7 139.7)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5b168b7e-4bff-4872-8a7c-59c06f4b1020")
-	)
-	(wire
-		(pts
-			(xy 213.36 91.44) (xy 208.28 91.44)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5cd5dcdb-be84-465c-add2-4cabb8fe28ad")
-	)
-	(wire
-		(pts
-			(xy 172.72 195.58) (xy 172.72 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "5dda809e-8615-4381-a95c-66a488ec5028")
-	)
-	(wire
-		(pts
-			(xy 35.56 55.88) (xy 50.8 55.88)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6834353b-eae4-4316-be9a-03592563d33f")
-	)
-	(wire
-		(pts
-			(xy 312.42 139.7) (xy 312.42 144.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6c8a5fdc-ffe2-4c2d-8224-abf44415e339")
-	)
-	(wire
-		(pts
-			(xy 302.26 88.9) (xy 297.18 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "6e8e5a27-9e9e-44ac-8fbf-5a927844146e")
-	)
-	(wire
-		(pts
-			(xy 58.42 119.38) (xy 53.34 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "70660f9e-7027-44c3-b875-b7535973ce4b")
-	)
-	(wire
-		(pts
-			(xy 302.26 93.98) (xy 297.18 93.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "724c4260-9e9b-47e7-9e73-cc00753202f3")
-	)
-	(wire
-		(pts
-			(xy 325.12 139.7) (xy 325.12 144.78)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "72a2e6f1-567e-400f-b0ea-aa1b784bb323")
-	)
-	(wire
-		(pts
-			(xy 162.56 215.9) (xy 162.56 220.98)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "72f5b85d-d47e-4633-b9d9-85f06a242f6a")
-	)
-	(wire
-		(pts
-			(xy 238.76 106.68) (xy 243.84 106.68)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73680a91-95aa-43ab-9254-7f055631d072")
-	)
-	(wire
-		(pts
-			(xy 162.56 195.58) (xy 162.56 190.5)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "73a3ac29-64bd-4942-a857-89c5f6fdad7e")
-	)
-	(wire
-		(pts
-			(xy 60.96 209.55) (xy 60.96 214.63)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "75756b15-9ae7-4039-85d8-a255e2c329c1")
-	)
-	(wire
-		(pts
-			(xy 213.36 88.9) (xy 208.28 88.9)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7846619a-1f97-4c8c-b364-ec2a74482c71")
-	)
-	(wire
-		(pts
-			(xy 213.36 119.38) (xy 208.28 119.38)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "785f52c3-190e-4e96-8dc8-9d74381c323e")
-	)
-	(wire
-		(pts
-			(xy 60.96 186.69) (xy 60.96 181.61)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "79a2ff75-5237-4431-b90f-baa392673dd9")
-	)
-	(wire
-		(pts
-			(xy 347.98 99.06) (xy 370.84 99.06)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "7a1427ef-a0db-4b31-b3fe-8dd34e220b9b")
-	)
-	(wire
-		(pts
-			(xy 325.12 63.5) (xy 325.12 58.42)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "84fd3779-5c35-4644-b033-f56632401fb2")
+		(uuid "00faa834-46fd-430c-bdbf-76fde53e3346")
 	)
 	(wire
 		(pts
@@ -4438,357 +4264,837 @@
 			(width 0)
 			(type default)
 		)
-		(uuid "8a8e4cf9-e51d-4725-b241-f10ebc3683b1")
+		(uuid "0693fba6-948d-4a50-93e2-8d354752056c")
 	)
 	(wire
 		(pts
-			(xy 238.76 109.22) (xy 243.84 109.22)
+			(xy 254 63.5) (xy 307.34 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8c78e6a0-b25f-4e06-99c8-6e593b5c0c2a")
+		(uuid "0b2e6509-003d-4a30-90c4-d06fdda348ef")
 	)
 	(wire
 		(pts
-			(xy 134.62 68.58) (xy 134.62 63.5)
+			(xy 261.62 134.62) (xy 256.54 134.62)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "8e0071c8-7fb1-42f4-acb8-acc14f93a338")
+		(uuid "0e47183c-515d-4d08-9d4d-078db3cad392")
 	)
 	(wire
 		(pts
-			(xy 60.96 194.31) (xy 60.96 201.93)
+			(xy 307.34 83.82) (xy 307.34 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "91260ca4-2e46-4617-9ed7-5d91b37f7c60")
+		(uuid "1488a045-6e4c-424e-b9fd-e8a99b65cadd")
 	)
 	(wire
 		(pts
-			(xy 58.42 114.3) (xy 53.34 114.3)
+			(xy 210.82 172.72) (xy 210.82 177.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "94efc5fb-aa9c-4c90-b567-0b5c3e18add2")
+		(uuid "1c7d2adb-e6a5-48c4-82dc-ebffda10baf6")
 	)
 	(wire
 		(pts
-			(xy 302.26 83.82) (xy 297.18 83.82)
+			(xy 121.92 119.38) (xy 127 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9cea162c-f44e-49be-8d4f-7f4315cc85e9")
+		(uuid "1e4552bd-00c6-4532-9262-3c6aad237b2d")
 	)
 	(wire
 		(pts
-			(xy 347.98 134.62) (xy 370.84 134.62)
+			(xy 127 119.38) (xy 127 124.46)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9fd74921-abb4-432f-a709-2a742c22557e")
+		(uuid "232e8166-0636-4fb6-bc29-7ef7c25191c0")
 	)
 	(wire
 		(pts
-			(xy 355.6 81.28) (xy 363.22 81.28)
+			(xy 350.52 63.5) (xy 350.52 99.06)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a09efe1b-eb3d-48ce-bf37-543bebc96d93")
+		(uuid "2504a483-3cef-43d4-9847-e2c1225790ed")
 	)
 	(wire
 		(pts
-			(xy 83.82 119.38) (xy 88.9 119.38)
+			(xy 35.56 55.88) (xy 50.8 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "aa22667c-9bb1-4e74-a462-a3fb40a3ec82")
+		(uuid "273bc126-2559-4cfa-9dd9-fc3d019b748c")
 	)
 	(wire
 		(pts
-			(xy 213.36 111.76) (xy 208.28 111.76)
+			(xy 271.78 121.92) (xy 297.18 121.92)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ab527f86-0649-435d-99c9-186f47a12d8d")
+		(uuid "2e70e907-e7bd-413b-8494-093a1a99ce03")
 	)
 	(wire
 		(pts
-			(xy 355.6 86.36) (xy 355.6 81.28)
+			(xy 81.28 55.88) (xy 86.36 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b855701b-1fa7-4307-890c-46fc32406f4a")
+		(uuid "38f531a6-25e6-4083-a6e3-bc388ade2127")
 	)
 	(wire
 		(pts
-			(xy 119.38 81.28) (xy 114.3 81.28)
+			(xy 185.42 134.62) (xy 185.42 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b877041e-a91c-449d-b834-d437b3940af2")
+		(uuid "4280738d-edad-4869-8ba1-b7ff99ed662a")
 	)
 	(wire
 		(pts
-			(xy 302.26 81.28) (xy 297.18 81.28)
+			(xy 132.08 63.5) (xy 144.78 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c83db3ba-36bc-41a6-989b-ed815fb3d0d9")
+		(uuid "44a8f2d4-f431-49d1-a9e6-7e715637376f")
 	)
 	(wire
 		(pts
-			(xy 231.14 78.74) (xy 231.14 73.66)
+			(xy 259.08 134.62) (xy 259.08 139.7)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cc908cdd-8543-4623-9e11-060664a71dce")
+		(uuid "4a812633-643c-4f7f-89e7-1497e940e50e")
 	)
 	(wire
 		(pts
-			(xy 238.76 104.14) (xy 243.84 104.14)
+			(xy 96.52 119.38) (xy 91.44 119.38)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ced84977-21e6-40cc-8ff4-df1bd81c02e4")
+		(uuid "4bbb45f5-3b4a-4135-90ab-00f4aaea9049")
 	)
 	(wire
 		(pts
-			(xy 88.9 55.88) (xy 96.52 55.88)
+			(xy 228.6 109.22) (xy 228.6 180.34)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d2d60ff4-356f-47fe-8c22-21d9ae0bc650")
+		(uuid "4c7e8e40-7602-4910-b9ea-71624d77a664")
 	)
 	(wire
 		(pts
-			(xy 238.76 88.9) (xy 243.84 88.9)
+			(xy 342.9 154.94) (xy 358.14 154.94)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d4cc547d-8bba-4b1e-b0b4-3387431d53ee")
+		(uuid "4d43a35f-400e-4d36-984c-2bdfa424f019")
 	)
 	(wire
 		(pts
-			(xy 213.36 109.22) (xy 208.28 109.22)
+			(xy 86.36 114.3) (xy 96.52 114.3)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d9bd084f-b389-4e48-84e1-a57136ac13c8")
+		(uuid "5069ceb5-8971-46fe-ab2f-6a33bfa23709")
 	)
 	(wire
 		(pts
-			(xy 302.26 86.36) (xy 297.18 86.36)
+			(xy 246.38 109.22) (xy 228.6 109.22)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "da46b871-7481-46f3-89d8-88ecf7c7eb8e")
+		(uuid "59715f8e-bde2-4919-954a-a18177958ca1")
 	)
 	(wire
 		(pts
-			(xy 302.26 96.52) (xy 297.18 96.52)
+			(xy 271.78 109.22) (xy 297.18 109.22)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e08b40e4-bba7-4c42-a727-c1da7249947e")
+		(uuid "5ad4362a-0a79-44a1-9b6a-b6260e834153")
 	)
 	(wire
 		(pts
-			(xy 355.6 76.2) (xy 363.22 76.2)
+			(xy 271.78 106.68) (xy 297.18 106.68)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e3f71da7-c34c-47df-b268-630b9eb226a3")
+		(uuid "5d1f8863-17db-43f3-8474-1b4a15792382")
 	)
 	(wire
 		(pts
-			(xy 226.06 132.08) (xy 226.06 137.16)
+			(xy 342.9 101.6) (xy 345.44 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e49fed82-c274-41d4-9019-fff52172db80")
+		(uuid "5d8dce32-8bdf-43f8-92bd-ed683575303e")
 	)
 	(wire
 		(pts
-			(xy 213.36 99.06) (xy 208.28 99.06)
+			(xy 157.48 63.5) (xy 190.5 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e754e7ff-5065-484d-9530-8eebc2f0ec28")
+		(uuid "6846b275-a4bd-4f72-a95e-91df8cf0bc04")
 	)
 	(wire
 		(pts
-			(xy 213.36 104.14) (xy 208.28 104.14)
+			(xy 76.2 55.88) (xy 81.28 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "edf19780-a7ea-476f-8a24-21a9c591425e")
+		(uuid "69065933-f605-4362-94b8-ab4741b0369c")
 	)
 	(wire
 		(pts
-			(xy 347.98 111.76) (xy 370.84 111.76)
+			(xy 190.5 68.58) (xy 190.5 63.5)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f5ed07d6-64db-4c03-9b2c-57df92aec973")
+		(uuid "6a9df5c7-6540-4fc8-bed6-5d67b06c8343")
 	)
 	(wire
 		(pts
-			(xy 86.36 114.3) (xy 88.9 114.3)
+			(xy 96.52 55.88) (xy 320.04 55.88)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "fe8c4c26-0698-472b-b4fc-5a023d4f5918")
+		(uuid "6ac87bd6-3fcb-43e5-b4f4-ba2f307c47d0")
 	)
-	(label "D7"
-		(at 208.28 106.68 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+	(wire
+		(pts
+			(xy 205.74 78.74) (xy 213.36 78.74)
 		)
-		(uuid "03b81c06-9177-49f9-9fd7-7d55b6ed503b")
-	)
-	(label "D6"
-		(at 297.18 86.36 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
+		(stroke
+			(width 0)
+			(type default)
 		)
-		(uuid "065138fe-0ad0-4618-ab55-50afe0bdc53e")
+		(uuid "77c64f46-bff7-4d27-8218-d7e62a5c5501")
 	)
-	(label "TRIG"
-		(at 243.84 106.68 0)
+	(wire
+		(pts
+			(xy 307.34 160.02) (xy 307.34 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7af4e030-5fb9-4494-b953-c2ace702fcfc")
+	)
+	(wire
+		(pts
+			(xy 210.82 162.56) (xy 210.82 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7c882fd9-e03e-4aef-bc94-cf19eb3477b0")
+	)
+	(wire
+		(pts
+			(xy 132.08 114.3) (xy 132.08 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7d596065-90a0-4162-a47b-21425ff5c320")
+	)
+	(wire
+		(pts
+			(xy 287.02 93.98) (xy 271.78 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "7e45fefe-d32e-4bf2-adb9-9c35939fa277")
+	)
+	(wire
+		(pts
+			(xy 35.56 88.9) (xy 35.56 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8335a110-800c-447b-b79e-61510e09f38c")
+	)
+	(wire
+		(pts
+			(xy 345.44 101.6) (xy 358.14 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8377faa4-bf0b-4bfa-ba6a-8ecb8007d2d0")
+	)
+	(wire
+		(pts
+			(xy 233.68 111.76) (xy 233.68 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83a2e10f-bda9-42c2-b845-849d31165fe8")
+	)
+	(wire
+		(pts
+			(xy 218.44 81.28) (xy 218.44 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "83cfe19c-c55c-495c-b400-0436969a6c21")
+	)
+	(wire
+		(pts
+			(xy 213.36 68.58) (xy 281.94 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8494ec1a-f5ab-4f5d-ba17-053c6f70eeec")
+	)
+	(wire
+		(pts
+			(xy 271.78 104.14) (xy 297.18 104.14)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "894417a6-cdae-4fe8-994a-a36a5b6ce266")
+	)
+	(wire
+		(pts
+			(xy 342.9 142.24) (xy 358.14 142.24)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8b4f6eca-30e8-48c5-a28f-d43060a97a1f")
+	)
+	(wire
+		(pts
+			(xy 246.38 111.76) (xy 233.68 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "91228115-6c24-46c8-9320-3e71d9731f46")
+	)
+	(wire
+		(pts
+			(xy 287.02 73.66) (xy 287.02 93.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "916c772a-5d43-44bf-85c3-e2161a132ee9")
+	)
+	(wire
+		(pts
+			(xy 271.78 111.76) (xy 297.18 111.76)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "963baf46-658c-403c-97d1-9176a8eb82ab")
+	)
+	(wire
+		(pts
+			(xy 241.3 190.5) (xy 236.22 190.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "96c4a265-02e9-4e0a-925b-5bbfe36b36c3")
+	)
+	(wire
+		(pts
+			(xy 320.04 55.88) (xy 320.04 83.82)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9c849255-a19e-4158-a86b-b207203af4ba")
+	)
+	(wire
+		(pts
+			(xy 342.9 99.06) (xy 350.52 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9dae4480-a719-43b8-a2d8-96e157b20a82")
+	)
+	(wire
+		(pts
+			(xy 307.34 63.5) (xy 350.52 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f0b18df-2054-4114-9f8d-daddf507bbab")
+	)
+	(wire
+		(pts
+			(xy 281.94 91.44) (xy 271.78 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a1b88f30-41ad-419f-ad2d-6d87d0d6bd54")
+	)
+	(wire
+		(pts
+			(xy 190.5 63.5) (xy 254 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a6f9ff34-3d95-41fe-8d67-b948a36daa0f")
+	)
+	(wire
+		(pts
+			(xy 254 81.28) (xy 254 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a74459d7-052c-4447-b710-14ed30782924")
+	)
+	(wire
+		(pts
+			(xy 35.56 78.74) (xy 35.56 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "a754078a-e821-481b-a59e-c79be1f38f56")
+	)
+	(wire
+		(pts
+			(xy 271.78 101.6) (xy 297.18 101.6)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "abadecbd-6a8d-4ded-8f75-32c472e170d5")
+	)
+	(wire
+		(pts
+			(xy 210.82 160.02) (xy 210.82 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac4fa623-9917-4959-98de-ae241683ca88")
+	)
+	(wire
+		(pts
+			(xy 144.78 63.5) (xy 157.48 63.5)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ac7e41e6-73ee-4aae-b775-9a0ba0e6755b")
+	)
+	(wire
+		(pts
+			(xy 86.36 147.32) (xy 210.82 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b02869aa-f295-4ae0-8968-2925d78aad8f")
+	)
+	(wire
+		(pts
+			(xy 213.36 78.74) (xy 213.36 68.58)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b23132dc-aa9b-41f8-bd8e-9a7d359e6cbf")
+	)
+	(wire
+		(pts
+			(xy 218.44 73.66) (xy 287.02 73.66)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b2d75630-4b83-4b75-94cf-cd408465bf8f")
+	)
+	(wire
+		(pts
+			(xy 233.68 175.26) (xy 241.3 175.26)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b4f09154-f95c-4b4d-8c32-e9ed31ffed94")
+	)
+	(wire
+		(pts
+			(xy 205.74 81.28) (xy 218.44 81.28)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b51fc4ca-57e0-4848-87b7-666402700841")
+	)
+	(wire
+		(pts
+			(xy 342.9 119.38) (xy 358.14 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b6331000-375e-4820-a55b-4d7511cd6534")
+	)
+	(wire
+		(pts
+			(xy 320.04 160.02) (xy 320.04 165.1)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "b7be22fb-fd32-4680-ba41-6d37e51af7eb")
+	)
+	(wire
+		(pts
+			(xy 223.52 106.68) (xy 223.52 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c80aef07-8039-459d-8bfe-2b675e5d4ec5")
+	)
+	(wire
+		(pts
+			(xy 86.36 55.88) (xy 96.52 55.88)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "c879b522-6cfa-47a7-87d3-f5ab334962e2")
+	)
+	(wire
+		(pts
+			(xy 345.44 101.6) (xy 345.44 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cc5deb32-09ea-47e7-8041-64d57be04299")
+	)
+	(wire
+		(pts
+			(xy 342.9 132.08) (xy 358.14 132.08)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceacf4fe-fc54-431b-847a-5eab581290cd")
+	)
+	(wire
+		(pts
+			(xy 223.52 162.56) (xy 210.82 162.56)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ceba80c0-191a-4db0-b70c-27d66d25f587")
+	)
+	(wire
+		(pts
+			(xy 157.48 185.42) (xy 241.3 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "cffea3da-4621-4f07-8ca8-98d1aa581701")
+	)
+	(wire
+		(pts
+			(xy 281.94 68.58) (xy 281.94 91.44)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d5e61e7d-69e3-46bd-a6df-08b0da064e17")
+	)
+	(wire
+		(pts
+			(xy 86.36 114.3) (xy 86.36 147.32)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d883b76b-17ae-4247-a973-40207fe7139f")
+	)
+	(wire
+		(pts
+			(xy 210.82 147.32) (xy 210.82 152.4)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "db96189c-2492-4693-aa77-9b657fbf40ff")
+	)
+	(wire
+		(pts
+			(xy 342.9 96.52) (xy 358.14 96.52)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ea62c35f-24d2-409b-b4ef-923d56e95dbb")
+	)
+	(wire
+		(pts
+			(xy 86.36 55.88) (xy 86.36 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ed245e31-6e20-4a6c-88f0-7f2d72a444d9")
+	)
+	(wire
+		(pts
+			(xy 127 119.38) (xy 132.08 119.38)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f092b068-af2e-4f1d-b12c-0b2ec43cff74")
+	)
+	(wire
+		(pts
+			(xy 350.52 99.06) (xy 358.14 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f3be83ea-bbe5-4ece-86ff-2ce0229fc5e5")
+	)
+	(wire
+		(pts
+			(xy 271.78 114.3) (xy 297.18 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f571e30a-f79a-4d4b-ac81-381d4355f93f")
+	)
+	(wire
+		(pts
+			(xy 228.6 180.34) (xy 241.3 180.34)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f73f1325-477a-4ad5-81e1-cd2a3bbeb605")
+	)
+	(wire
+		(pts
+			(xy 35.56 93.98) (xy 35.56 99.06)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f81bf0d6-2879-4085-9a7c-116691f64659")
+	)
+	(wire
+		(pts
+			(xy 246.38 106.68) (xy 223.52 106.68)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f9e69ca2-8982-4b09-9f17-de56628253d4")
+	)
+	(wire
+		(pts
+			(xy 121.92 114.3) (xy 132.08 114.3)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa16e4d0-b5ab-44fe-bb76-d9c6a847f2f5")
+	)
+	(wire
+		(pts
+			(xy 157.48 63.5) (xy 157.48 185.42)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "ff4365e7-3ef1-4edf-9fd7-76b52c2ad646")
+	)
+	(label "GPIO14_TXD"
+		(at 260.35 68.58 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "086667b7-156b-4877-a2a6-9f42f7a3601d")
+		(uuid "0b1eaa31-fa92-4fd9-b10f-4eaa70c20873")
+	)
+	(label "D9"
+		(at 289.56 114.3 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "1e875c34-d7dc-405c-872b-57e144c07f9a")
+	)
+	(label "D7"
+		(at 289.56 109.22 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "2e90686e-fc9b-4699-afc3-65c5225dec4e")
+	)
+	(label "D4"
+		(at 289.56 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "6022d729-763c-4dd8-a36d-c9a140cebe6f")
 	)
 	(label "ECHO"
-		(at 172.72 190.5 0)
+		(at 235 175.26 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "13aef064-0c5c-4be1-932a-385900bd9c14")
+		(uuid "749fe54d-8547-49e1-b42a-5ce35d020999")
 	)
-	(label "TRIG"
-		(at 162.56 190.5 0)
+	(label "D6"
+		(at 289.56 106.68 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left bottom)
 		)
-		(uuid "154cf32c-a95d-4d8a-b371-a5d9eb56d739")
-	)
-	(label "D12"
-		(at 208.28 119.38 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "17e62064-7aef-491d-a6e0-ab88e0014568")
-	)
-	(label "GPIO18_RESET"
-		(at 114.3 91.44 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "258f612c-5baf-4308-b86f-cf9411bf54a7")
-	)
-	(label "GND"
-		(at 349.25 86.36 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "2ed410c3-44f9-4cf7-800a-bda946ea6878")
-	)
-	(label "GPIO15_RXD"
-		(at 208.28 91.44 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "44deb08b-4e67-4728-83b7-e7cbc335475d")
-	)
-	(label "D7"
-		(at 297.18 88.9 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "49b14abf-eacb-4440-b87f-5e928c69af39")
+		(uuid "82821d5d-b79e-4582-ba64-a9d6b13186a8")
 	)
 	(label "VBAT"
 		(at 96.52 55.88 0)
@@ -4798,217 +5104,77 @@
 			)
 			(justify left bottom)
 		)
-		(uuid "4e5d3348-f8b4-4fc9-8add-6ed95e1a60c6")
-	)
-	(label "VBAT"
-		(at 60.96 181.61 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5086350b-6e04-4b0b-b89a-fb035539ad3d")
-	)
-	(label "GPIO14_TXD"
-		(at 208.28 88.9 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "52b0763c-4e9b-4074-8119-bc0383ed43b7")
-	)
-	(label "D9"
-		(at 297.18 93.98 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "56eff4ec-8307-4450-b4f6-7510b925d9f4")
-	)
-	(label "ECHO"
-		(at 243.84 109.22 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "5ee0eccb-8364-4886-b2aa-7e3399586261")
-	)
-	(label "GPIO14_TXD"
-		(at 114.3 78.74 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "6a6e4c48-b449-4bf4-ae0c-1e5359eae7aa")
-	)
-	(label "+5V"
-		(at 349.25 78.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "6c58fe2e-e84c-4bb4-aec1-40c9f8e21bf3")
-	)
-	(label "D4"
-		(at 208.28 99.06 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "71295699-e0c9-4448-8148-410468e02e92")
-	)
-	(label "D5"
-		(at 297.18 83.82 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "86c0cf7d-c88a-44d3-b408-68c91be2057b")
-	)
-	(label "D12"
-		(at 297.18 96.52 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "95514812-ae1d-4814-a32d-0307f211d3f2")
-	)
-	(label "VBAT"
-		(at 325.12 58.42 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "966592ba-4ff9-4997-86b7-89e306a279cb")
-	)
-	(label "D6"
-		(at 208.28 104.14 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ae1e420b-82e4-431a-b996-625aa9317abc")
-	)
-	(label "D5"
-		(at 208.28 101.6 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "ae360671-0c27-40cc-9274-dd6274c81370")
-	)
-	(label "PACK_SENSE"
-		(at 243.84 104.14 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b441b169-cccc-4849-8abf-2d02f343b631")
-	)
-	(label "PACK_SENSE"
-		(at 71.12 198.12 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "b9a7005b-60a0-49c1-b1f6-d6dee16e118c")
-	)
-	(label "D8"
-		(at 208.28 109.22 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c46eaf1e-4c04-420f-927b-97b3a9326a49")
-	)
-	(label "D4"
-		(at 297.18 81.28 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "c94ff915-6f96-4e12-b94d-4b2fefa6405e")
-	)
-	(label "GPIO18_RESET"
-		(at 243.84 88.9 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "ccd0cfbc-f1ed-4fec-b77a-328adfc45e7c")
-	)
-	(label "VBAT"
-		(at 53.34 114.3 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "d20aba8d-c588-4624-ac12-80ed276c90a3")
-	)
-	(label "D8"
-		(at 297.18 91.44 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "dae7ce39-aa1a-45b0-ae19-34334eb68c0d")
-	)
-	(label "D9"
-		(at 208.28 111.76 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "e9180b4f-663b-4cc9-80ba-6e61dd47a56d")
+		(uuid "abbe5b44-dc21-4e1f-9030-8cc4def6cf94")
 	)
 	(label "GPIO15_RXD"
-		(at 114.3 81.28 180)
+		(at 260.35 73.66 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right bottom)
+			(justify left bottom)
 		)
-		(uuid "fb869f6a-917b-4a59-afaf-f7032a708ae4")
+		(uuid "b09436f1-2891-4e3f-8fae-c3589efd72b6")
+	)
+	(label "D8"
+		(at 289.56 111.76 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "c3f6229f-a12c-43e4-8d56-a9e8dcb91819")
+	)
+	(label "GPIO18_RESET"
+		(at 223.52 91.44 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d6c46fbe-db4c-4b73-9ab9-0c29c0292928")
+	)
+	(label "D5"
+		(at 289.56 104.14 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "da42b94d-5d88-4a03-842b-d92d944d5e0a")
+	)
+	(label "PACK_SENSE"
+		(at 229.87 106.68 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "dd1173e2-0b47-4240-9057-289ed5d3679c")
+	)
+	(label "TRIG"
+		(at 229.87 180.34 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "e0e2ff30-4804-401f-a261-26df9cec9e30")
+	)
+	(label "D12"
+		(at 289.56 121.92 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "f61f412c-fa1d-4c6b-8016-5d3c333db2ab")
 	)
 	(symbol
 		(lib_id "power:GND")
@@ -5020,7 +5186,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "06a93890-cc9f-474c-af57-6bf8939e20e3")
+		(uuid "00c641b7-fe09-44d3-ab91-c26973cdc5c4")
 		(property "Reference" "#PWR001"
 			(at 35.56 105.41 0)
 			(hide yes)
@@ -5076,7 +5242,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "81256357-cfa6-47cd-8998-316a840c84f3")
+			(uuid "c39c3148-87f6-45b9-8438-b3b74b9b0b5d")
 		)
 		(instances
 			(project "rover-cam"
@@ -5088,8 +5254,8 @@
 		)
 	)
 	(symbol
-		(lib_id "rover-cam:BUCK_5V")
-		(at 71.12 116.84 0)
+		(lib_id "power:PWR_FLAG")
+		(at 81.28 55.88 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5097,31 +5263,31 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "199a197a-b5f3-461f-97a4-94e5bcc2e343")
-		(property "Reference" "U1"
-			(at 60.96 107.95 0)
+		(uuid "00d04d01-0ed0-4acf-9906-9775b7eaddf7")
+		(property "Reference" "#FLG001"
+			(at 81.28 53.975 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left bottom)
 			)
 		)
-		(property "Value" "AKEYSRC 5V 3A buck (B0GYJDP96Q)"
-			(at 60.96 125.73 0)
+		(property "Value" "PWR_FLAG"
+			(at 81.28 52.07 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left top)
 			)
 		)
 		(property "Footprint" ""
-			(at 71.12 116.84 0)
+			(at 81.28 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5132,7 +5298,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 71.12 116.84 0)
+			(at 81.28 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5143,7 +5309,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 71.12 116.84 0)
+			(at 81.28 55.88 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5154,98 +5320,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "a3e0886a-dbce-47c1-ba9a-8f19ff4b8924")
-		)
-		(pin "2"
-			(uuid "0a178e35-707b-4c7e-8ad2-7ee0671af2fd")
-		)
-		(pin "3"
-			(uuid "89822c34-c1ea-41bc-8bd0-58a4fb859b3b")
-		)
-		(pin "4"
-			(uuid "101a8af6-143b-4975-962f-a2e2979833ee")
+			(uuid "1b11adb4-c55e-4954-9743-abf7e59fad2b")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "U1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 152.4 190.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3efaccca-471b-449e-9a93-87778f62e9e4")
-		(property "Reference" "#PWR013"
-			(at 152.4 194.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 152.4 186.944 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 152.4 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 152.4 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 152.4 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "3356426e-47a0-459d-accb-e3e132298c71")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR013")
+					(reference "#FLG001")
 					(unit 1)
 				)
 			)
@@ -5253,7 +5333,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 162.56 220.98 0)
+		(at 91.44 119.38 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5261,331 +5341,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "4cce4572-ec80-4e0a-9a00-73727e958da2")
-		(property "Reference" "#PWR014"
-			(at 162.56 227.33 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 162.56 224.79 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 162.56 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 162.56 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 162.56 220.98 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "2f18b0ef-3801-489c-a5a8-a2ec65453575")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR014")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "rover-cam:HC-SR04")
-		(at 162.56 205.74 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "53a79ca7-ec9f-4bc5-8fe9-38168c756924")
-		(property "Reference" "U3"
-			(at 147.32 196.85 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "HC-SR04"
-			(at 147.32 214.63 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Footprint" ""
-			(at 162.56 205.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 162.56 205.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 162.56 205.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "ce35a875-9b0c-4ca3-84b5-5af695076e97")
-		)
-		(pin "2"
-			(uuid "9c628278-e12f-46bd-bbeb-1249f0c170cf")
-		)
-		(pin "3"
-			(uuid "daff2652-1885-4df5-9d49-8a71e035ea98")
-		)
-		(pin "4"
-			(uuid "0662fd2b-3af6-4829-b7a3-f8306526b650")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "U3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Motor:Motor_DC")
-		(at 370.84 127 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "55e3952d-3a39-4e70-87ba-1e7f181656ae")
-		(property "Reference" "M2"
-			(at 373.38 124.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "right TT motor"
-			(at 373.38 132.08 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Footprint" ""
-			(at 370.84 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 370.84 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 370.84 127 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "628eaa46-c42c-4f72-b85d-1bae3a7fc5b9")
-		)
-		(pin "2"
-			(uuid "b3498128-45e8-4624-b55f-030737f996e7")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "M2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 134.62 63.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6147607a-f8fd-4caf-9e9f-61ddb65ccd41")
-		(property "Reference" "#PWR005"
-			(at 134.62 67.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 134.62 59.944 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 134.62 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 134.62 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 134.62 63.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "76049c4e-8faa-43cc-a42e-dc229a8a02ff")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR005")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 53.34 119.38 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "6acb22a7-d776-4a11-b5e4-682a0c5c7c77")
+		(uuid "036933e7-5304-4b3d-a5c6-f0315b62ea0c")
 		(property "Reference" "#PWR002"
-			(at 53.34 125.73 0)
+			(at 91.44 125.73 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5596,7 +5354,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 53.34 123.19 0)
+			(at 91.44 123.19 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5606,7 +5364,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 53.34 119.38 0)
+			(at 91.44 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5617,7 +5375,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 53.34 119.38 0)
+			(at 91.44 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5628,7 +5386,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 53.34 119.38 0)
+			(at 91.44 119.38 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5639,7 +5397,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "927e680d-b617-4868-8b9e-ba5f595143a8")
+			(uuid "37b585cb-f5a2-4aee-bf00-ad4a4cefe8e8")
 		)
 		(instances
 			(project "rover-cam"
@@ -5652,7 +5410,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 88.9 119.38 0)
+		(at 185.42 139.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5660,9 +5418,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "6e5306f8-8d5c-4fdf-a927-0496f74d5fa3")
+		(uuid "12e73b23-47bf-451e-8501-33e8f8aedb86")
 		(property "Reference" "#PWR004"
-			(at 88.9 125.73 0)
+			(at 185.42 146.05 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5673,7 +5431,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 88.9 123.19 0)
+			(at 185.42 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5683,7 +5441,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 88.9 119.38 0)
+			(at 185.42 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5694,7 +5452,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 88.9 119.38 0)
+			(at 185.42 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5705,7 +5463,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 88.9 119.38 0)
+			(at 185.42 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5716,1087 +5474,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "9e5ab341-921a-44c4-b692-472823e81ced")
+			(uuid "212d8712-48a2-4f91-bec2-43b7bd992484")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
 					(reference "#PWR004")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Motor:Motor_Servo")
-		(at 370.84 78.74 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8968ff29-b6b8-48ca-bb34-cf9a4af5b2c1")
-		(property "Reference" "M3"
-			(at 363.22 71.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "Parallax standard servo 4-6 V"
-			(at 365.76 82.804 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Footprint" ""
-			(at 370.84 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 370.84 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 370.84 78.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bc8f7805-0b74-435c-b6f0-814cc9a7663f")
-		)
-		(pin "2"
-			(uuid "b8087848-2086-4bd4-9ece-63593f9ee017")
-		)
-		(pin "3"
-			(uuid "5d070de6-2751-4569-89cd-38565f08ae85")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "M3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 139.7 139.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8a4b6358-d6ff-4ee4-8686-fbad450f888e")
-		(property "Reference" "#PWR006"
-			(at 139.7 146.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 139.7 143.51 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 139.7 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 139.7 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 139.7 139.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "547143e4-8201-4c29-8d52-6d67b17cd45c")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR006")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 312.42 58.42 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8bc643d9-c61d-4f83-acbe-807c727f1ea0")
-		(property "Reference" "#PWR009"
-			(at 312.42 62.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 312.42 54.864 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 312.42 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 312.42 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 312.42 58.42 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "141971f3-c8a3-4fe3-b343-77ce2e30cb48")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR009")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Connector:Raspberry_Pi_2_3")
-		(at 139.7 101.6 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8da5d693-34e0-4497-bd2c-0d32d967c089")
-		(property "Reference" "J1"
-			(at 121.92 69.85 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "Raspberry Pi 4"
-			(at 149.86 133.35 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Footprint" ""
-			(at 139.7 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 139.7 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 139.7 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "02db1b50-85c9-4138-89f1-812a5cc6a85e")
-		)
-		(pin "2"
-			(uuid "79a02cab-d87b-4420-946d-e229898f652d")
-		)
-		(pin "3"
-			(uuid "0a3e068d-9844-41b3-93ac-c078b9d9600c")
-		)
-		(pin "4"
-			(uuid "fb528926-c2c9-488c-a4a7-2e54a05a2f2d")
-		)
-		(pin "5"
-			(uuid "b68e904d-cf42-477f-b903-870e4f8d793e")
-		)
-		(pin "6"
-			(uuid "a4113351-a149-4993-9212-dafd72393d7a")
-		)
-		(pin "7"
-			(uuid "5bfab4f3-4fc4-42c1-8ad2-5c100a07b342")
-		)
-		(pin "8"
-			(uuid "b251ddd4-b004-45c9-8bb1-8f86f127c2fb")
-		)
-		(pin "9"
-			(uuid "7c9bde5c-0a4f-41a5-bcf1-007b8d6affce")
-		)
-		(pin "10"
-			(uuid "645a3953-b68a-41d1-90ee-29656c7262ef")
-		)
-		(pin "11"
-			(uuid "ae5f6d87-d9ae-4b20-80da-dfde5ce2d2cc")
-		)
-		(pin "12"
-			(uuid "a4f0e5e7-342f-413b-b4cd-7898b1b746bb")
-		)
-		(pin "13"
-			(uuid "b5418279-a07c-4047-9077-f551f6875a2e")
-		)
-		(pin "14"
-			(uuid "93e2398b-5990-426f-9c10-c46caa51f0c0")
-		)
-		(pin "15"
-			(uuid "db0c65f3-263a-47ec-bfab-6d4ec31bc177")
-		)
-		(pin "16"
-			(uuid "82cd4205-2131-402d-9f97-d44c8ed58d67")
-		)
-		(pin "17"
-			(uuid "5e7b4d2d-f98d-483c-95ec-0eb00440724b")
-		)
-		(pin "18"
-			(uuid "e4b66a25-5278-4458-8cbb-48b628f6dba6")
-		)
-		(pin "19"
-			(uuid "182269a5-4a6f-4ed8-b60c-9193251a1063")
-		)
-		(pin "20"
-			(uuid "66d62a1e-c1e2-49e5-86ab-d6f0cc7cbbbf")
-		)
-		(pin "21"
-			(uuid "3543c44e-67b0-4fc7-a4d5-765f7191ea08")
-		)
-		(pin "22"
-			(uuid "0f2347e5-3f13-4eb1-8468-8c6c7c342e73")
-		)
-		(pin "23"
-			(uuid "8a88584a-be8a-4c45-aa48-3086eb547b50")
-		)
-		(pin "24"
-			(uuid "6bac2032-1b28-499c-b7e3-65b3eb3dc402")
-		)
-		(pin "25"
-			(uuid "b7ca57e5-6b53-4c7a-bda6-a5c3d77bf06b")
-		)
-		(pin "26"
-			(uuid "8afa88a1-9b38-4db7-ad7d-e1161c310f4c")
-		)
-		(pin "27"
-			(uuid "1dce746e-a438-4a8e-b384-138fa5b54d7d")
-		)
-		(pin "28"
-			(uuid "129abce2-46c1-4c8d-a298-8b8201936b36")
-		)
-		(pin "29"
-			(uuid "8f74782a-06a7-4af4-b188-a0b9fefc0df7")
-		)
-		(pin "30"
-			(uuid "510ea974-ec09-4744-af05-29da003e4fcc")
-		)
-		(pin "31"
-			(uuid "13d5daa9-7819-4912-bb1d-824b4202a5cf")
-		)
-		(pin "32"
-			(uuid "9422a168-1142-433f-b284-799e12f37ee4")
-		)
-		(pin "33"
-			(uuid "f4e1c84d-fa8f-4555-a234-021ac1e53a68")
-		)
-		(pin "34"
-			(uuid "991b62da-d0eb-43df-bfec-c50b058d6da4")
-		)
-		(pin "35"
-			(uuid "08faadbc-a63b-43cd-a8c3-5f421342e40d")
-		)
-		(pin "36"
-			(uuid "48acccb8-739e-4d1b-8d5c-1f7dcc62b24c")
-		)
-		(pin "37"
-			(uuid "54cd5e01-cc59-4abc-ba06-a52044257597")
-		)
-		(pin "38"
-			(uuid "69651223-2be1-4430-8aba-42786b4594b4")
-		)
-		(pin "39"
-			(uuid "8da8570c-6c6b-4e9f-a1fc-3d43b6b9e083")
-		)
-		(pin "40"
-			(uuid "814690e5-f749-469a-970f-582e7c202cd7")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "J1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:Fuse")
-		(at 54.61 55.88 90)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "9343fcd3-7284-4e0c-986a-e2f3755eca82")
-		(property "Reference" "F1"
-			(at 54.61 52.07 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "5A blade"
-			(at 54.61 59.69 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 54.61 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 54.61 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 54.61 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "45dd49a6-6ade-41df-b3ba-58a2f802e828")
-		)
-		(pin "2"
-			(uuid "fdcd7e6b-87d8-4d04-a91b-b6ed12c5accb")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "F1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "MCU_Module:Arduino_UNO_R3")
-		(at 226.06 104.14 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "96a09814-4373-459f-a890-da5f55673542")
-		(property "Reference" "A1"
-			(at 215.9 80.645 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left bottom)
-			)
-		)
-		(property "Value" "WyoLum aLaMode (Uno-compatible)"
-			(at 231.14 130.81 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left top)
-			)
-		)
-		(property "Footprint" ""
-			(at 226.06 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 226.06 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 226.06 104.14 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "92666e2d-ff1a-43c8-bf71-f41d0ff9d64b")
-		)
-		(pin "2"
-			(uuid "35afc3d6-b3e0-4260-959c-6caf1c3fa86b")
-		)
-		(pin "3"
-			(uuid "35b29273-2bf4-4dab-86d1-30e9f14f4906")
-		)
-		(pin "4"
-			(uuid "4c2def94-0ec4-4874-8607-6ebb935f0397")
-		)
-		(pin "5"
-			(uuid "7e2536f5-6955-4303-b6d8-4fb2e5c86e8a")
-		)
-		(pin "6"
-			(uuid "88ab14ea-eec0-4d5c-bd26-75c9741bdfe0")
-		)
-		(pin "7"
-			(uuid "2f92429d-92de-4f2a-ae73-864def87c4f4")
-		)
-		(pin "8"
-			(uuid "bc6622f9-85c1-4685-a200-da23aad2f93a")
-		)
-		(pin "9"
-			(uuid "ad86bf2b-28ca-4bc4-99f2-940120393e48")
-		)
-		(pin "10"
-			(uuid "da9d27e7-5972-4849-864b-2414a2b49852")
-		)
-		(pin "11"
-			(uuid "29d76c8b-614c-48e2-8d2f-ef8f76a4b2b7")
-		)
-		(pin "12"
-			(uuid "b54627e1-69e6-4d07-a9eb-64f6b06a098a")
-		)
-		(pin "13"
-			(uuid "d5c0b2c0-0894-41f3-9921-7f06a3ecd37d")
-		)
-		(pin "14"
-			(uuid "6fc6609a-6b24-48d0-9cdb-d0508672b978")
-		)
-		(pin "15"
-			(uuid "b0ad78f6-37c7-4ee9-bdcc-4e515528db0a")
-		)
-		(pin "16"
-			(uuid "d51a39aa-2e9b-4f55-87e8-7a7e77548831")
-		)
-		(pin "17"
-			(uuid "549b0dbf-4359-42c5-b103-d850700d462b")
-		)
-		(pin "18"
-			(uuid "4855ee66-bcb9-4be5-9c17-01b6dacc0725")
-		)
-		(pin "19"
-			(uuid "9ecaef9b-1940-492e-b555-344b21ad1660")
-		)
-		(pin "20"
-			(uuid "9378369b-7e64-479d-93f0-9545d7769be7")
-		)
-		(pin "21"
-			(uuid "ef96ed4d-b07c-4b25-9b7e-95d1f48235bc")
-		)
-		(pin "22"
-			(uuid "988d40e8-11c7-46b1-a8f9-97b6011db0f9")
-		)
-		(pin "23"
-			(uuid "768d4139-4859-4fa9-bb75-d283988f038c")
-		)
-		(pin "24"
-			(uuid "9783fddd-2c69-4de8-92fd-b5873b5f7c5d")
-		)
-		(pin "25"
-			(uuid "77bd82cd-1591-4ed1-9bb8-7028298325b7")
-		)
-		(pin "26"
-			(uuid "ad1ffe79-cf49-4d68-a962-b68c9633711e")
-		)
-		(pin "27"
-			(uuid "477dd42c-2b1c-4cf7-89a6-f8a20e10e3dc")
-		)
-		(pin "28"
-			(uuid "f552f656-20b4-4261-846c-3f8b6d744cfa")
-		)
-		(pin "29"
-			(uuid "9270773f-3d03-445c-b869-d80c0f20558f")
-		)
-		(pin "30"
-			(uuid "e3073e8c-be48-4fbf-93f2-f703c62c97f7")
-		)
-		(pin "31"
-			(uuid "94f328cc-282a-4fae-a319-7f6eb1932758")
-		)
-		(pin "32"
-			(uuid "4acf9b8a-100c-4556-830a-da5993404908")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "A1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Device:R")
-		(at 60.96 190.5 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a2852669-5da2-416d-a181-5201324d1179")
-		(property "Reference" "R1"
-			(at 63.5 189.23 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "10k"
-			(at 63.5 191.77 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" ""
-			(at 60.96 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 60.96 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 60.96 190.5 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "6968aa63-435b-449f-a848-10ff88acf23f")
-		)
-		(pin "2"
-			(uuid "90e1db2f-56bc-4486-b81a-f8e740dc8282")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "R1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "Switch:SW_SPST")
-		(at 71.12 55.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "a332613b-71c2-4c75-9221-c8bafa54e9a5")
-		(property "Reference" "SW1"
-			(at 71.12 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "chassis switch"
-			(at 71.12 60.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 71.12 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 71.12 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 71.12 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "780ef84a-aa17-43b8-9d73-72902eb6c8ab")
-		)
-		(pin "2"
-			(uuid "7a063130-901a-4340-874e-fc4d8496940c")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "SW1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:GND")
-		(at 325.12 144.78 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "aa6b5776-adc7-447f-833a-f5ca58ffc7f9")
-		(property "Reference" "#PWR011"
-			(at 325.12 151.13 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "GND"
-			(at 325.12 148.59 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 325.12 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 325.12 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 325.12 144.78 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "237115b2-671b-414e-b5b4-f53ec2aae90a")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR011")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+5V")
-		(at 88.9 114.3 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "ae2b92af-e611-469b-bd1e-f9740ab0db9e")
-		(property "Reference" "#PWR003"
-			(at 88.9 118.11 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "+5V"
-			(at 88.9 110.744 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 114.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 114.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 88.9 114.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "46c29a36-86ee-49f1-b70c-7fd6015b083e")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR003")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:PWR_FLAG")
-		(at 88.9 55.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "b3e5d267-a8ab-4a29-ada3-42dbf4479a9e")
-		(property "Reference" "#FLG001"
-			(at 88.9 53.975 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "PWR_FLAG"
-			(at 88.9 52.07 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 88.9 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 88.9 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 88.9 55.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "f276c108-78d5-4755-b16c-990b7f4d946d")
-		)
-		(instances
-			(project "rover-cam"
-				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#FLG001")
 					(unit 1)
 				)
 			)
@@ -6812,7 +5495,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "c55963ec-725e-43b8-bc9e-f2cfc3fd3277")
+		(uuid "17c7b390-1a3c-4edb-b0e2-1b96c3407817")
 		(property "Reference" "#FLG002"
 			(at 35.56 92.075 0)
 			(hide yes)
@@ -6869,7 +5552,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "7acf08c1-442b-489b-b5fc-453103aae283")
+			(uuid "1f366f87-b382-4a25-b6ba-27fbd5d08511")
 		)
 		(instances
 			(project "rover-cam"
@@ -6881,8 +5564,8 @@
 		)
 	)
 	(symbol
-		(lib_id "Motor:Motor_DC")
-		(at 370.84 104.14 0)
+		(lib_id "power:GND")
+		(at 259.08 139.7 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6890,31 +5573,30 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "ca00a90e-83a0-4efb-9229-6339ceb4cd0f")
-		(property "Reference" "M1"
-			(at 373.38 101.6 0)
+		(uuid "18b6b554-9648-44d9-9a20-88599cebfac6")
+		(property "Reference" "#PWR005"
+			(at 259.08 146.05 0)
+			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left)
 			)
 		)
-		(property "Value" "left TT motor"
-			(at 373.38 109.22 0)
+		(property "Value" "GND"
+			(at 259.08 143.51 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
-				(justify left top)
 			)
 		)
 		(property "Footprint" ""
-			(at 370.84 104.14 0)
+			(at 259.08 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6925,7 +5607,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 370.84 104.14 0)
+			(at 259.08 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6936,7 +5618,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 370.84 104.14 0)
+			(at 259.08 139.7 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6947,23 +5629,20 @@
 			)
 		)
 		(pin "1"
-			(uuid "f5e887af-6e7e-4538-815e-6629fd857962")
-		)
-		(pin "2"
-			(uuid "9bcf15e3-37eb-4a48-8e1e-8b10aab7c5dc")
+			(uuid "8cbeb332-c033-4d8e-91ff-e9b9e59b96ef")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "M1")
+					(reference "#PWR005")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "rover-cam:Adafruit_MotorShield_v1")
-		(at 325.12 88.9 0)
+		(lib_id "rover-cam:HC-SR04")
+		(at 256.54 182.88 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6971,9 +5650,755 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "cbbcb958-7891-4e3d-a92e-e167b3200451")
+		(uuid "1acd7bfc-81e2-4686-9b84-19bd896dc964")
+		(property "Reference" "U3"
+			(at 243.84 171.45 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "HC-SR04"
+			(at 243.84 194.31 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 256.54 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 256.54 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 256.54 182.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "3"
+			(uuid "46ae7e24-b58f-4882-81ee-b4591629de53")
+		)
+		(pin "2"
+			(uuid "17f4595b-10b5-445f-a3dc-8df0ccd78349")
+		)
+		(pin "1"
+			(uuid "9a8befd9-d15a-4bad-beb4-ddc728e0d866")
+		)
+		(pin "4"
+			(uuid "bbe1af98-f33a-4c2a-a19d-6cda74918da3")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "U3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 345.44 106.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "1c6690d5-32c6-47e6-b62e-2e0cb96a9598")
+		(property "Reference" "#PWR009"
+			(at 345.44 113.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 345.44 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 345.44 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 345.44 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 345.44 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "11610394-d168-4cf4-b108-034e74f705fb")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "#PWR009")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 320.04 165.1 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "26b5f39f-2d50-4ce7-8d7e-e305ba273385")
+		(property "Reference" "#PWR008"
+			(at 320.04 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 320.04 168.91 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 320.04 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 320.04 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 320.04 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "e7615c7b-ab1c-4f4b-94e2-fa5b204d67a9")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "#PWR008")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "rover-cam:BUCK_5V")
+		(at 109.22 116.84 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "4d1c96e5-748b-4699-9dbe-fbfd0274ca66")
+		(property "Reference" "U1"
+			(at 99.06 107.95 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "AKEYSRC 5V 3A buck"
+			(at 99.06 125.73 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 109.22 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 109.22 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 109.22 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "4349a28a-e6f7-4fd6-9a1b-9a38b0cf33ec")
+		)
+		(pin "2"
+			(uuid "2a881e64-f754-401f-83d0-d383d68aefba")
+		)
+		(pin "3"
+			(uuid "255224b2-62bb-4a0d-8d58-2f7bfbe79a30")
+		)
+		(pin "4"
+			(uuid "d31a2b93-962c-4d95-8c42-b72728b210c8")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "rover-cam:USB_C_Plug")
+		(at 142.24 116.84 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "563c25b7-d7ff-427e-8637-4aac3eaee585")
+		(property "Reference" "J2"
+			(at 134.62 110.49 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "USB-C plug"
+			(at 134.62 123.19 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 142.24 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 142.24 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 142.24 116.84 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c2c12f98-02de-479f-9690-2946b82065e8")
+		)
+		(pin "2"
+			(uuid "3ca70a7a-d0ae-47ba-b049-2f07faf7fb80")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "J2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Motor:Motor_Servo")
+		(at 365.76 99.06 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "60c31040-fd55-4679-bfac-cea75abc2795")
+		(property "Reference" "M3"
+			(at 360.68 91.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Parallax standard servo 4-6 V"
+			(at 360.68 103.124 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 365.76 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 365.76 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 365.76 99.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f21167ae-09b8-429a-a49e-e23e3c3f82f4")
+		)
+		(pin "2"
+			(uuid "5011ab1a-e04b-46c1-b36b-4e03d8a0a8e7")
+		)
+		(pin "3"
+			(uuid "45fd3e97-f84f-47aa-a345-1daa90944b07")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "M3")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:R")
+		(at 210.82 168.91 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "634f18e5-01f6-4aec-8380-d1fe3f86782e")
+		(property "Reference" "R2"
+			(at 213.36 167.64 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "3.3k"
+			(at 213.36 170.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" ""
+			(at 210.82 168.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 210.82 168.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 210.82 168.91 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "db4bbdeb-e95a-4265-a671-86157a8bddae")
+		)
+		(pin "2"
+			(uuid "43f65e2b-99e2-4146-8d32-6e1e7ac57a25")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "R2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "MCU_Module:Arduino_UNO_R3")
+		(at 259.08 106.68 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "66fa5823-92e8-4654-bfc1-9225a005898d")
+		(property "Reference" "A1"
+			(at 248.92 83.185 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "WyoLum aLaMode (Uno-compatible)"
+			(at 248.92 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 259.08 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 259.08 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 259.08 106.68 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "035ffdb5-26ea-4c77-bf76-0047e117a8e4")
+		)
+		(pin "2"
+			(uuid "3571b241-e6dd-4928-a586-ba799d039399")
+		)
+		(pin "3"
+			(uuid "d6e141fb-b8f0-4643-a7b6-74496513bf31")
+		)
+		(pin "4"
+			(uuid "72839f75-a791-4266-834b-2cb8c3df1196")
+		)
+		(pin "5"
+			(uuid "357d8f3c-e6d9-4645-8395-c9ba6d093510")
+		)
+		(pin "6"
+			(uuid "8b6895fb-1585-49c1-8739-4b4cb58484cc")
+		)
+		(pin "7"
+			(uuid "8593ab3d-ae71-4071-a85a-422f6c86f47e")
+		)
+		(pin "8"
+			(uuid "be2143fb-6cae-4b9a-b9d2-4b0980aa7abd")
+		)
+		(pin "9"
+			(uuid "93b2fe58-188a-4b99-8245-e058e375f94e")
+		)
+		(pin "10"
+			(uuid "744b448d-1053-41d8-a2c0-a18a453c39f9")
+		)
+		(pin "11"
+			(uuid "3a4c4b81-c739-41f4-8c24-17e6365c5554")
+		)
+		(pin "12"
+			(uuid "c29fcfe8-57d4-4ac4-a91e-d12834564fde")
+		)
+		(pin "13"
+			(uuid "0baba967-11c9-42f2-a23a-c4f00adabf6f")
+		)
+		(pin "14"
+			(uuid "ae718a10-391b-4e8d-b230-9cf4e2881cb3")
+		)
+		(pin "15"
+			(uuid "576c9962-a558-41c2-ac65-d1209950e40a")
+		)
+		(pin "16"
+			(uuid "f837afa6-7d0c-40d9-afb7-a8f2b1447457")
+		)
+		(pin "17"
+			(uuid "ba371cbe-7f4d-41f1-9b5d-c2da0c7dd223")
+		)
+		(pin "18"
+			(uuid "949a81f6-a4e5-4e3e-a683-a8c05876bb18")
+		)
+		(pin "19"
+			(uuid "b0890cef-2871-4e78-99c8-e8c318951972")
+		)
+		(pin "20"
+			(uuid "6013610f-0558-4b6a-bada-ef4d1d9960a7")
+		)
+		(pin "21"
+			(uuid "d99fa504-31aa-4ca6-83d0-f618b9ac04b0")
+		)
+		(pin "22"
+			(uuid "7e34301e-3023-43dc-815c-4db441d273c8")
+		)
+		(pin "23"
+			(uuid "ec449dc2-af46-419c-9ae3-227cc84812b7")
+		)
+		(pin "24"
+			(uuid "b5dfc7ce-885d-4c34-ac54-6f027a6c94e8")
+		)
+		(pin "25"
+			(uuid "2e167227-acfc-4095-9033-989a898f068b")
+		)
+		(pin "26"
+			(uuid "78c86708-9afd-4a68-b252-5143dd390a08")
+		)
+		(pin "27"
+			(uuid "59c5c838-01c4-4c60-9b54-29beb998a08d")
+		)
+		(pin "28"
+			(uuid "a29c7199-d63f-4323-ae16-081cceeba8cd")
+		)
+		(pin "29"
+			(uuid "0e0a6b36-6be1-4a42-9d8b-eed5822de2ca")
+		)
+		(pin "30"
+			(uuid "9cdfb0e4-f3bd-43ae-86bc-e2b0453c7a8b")
+		)
+		(pin "31"
+			(uuid "7380504a-9180-40c8-b253-4f49172e3d55")
+		)
+		(pin "32"
+			(uuid "8ba5aebd-4a66-4106-9320-118f535ee370")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "A1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "rover-cam:Adafruit_MotorShield_v1")
+		(at 320.04 109.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "6aa2c044-3257-47e4-b547-18130a07d6d5")
 		(property "Reference" "U2"
-			(at 304.8 64.77 0)
+			(at 299.72 85.09 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6984,7 +6409,7 @@
 			)
 		)
 		(property "Value" "Adafruit Motor Shield v1, PWR jumper REMOVED"
-			(at 304.8 153.67 0)
+			(at 299.72 173.99 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6995,7 +6420,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 325.12 88.9 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7006,7 +6431,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 325.12 88.9 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7017,7 +6442,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 325.12 88.9 0)
+			(at 320.04 109.22 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7028,58 +6453,58 @@
 			)
 		)
 		(pin "1"
-			(uuid "0c58e2d8-8363-49b6-b06a-71f5d5bb7894")
+			(uuid "bfffd8f4-a963-42f7-bf4a-5635ce9ea12f")
 		)
 		(pin "2"
-			(uuid "a340d577-9fdf-4364-970a-0af4f7b50d69")
+			(uuid "ef17f7e2-c3a1-493d-bcbb-ab108a36016e")
 		)
 		(pin "3"
-			(uuid "6b0ec8a5-02a7-43d8-9985-f634d93384ae")
+			(uuid "50a46dd5-83d1-4902-8146-e163386e809a")
 		)
 		(pin "4"
-			(uuid "045e5609-e5c5-4c05-9852-28e87060508d")
+			(uuid "2ae62661-27b7-4ad4-8117-9241738e9478")
 		)
 		(pin "5"
-			(uuid "908740b8-9be9-4939-83ba-f6b28750b560")
+			(uuid "338c7875-76df-4e71-b3fe-4410466352ff")
 		)
 		(pin "6"
-			(uuid "3a50c787-5c01-42fc-a2df-a48821f59ef1")
+			(uuid "2b2aff35-7172-4479-8913-e72c3681f835")
 		)
 		(pin "7"
-			(uuid "bc0bd3d9-d1e5-4440-b52b-c705741453c5")
+			(uuid "16ab6baf-e9d0-442e-92e5-9bf07265cbe2")
 		)
 		(pin "8"
-			(uuid "353fdabf-6848-4afd-9661-b1a102a89a4c")
+			(uuid "ddee4167-8119-47cf-be34-c3f09583fc82")
 		)
 		(pin "9"
-			(uuid "2bde48d4-10df-4a6f-ba8c-db7027c769f2")
+			(uuid "eb88f1ca-6a17-47bf-b27d-96bab7216a5c")
 		)
 		(pin "10"
-			(uuid "a1c4c8b3-83c5-4125-b44c-0e4eb405bdc4")
+			(uuid "573b4ca2-b225-443b-b4bc-c88e86808302")
 		)
 		(pin "11"
-			(uuid "4448e033-2421-46b5-8a74-5e8d0599ed69")
+			(uuid "c6e8ed8d-36ad-4355-be1a-83d0cfdaebcb")
 		)
 		(pin "12"
-			(uuid "8ff126c8-a76a-4d3b-833c-b96bb1f18abd")
+			(uuid "c10cfc93-d46b-41de-9fb9-3418669d9771")
 		)
 		(pin "13"
-			(uuid "1d4f720d-cf7f-4c38-9e2f-c93f38731cf9")
+			(uuid "82759444-e71b-4de9-8805-7d3e2dc2a811")
 		)
 		(pin "14"
-			(uuid "5e75684e-cde1-4890-8548-b25323953dd7")
+			(uuid "26d85de9-bf2d-4bfc-8929-99ac5c3f453b")
 		)
 		(pin "15"
-			(uuid "0e54c26f-07ea-473a-922b-a3bf5b0e35d5")
+			(uuid "6e56e930-00fe-4d95-8e08-58ec180324c5")
 		)
 		(pin "16"
-			(uuid "7f9c5d01-7709-4ffc-b707-6a555b70e915")
+			(uuid "f247c343-6c06-40e1-b068-0f56bd79f0e3")
 		)
 		(pin "17"
-			(uuid "39d8e29f-bed5-458f-b61d-e18aa3dc8ef0")
+			(uuid "c66a3b9e-ad55-4f45-9a19-53be714875ad")
 		)
 		(pin "18"
-			(uuid "ab373ee8-4c8a-48b7-9d38-eb074c6e39c3")
+			(uuid "0ace27ab-2d24-4a36-9af0-01aacb22a02f")
 		)
 		(instances
 			(project "rover-cam"
@@ -7091,8 +6516,8 @@
 		)
 	)
 	(symbol
-		(lib_id "power:+5V")
-		(at 231.14 73.66 0)
+		(lib_id "Motor:Motor_DC")
+		(at 358.14 147.32 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7100,30 +6525,31 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "d134b612-d38a-4d84-8f56-472f15c13702")
-		(property "Reference" "#PWR007"
-			(at 231.14 77.47 0)
-			(hide yes)
+		(uuid "6f456703-18b2-462c-96c3-eedeeaab4406")
+		(property "Reference" "M2"
+			(at 360.68 144.78 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left)
 			)
 		)
-		(property "Value" "+5V"
-			(at 231.14 70.104 0)
+		(property "Value" "right TT motor"
+			(at 360.68 152.4 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
+				(justify left top)
 			)
 		)
 		(property "Footprint" ""
-			(at 231.14 73.66 0)
+			(at 358.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7134,7 +6560,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 231.14 73.66 0)
+			(at 358.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7145,7 +6571,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 231.14 73.66 0)
+			(at 358.14 147.32 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7156,12 +6582,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "494632fd-a1bc-41e7-be65-dcd0cb1f4a6f")
+			(uuid "df1fc50b-8524-4241-9a0f-c4bb16564642")
+		)
+		(pin "2"
+			(uuid "42d2933c-1f5c-45e7-8b9c-c916fa568bee")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR007")
+					(reference "M2")
 					(unit 1)
 				)
 			)
@@ -7169,7 +6598,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 60.96 214.63 0)
+		(at 236.22 190.5 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7177,9 +6606,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "ded9313a-200e-4e6c-9f51-201b9f8293b2")
-		(property "Reference" "#PWR012"
-			(at 60.96 220.98 0)
+		(uuid "802e100c-716e-4374-a151-22beb3daf089")
+		(property "Reference" "#PWR011"
+			(at 236.22 196.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7190,7 +6619,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 60.96 218.44 0)
+			(at 236.22 194.31 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7200,7 +6629,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 60.96 214.63 0)
+			(at 236.22 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7211,7 +6640,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 60.96 214.63 0)
+			(at 236.22 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7222,7 +6651,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 60.96 214.63 0)
+			(at 236.22 190.5 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7233,12 +6662,12 @@
 			)
 		)
 		(pin "1"
-			(uuid "ce0ec88b-bab0-462f-bcf5-c2437f639f0d")
+			(uuid "015c2b57-6d64-42c7-b1ac-d88616d826fb")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR012")
+					(reference "#PWR011")
 					(unit 1)
 				)
 			)
@@ -7254,7 +6683,7 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "e882c0a0-4ed3-4985-8a30-3d87e53f32bc")
+		(uuid "84035b20-50a3-469f-a996-40a525c44981")
 		(property "Reference" "BT1"
 			(at 40.64 81.28 0)
 			(show_name no)
@@ -7311,10 +6740,10 @@
 			)
 		)
 		(pin "1"
-			(uuid "ea136858-edbd-4764-b8f6-262eec125532")
+			(uuid "cc8f80af-feb7-4aeb-bed3-d300b8b79ba6")
 		)
 		(pin "2"
-			(uuid "58183a85-faf7-4cc1-aedb-0f94fbd0e3c2")
+			(uuid "9f9aa3eb-b42a-4f90-a944-1a2888da5c84")
 		)
 		(instances
 			(project "rover-cam"
@@ -7327,7 +6756,7 @@
 	)
 	(symbol
 		(lib_id "Device:R")
-		(at 60.96 205.74 0)
+		(at 210.82 156.21 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7335,9 +6764,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "edc03f29-6245-425c-a096-e8348d6da2a1")
-		(property "Reference" "R2"
-			(at 63.5 204.47 0)
+		(uuid "8821b204-afce-4603-b0fe-9f94129676be")
+		(property "Reference" "R1"
+			(at 213.36 154.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7347,8 +6776,8 @@
 				(justify left)
 			)
 		)
-		(property "Value" "3.3k"
-			(at 63.5 207.01 0)
+		(property "Value" "10k"
+			(at 213.36 157.48 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7359,7 +6788,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 60.96 205.74 0)
+			(at 210.82 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7370,7 +6799,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 60.96 205.74 0)
+			(at 210.82 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7381,7 +6810,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 60.96 205.74 0)
+			(at 210.82 156.21 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7392,23 +6821,23 @@
 			)
 		)
 		(pin "1"
-			(uuid "30052961-3017-42f4-b94c-918737cbc098")
+			(uuid "46b39fee-23b9-4a21-abbd-2384d18d114b")
 		)
 		(pin "2"
-			(uuid "991ad4b3-1350-4760-bade-98c2d18ebe8d")
+			(uuid "d0a81fc6-8e4c-439e-8650-db307890e737")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "R2")
+					(reference "R1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "power:GND")
-		(at 312.42 144.78 0)
+		(lib_id "Motor:Motor_DC")
+		(at 358.14 124.46 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7416,9 +6845,167 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "f1937766-1177-4577-a9aa-10c0e77780da")
+		(uuid "8aea1731-b61a-4f9a-aa37-b9b105a6ab71")
+		(property "Reference" "M1"
+			(at 360.68 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "left TT motor"
+			(at 360.68 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 358.14 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 358.14 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 358.14 124.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "41ffe47e-7f60-4a30-a6df-653b4404ea46")
+		)
+		(pin "2"
+			(uuid "d838f884-faa6-4c25-b223-2ef5d075a8f3")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "M1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:+5V")
+		(at 144.78 63.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "8d8fe775-9e52-4804-9e51-8f5b85d61db6")
+		(property "Reference" "#PWR006"
+			(at 144.78 67.31 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "+5V"
+			(at 144.78 59.944 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 144.78 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 144.78 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 144.78 63.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d281060b-202f-438c-8122-0fd1fc60341c")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "#PWR006")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 210.82 177.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "94c81cd3-0c1e-41b6-8a1d-20ebf7ca100c")
 		(property "Reference" "#PWR010"
-			(at 312.42 151.13 0)
+			(at 210.82 184.15 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7429,7 +7016,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 312.42 148.59 0)
+			(at 210.82 181.61 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7439,7 +7026,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 312.42 144.78 0)
+			(at 210.82 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7450,7 +7037,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 312.42 144.78 0)
+			(at 210.82 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7461,7 +7048,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 312.42 144.78 0)
+			(at 210.82 177.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7472,7 +7059,7 @@
 			)
 		)
 		(pin "1"
-			(uuid "f74dfbe7-1c16-412c-a41d-e673b7511773")
+			(uuid "f181883a-e80f-40a1-a743-b50a64a4dcf2")
 		)
 		(instances
 			(project "rover-cam"
@@ -7485,7 +7072,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 226.06 137.16 0)
+		(at 127 124.46 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -7493,9 +7080,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "f68fe8f1-bf78-43c4-b81e-7d4bfc1ecf1e")
-		(property "Reference" "#PWR008"
-			(at 226.06 143.51 0)
+		(uuid "b8c4c003-4884-4a4c-bcd4-0f357e0c79da")
+		(property "Reference" "#PWR003"
+			(at 127 130.81 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7506,7 +7093,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 226.06 140.97 0)
+			(at 127 128.27 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -7516,7 +7103,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 226.06 137.16 0)
+			(at 127 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7527,7 +7114,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 226.06 137.16 0)
+			(at 127 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7538,7 +7125,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 226.06 137.16 0)
+			(at 127 124.46 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -7549,12 +7136,443 @@
 			)
 		)
 		(pin "1"
-			(uuid "6a4ac75e-4581-41a7-ba8f-57e9e38938f7")
+			(uuid "3429f9aa-6509-4635-8d3c-5c7fa9e31402")
 		)
 		(instances
 			(project "rover-cam"
 				(path "/6b0b1f2e-0000-4000-8000-000000000001"
-					(reference "#PWR008")
+					(reference "#PWR003")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Device:Fuse")
+		(at 54.61 55.88 90)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "bfec1530-9cf7-4bc5-80ad-6a99e40f8992")
+		(property "Reference" "F1"
+			(at 54.61 52.07 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "5A blade"
+			(at 54.61 59.69 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 54.61 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 54.61 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 54.61 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "743af6c5-094e-4e3e-b5b0-f1589fce3519")
+		)
+		(pin "2"
+			(uuid "d20b102f-f3ce-484b-ae7e-8f7fdaf18519")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "F1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Connector:Raspberry_Pi_2_3")
+		(at 185.42 101.6 0)
+		(mirror y)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "dff2902c-4882-4711-a039-07d9cef714af")
+		(property "Reference" "J1"
+			(at 167.64 69.85 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left bottom)
+			)
+		)
+		(property "Value" "Raspberry Pi 4"
+			(at 165.1 138.43 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left top)
+			)
+		)
+		(property "Footprint" ""
+			(at 185.42 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 185.42 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 185.42 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "f0e36eaa-8b11-4f27-a2dc-749236eadf4a")
+		)
+		(pin "2"
+			(uuid "dfc7d9ec-2223-4607-884e-402c67fd5c59")
+		)
+		(pin "3"
+			(uuid "1da4694f-1e2f-4c0c-983b-3a7aab1c66f5")
+		)
+		(pin "4"
+			(uuid "5a5eeb5b-a50f-41aa-8889-aa74759932b6")
+		)
+		(pin "5"
+			(uuid "93d8e589-03af-4886-8777-b808a9368cc5")
+		)
+		(pin "6"
+			(uuid "1a0ec345-937b-422e-868e-37b56a6ea40a")
+		)
+		(pin "7"
+			(uuid "f383a7eb-727c-42be-b7d0-8bb7efac7630")
+		)
+		(pin "8"
+			(uuid "05a594a7-fc74-4220-8a38-d4702fd3dec7")
+		)
+		(pin "9"
+			(uuid "d5649206-bbad-486f-b91a-b3c5d3f61e83")
+		)
+		(pin "10"
+			(uuid "0c1c459d-fe7b-4b0b-b613-d269bed99b70")
+		)
+		(pin "11"
+			(uuid "95295f8e-c453-4a26-bf27-b9eb54ddfad5")
+		)
+		(pin "12"
+			(uuid "1d856e5b-a67c-4dbf-84eb-9eeb3c6f56f2")
+		)
+		(pin "13"
+			(uuid "6fb644de-33f4-40bb-bfb8-85840bc9035d")
+		)
+		(pin "14"
+			(uuid "03fbeec5-8704-4478-b579-dc7852de944c")
+		)
+		(pin "15"
+			(uuid "278e0fef-da7e-4be8-a625-75b3df6c912d")
+		)
+		(pin "16"
+			(uuid "246f9dba-7e17-4d91-9cc9-277bb15bb7bf")
+		)
+		(pin "17"
+			(uuid "e974ea77-2d29-4ac7-829f-0e3685c12372")
+		)
+		(pin "18"
+			(uuid "e9a9efeb-2c76-4b3b-8d43-f7214881b8d3")
+		)
+		(pin "19"
+			(uuid "7ae13b41-43be-4386-9aa7-a2031ff6a4a6")
+		)
+		(pin "20"
+			(uuid "b667b9bf-cf5b-4c6f-ae8a-338cfa6f2198")
+		)
+		(pin "21"
+			(uuid "b7e519b6-ffce-4e7f-bf36-7e6cfc3510e4")
+		)
+		(pin "22"
+			(uuid "b2d10534-f881-467a-b37f-a52085d834aa")
+		)
+		(pin "23"
+			(uuid "f750c7b0-c2cc-4483-85ac-9803b5e129f5")
+		)
+		(pin "24"
+			(uuid "1247fe1a-dda2-414b-8ed5-31bffd0e74f1")
+		)
+		(pin "25"
+			(uuid "0dc69791-4a95-4180-892e-adc03650634c")
+		)
+		(pin "26"
+			(uuid "19fd80ff-e9dd-4e5a-9990-3faad9ffda9a")
+		)
+		(pin "27"
+			(uuid "877d8ed7-92d8-41a4-b5e2-7cac15f7a1bc")
+		)
+		(pin "28"
+			(uuid "d0b3d977-52b4-45e7-a9bd-3e779d3aa4f6")
+		)
+		(pin "29"
+			(uuid "ef1f2507-d644-424f-8dc3-3bd2d407aaf6")
+		)
+		(pin "30"
+			(uuid "e1e66fea-6bc8-484c-a40e-0a59c1f5a07a")
+		)
+		(pin "31"
+			(uuid "dedc654f-a99f-4732-befe-133ded24f8cd")
+		)
+		(pin "32"
+			(uuid "4e92d317-6441-4592-ba12-841726171454")
+		)
+		(pin "33"
+			(uuid "cdbc52aa-a227-4ab5-be1b-15b9e39bb938")
+		)
+		(pin "34"
+			(uuid "ccf7b92d-c636-4efc-9909-0ff922642307")
+		)
+		(pin "35"
+			(uuid "0e529e21-5a35-4117-b68f-8437f81ef9dd")
+		)
+		(pin "36"
+			(uuid "bf1a6714-b394-42a7-9d46-5d7d2a023d20")
+		)
+		(pin "37"
+			(uuid "0e773969-7069-47dc-a59e-514448190de7")
+		)
+		(pin "38"
+			(uuid "428fa689-4608-4214-8c2a-f277d4aff30f")
+		)
+		(pin "39"
+			(uuid "150788b4-68b1-49a8-8cb1-9798e9b92405")
+		)
+		(pin "40"
+			(uuid "e96f008d-a434-4134-b768-d7741db90848")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:GND")
+		(at 307.34 165.1 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e370e750-ec8b-456b-9cef-95267e7bc5e8")
+		(property "Reference" "#PWR007"
+			(at 307.34 171.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "GND"
+			(at 307.34 168.91 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 307.34 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 307.34 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 307.34 165.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "52541082-78da-40fa-a18c-a93932b6246a")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "#PWR007")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Switch:SW_SPST")
+		(at 71.12 55.88 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e58f5376-8e6d-4ae3-9f2e-467c0a7027da")
+		(property "Reference" "SW1"
+			(at 71.12 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "chassis switch"
+			(at 71.12 60.96 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 71.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 71.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 71.12 55.88 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "afdde990-3ecb-48d2-a9b3-e96f13ebf5eb")
+		)
+		(pin "2"
+			(uuid "df489e00-218f-4290-9d24-a7ea8927c465")
+		)
+		(instances
+			(project "rover-cam"
+				(path "/6b0b1f2e-0000-4000-8000-000000000001"
+					(reference "SW1")
 					(unit 1)
 				)
 			)
