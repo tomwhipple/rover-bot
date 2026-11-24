@@ -96,7 +96,7 @@ def custom(name, ref, desc, half_w, top, bottom, pins):
     return Sym("rover-cam", name, "\n".join(out))
 
 
-UBEC = custom("UBEC_5V", "U", "5 V buck converter", 10.16, 7.62, -7.62,
+BUCK = custom("BUCK_5V", "U", "5 V buck converter", 10.16, 7.62, -7.62,
               [("1", "IN+", "L", -12.7, 2.54), ("2", "IN-", "L", -12.7, -2.54),
                ("3", "+5V OUT", "R", 12.7, 2.54), ("4", "GND OUT", "R", 12.7, -2.54)])
 
@@ -127,7 +127,7 @@ ARD = stock("MCU_Module", "Arduino_UNO_R3")
 GNDS = stock("power", "GND")
 P5V = stock("power", "+5V")
 FLAG = stock("power", "PWR_FLAG")
-ALL_SYMS = [BAT, FUSE, SW, RES, MDC, MSERVO, PI, ARD, GNDS, P5V, FLAG, UBEC, SHIELD, HCSR04]
+ALL_SYMS = [BAT, FUSE, SW, RES, MDC, MSERVO, PI, ARD, GNDS, P5V, FLAG, BUCK, SHIELD, HCSR04]
 
 # ----------------------------------------------------------------- drawing
 out = []
@@ -261,14 +261,14 @@ power("GND", gb)
 flag((35.56, 93.98), 90)
 
 u1 = (71.12, 116.84)
-place(UBEC, "U1", "Adafruit UBEC #1385 5V 3A", u1)
-tag(pin_at(u1, 0, UBEC, "1"), "L", "VBAT")
-tag(pin_at(u1, 0, UBEC, "2"), "L", "GND")
-o3 = pin_at(u1, 0, UBEC, "3")
+place(BUCK, "U1", "AKEYSRC 5V 3A buck (B0GYJDP96Q)", u1)
+tag(pin_at(u1, 0, BUCK, "1"), "L", "VBAT")
+tag(pin_at(u1, 0, BUCK, "2"), "L", "GND")
+o3 = pin_at(u1, 0, BUCK, "3")
 wire(o3, (o3[0] + 2.54, o3[1]))
 tag((o3[0] + 2.54, o3[1]), "R", "+5V", 2.54)
 # no PWR_FLAG on +5V: A1's stock 5V pin is a power output and already drives the net
-tag(pin_at(u1, 0, UBEC, "4"), "R", "GND")
+tag(pin_at(u1, 0, BUCK, "4"), "R", "GND")
 text("+5V goes to the Pi USB-C through a USB-A to C cable\nwith the A end cut off: red = +5 V, black = GND.\n"
      "Meter it before plugging in.", (55.88, 133.35))
 
@@ -389,7 +389,7 @@ sch = (f'(kicad_sch\n\t(version 20250114)\n\t(generator "eeschema")\n\t(generato
 (HERE / "rover-cam.kicad_sch").write_text(sch)
 
 lib = ('(kicad_symbol_lib\n\t(version 20251024)\n\t(generator "kicad_symbol_editor")\n'
-       '\t(generator_version "10.0")\n' + "\n".join(s.text for s in (UBEC, SHIELD, HCSR04)) + "\n)\n")
+       '\t(generator_version "10.0")\n' + "\n".join(s.text for s in (BUCK, SHIELD, HCSR04)) + "\n)\n")
 (HERE / "rover-cam.kicad_sym").write_text(lib)
 (HERE / "sym-lib-table").write_text(
     '(sym_lib_table\n\t(version 7)\n\t(lib (name "rover-cam")(type "KiCad")'

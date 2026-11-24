@@ -80,13 +80,13 @@ Sources: the [aLaMode v1 datasheet](https://www.electrokit.com/upload/product/41
 
 ## Power
 
-One 3S pack feeds everything through an XT60 pigtail, an inline 5 A fuse and the chassis switch. After the switch (VBAT, 10.5–12.6 V), one 5 V buck powers the Pi and the motors run straight from VBAT. This replaces the first draft's two Pololu regulators (about $45) with one $10 buck, and keeps the 3S packs already on hand.
+One 3S pack feeds everything through an XT60 pigtail, an inline 5 A fuse and the chassis switch. After the switch (VBAT, 10.5–12.6 V), one 5 V buck powers the Pi and the motors run straight from VBAT. This replaces the first draft's two Pololu regulators (about $45) with one module from an $8.99 six-pack (five spares), and keeps the 3S packs already on hand.
 
 The first draft's 6 V motor rail was a mistake, not just a cost. The L293D drops about 2.6 V at 0.6 A (1.4 V high side plus 1.2 V low side, typical; [TI SLRS008D](https://www.ti.com/lit/ds/slrs008d/slrs008d.pdf)), so 6 V in leaves the motors about 3.4 V, and about 2 V on average under the firmware's PWM cap of 150/255.
 
 From the switch:
 
-- **5 V 3 A buck, [Adafruit UBEC #1385](https://www.adafruit.com/product/1385)** (6–16 V in, 5 V ±5 %, 3 A continuous): to the Pi 4's USB-C port through a USB-A-to-C cable with the A end cut off. The aLaMode, the shield's logic and the pan servo take 5 V from the Pi through the stacked headers.
+- **5 V 3 A buck, [AKEYSRC module](https://www.amazon.com/dp/B0GYJDP96Q)** (4–30 V in per the listing bullets, 5–30 V per its title; fixed 5 V; 3 A continuous, 4 A peak; soft-start, undervoltage lockout and thermal shutdown). The listing does not name the regulator chip or give an output tolerance, so meter the output under load before connecting the Pi. It is a bare 22×17 mm module: solder wires for VBAT/GND in and for the cut USB-A-to-C cable out (A end cut off), which goes to the Pi 4's USB-C port. The aLaMode, the shield's logic and the pan servo take 5 V from the Pi through the stacked headers.
 - **Shield EXT\_PWR, PWR jumper removed:** straight from VBAT. The shield runs motors on 4.5–25 V ([Adafruit](https://www.adafruit.com/product/81)).
 - **A0 divider:** 10 k over 3.3 k, 3.1 V at a full pack.
 
@@ -96,7 +96,7 @@ Run the EXT\_PWR GND and the buck's IN− straight to the pack negative, in wire
 
 **Fuse.** 5 A, not 3 A: a stalled motor is about 4 Ω (6 V / 1.5 A), so on 10 V pulses two stalled motors could trip a 3 A fuse during an ordinary bump. 5 A still protects the wiring from a pack short. Use 20 AWG or heavier from the pack to the switch.
 
-**Servo.** The shield's servo header runs on its 5 V logic rail, not the motor supply ([Adafruit FAQ](https://learn.adafruit.com/adafruit-motor-shield/faq)). The Parallax servo takes 4–6 V and "can briefly increase to 500 mA or more" ([Parallax guide](https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5728/900-00005_Guide.pdf)). That shares the UBEC's 3 A with the Pi's typical 600 mA ([Raspberry Pi docs](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)). If the Pi reports under-voltage (below 4.63 V) when the servo moves, give the servo its own 5 V supply.
+**Servo.** The shield's servo header runs on its 5 V logic rail, not the motor supply ([Adafruit FAQ](https://learn.adafruit.com/adafruit-motor-shield/faq)). The Parallax servo takes 4–6 V and "can briefly increase to 500 mA or more" ([Parallax guide](https://mm.digikey.com/Volume0/opasdata/d220001/medias/docus/5728/900-00005_Guide.pdf)). That shares the buck's 3 A with the Pi's typical 600 mA ([Raspberry Pi docs](https://www.raspberrypi.com/documentation/computers/raspberry-pi.html)). If the Pi reports under-voltage (below 4.63 V) when the servo moves, give the servo its own 5 V supply.
 
 **Load.** The Pi's typical 0.6 A at 5 V is about 0.3 A from the pack at 90 % buck efficiency, so a 4200 mAh pack idles for over 10 hours. Driving and camera use shorten that; it has not been measured.
 
@@ -166,11 +166,11 @@ The limits sit in the aLaMode firmware, so nothing sent from the Pi can override
 
 ## Buy list
 
-About $15, or $22 with both optional items. The UBEC price was checked on 2026-11-24; the rest are approximate, from memory.
+About $14 ($8.99 + $3 + $2), or $21 with both optional items. The AKEYSRC price was checked on 2026-11-24, with free shipping; the rest are approximate, from memory.
 
 | Item | Why | Approx. |
 | --- | --- | --- |
-| [Adafruit UBEC 5 V 3 A](https://www.adafruit.com/product/1385) (#1385) | Pi 4 supply from the pack | $9.95 |
+| [AKEYSRC 5 V 3 A buck, 6-pack](https://www.amazon.com/dp/B0GYJDP96Q) (Amazon B0GYJDP96Q) | Pi 4 supply from the pack; five spares | $8.99 |
 | Inline blade fuse holder with a 5 A fuse | Short-circuit protection for the pack | $3 |
 | XT60 male pigtail | Pack to fuse, if not already on hand | $2 |
 | USB-A-to-C cable to cut, 10 k and 3.3 k resistors | Pi power lead, A0 divider; likely on hand | — |
@@ -183,7 +183,7 @@ Each step has one check before moving on.
 
 1. **Pi and camera alone.** Flash the OS, connect the camera. Check: `rpicam-still -o test.jpg` gives a picture.
 2. **aLaMode on the Pi, no shield.** Enable the UART, turn the serial console off, flash a blink sketch. Check: the D13 LED blinks.
-3. **Power.** Pack, fuse, switch and the 5 V buck, nothing connected downstream. Check: 4.75 to 5.25 V at the buck output and pack voltage at the EXT\_PWR leads, on a meter.
+3. **Power.** Pack, fuse, switch and the 5 V buck, nothing connected downstream. Check: 4.75 to 5.25 V at the buck output, measured with a load of about 1 A (e.g. a power resistor) because the listing gives no tolerance (the Pi flags under-voltage below 4.63 V), and pack voltage at the EXT\_PWR leads, on a meter.
 4. **Shield and motors, wheels off the ground.** Check: `M 120 120 1000` turns both wheels forward for one second, then stops.
 5. **Servo.** Check: `P 90` centres it.
 6. **The rover tool.** Check: a snapshot and a move from the laptop with `ssh`.
@@ -194,7 +194,7 @@ Each step has one check before moving on.
 
 ## Open questions
 
-Settled on 2026-11-24: one 5 V buck and the motors on pack voltage, 5 A fuse. Settled on 2026-11-22: fused pigtail and no power-lite board; the servo is a standard one; stand-off is 80 cm from the biped's 56 cm height; SSH and no HTTP service; Pi-side code in C++; self-driving and SLAM are a secondary goal.
+Settled on 2026-11-24: one 5 V buck and the motors on pack voltage, 5 A fuse; the buck is the AKEYSRC 6-pack (cheaper with free shipping, and spares) instead of the Adafruit UBEC. Settled on 2026-11-22: fused pigtail and no power-lite board; the servo is a standard one; stand-off is 80 cm from the biped's 56 cm height; SSH and no HTTP service; Pi-side code in C++; self-driving and SLAM are a secondary goal.
 
 - [ ] Which camera is in the box, and is its ribbon there?
 - [ ] Which ultrasonic sensors do you have: 4-pin HC-SR04 or 3-pin Parallax Ping)))?

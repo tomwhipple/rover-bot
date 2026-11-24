@@ -7,10 +7,11 @@ Pololu publishes no datasheet PDF for these regulators. Saved 2026-11-22:
 | `pololu-d36v28fx-dimensions.pdf` | Dimension drawing, shared by the D36V28Fx family |
 | `pololu-3782-product-page.html` | D36V28F5 (5 V) product page, text only: specs, pinout, graphs' captions |
 | `pololu-3783-product-page.html` | D36V28F6 (6 V) product page, same |
-| `adafruit-1385-mp2307-datasheet.pdf` | MP2307 3 A synchronous buck regulator datasheet (12 pages), the chip on the Adafruit UBEC (MP2307_r1.9.pdf) |
-| `adafruit-1385-product-page.md` | Adafruit #1385 product page: description and technical details text, saved 2026-11-24 |
+| `adafruit-1385-mp2307-datasheet.pdf` | MP2307 3 A synchronous buck regulator datasheet (12 pages), the chip on the Adafruit UBEC (MP2307_r1.9.pdf); alternative considered, not used |
+| `adafruit-1385-product-page.md` | Adafruit #1385 product page: description and technical details text, saved 2026-11-24; alternative considered, not used |
+| `akeysrc-b0gyjdp96q-listing.md` | AKEYSRC 5 V 3 A buck 6-pack Amazon listing facts, captured 2026-11-24 (the part used) |
 
-Adafruit UBEC 5 V 3 A (#1385), from Adafruit's page and the MP2307 datasheet:
+Adafruit UBEC 5 V 3 A (#1385), alternative considered, not used. From Adafruit's page and the MP2307 datasheet:
 
 | | Adafruit #1385 (board, from product page) |
 |---|---|
@@ -39,3 +40,14 @@ Key specs, from Pololu's spec pages:
 
 Sources: https://www.pololu.com/product/3782/specs and
 https://www.pololu.com/product/3783/specs
+
+AKEYSRC 5 V buck module (Amazon B0GYJDP96Q), from the listing (no datasheet; see `akeysrc-b0gyjdp96q-listing.md`):
+
+| | AKEYSRC 5 V 3 A |
+|---|---|
+| Input range | 4-30 V (bullets); 5-30 V (title) |
+| Output voltage | 5 V fixed, tolerance not stated |
+| Current | 3 A continuous, 4 A peak |
+| Efficiency | "up to 96%" |
+| Protections | soft-start, UVLO, thermal shutdown; short-circuit/over-current not stated |
+| Size, weight | 22 x 17 mm (1.57 x 0.79 x 0.39 in), 20 g (per 6-pack overview) |
