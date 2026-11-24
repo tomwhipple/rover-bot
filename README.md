@@ -4,6 +4,7 @@ A floor rover with a pan camera, so Claude can watch the biped. Separate from th
 `robot` repo on purpose.
 
 Design: [docs/design.md](docs/design.md)
+Wiring: [docs/wiring.svg](docs/wiring.svg)
 
 Status: first draft, not yet run on hardware.
 
