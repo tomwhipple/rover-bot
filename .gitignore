@@ -1,2 +1,7 @@
 pi/rover
 .claude/worktrees/
+
+# KiCad local state
+*.kicad_prl
+*-backups/
+fp-info-cache

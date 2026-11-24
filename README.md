@@ -4,7 +4,8 @@ A floor rover with a pan camera, so Claude can watch the biped. Separate from th
 `robot` repo on purpose.
 
 Design: [docs/design.md](docs/design.md)
-Wiring: [docs/wiring.svg](docs/wiring.svg)
+Wiring: [docs/wiring.svg](docs/wiring.svg) (PDF: [docs/wiring.pdf](docs/wiring.pdf)), exported from the KiCad 10
+project in `hardware/` (`hardware/gen_schematic.py` regenerates it).
 
 Status: first draft, not yet run on hardware.
 
