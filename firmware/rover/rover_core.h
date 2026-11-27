@@ -15,6 +15,7 @@ constexpr int CMD_TIMEOUT_MS = 300;
 constexpr int T_PERIOD_MS = 50;
 constexpr int NO_ECHO_CM = 999;
 constexpr int PAN_DEFAULT = 90;
+constexpr int PAN_MS_PER_DEG = 16;  // the pan moves to a commanded angle at 62.5 deg/s
 #define ROVER_VERSION "2.0.0"
 
 enum Flag : uint8_t {
@@ -81,7 +82,9 @@ class Core {
   int16_t cmd_l_, cmd_r_;
   uint32_t seq_, last_v_ms_, next_t_ms_, loop_max_us_;
   bool have_cmd_, v_pending_, timed_out_, bad_seen_, blocked_seen_, t_started_;
-  uint8_t pan_, refusing_;
+  uint8_t pan_, pan_target_, refusing_;
+  bool pan_moving_;
+  uint32_t pan_ms_;
   int16_t applied_l_, applied_r_;
 };
 

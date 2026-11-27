@@ -213,7 +213,9 @@ def test_pan(twin):
     assert twin.last_t()["pan"] == 150
     assert abs(twin.wait_pose()["pan_deg"] - 150) < 3
     twin.send("P 30")
-    time.sleep(1.5)
+    time.sleep(0.5)
+    assert 110 < twin.last_t()["pan"] < 130, "the pan moves at a limited rate"
+    time.sleep(2.5)
     assert abs(twin.wait_pose()["pan_deg"] - 30) < 3
 
 

@@ -18,7 +18,7 @@ good checksum but a malformed command gets an `E` reply.
 | Payload | Meaning |
 |---|---|
 | `V <left> <right> <seq>` | Drive. PWM -255..255 per side (sign = direction), `seq` 0..4294967295. Values beyond ±150 are clamped to ±150. Valid for 300 ms; with no newer `V` the motors stop. |
-| `P <deg>` | Pan, clamped to 0..180. Initial 90. |
+| `P <deg>` | Pan target, clamped to 0..180. Initial 90. The pan moves there at 62.5 deg/s. |
 | `S` | Stop now. |
 | `?` | Send the hello line. |
 
@@ -64,6 +64,8 @@ Enforced in the firmware; nothing upstream can override them.
   resumes. Range 999 (no echo) is clear.
 - Low pack: below 10500 mV nothing drives and `LOW_PACK` is set.
 - Command timeout: 300 ms after the last `V` the motors stop.
+- Pan rate: the pan moves towards its target one degree every 16 ms (62.5 deg/s), so a full sweep takes
+  2.9 s. `T` reports where the pan is, not the target.
 
 ## Host library
 

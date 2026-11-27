@@ -71,7 +71,8 @@ Core::Core()
       cmd_l_(0), cmd_r_(0), seq_(0), last_v_ms_(0), next_t_ms_(0),
       loop_max_us_(0), have_cmd_(false), v_pending_(false), timed_out_(false),
       bad_seen_(false), blocked_seen_(false), t_started_(false),
-      pan_(PAN_DEFAULT), refusing_(0), applied_l_(0), applied_r_(0) {
+      pan_(PAN_DEFAULT), pan_target_(PAN_DEFAULT), refusing_(0), pan_moving_(false), pan_ms_(0),
+      applied_l_(0), applied_r_(0) {
   rxbuf_[0] = 0;
   send_hello();
 }
@@ -218,7 +219,7 @@ void Core::command(const char *p) {
       send_error(E_ARGUMENT, "bad P arguments");
       return;
     }
-    pan_ = neg ? 0 : a > 180 ? 180 : (uint8_t)a;
+    pan_target_ = neg ? 0 : a > 180 ? 180 : (uint8_t)a;
   } else if (c == 'S' && !p[1]) {
     have_cmd_ = false;
     v_pending_ = false;
@@ -259,6 +260,20 @@ Outputs Core::tick(const Inputs &in) {
   } else {
     applied_l_ = cmd_l_;
     applied_r_ = cmd_r_;
+  }
+
+  // The pan follows its target a degree at a time, so no command can slam the servo.
+  if (pan_ == pan_target_) {
+    pan_moving_ = false;
+  } else if (!pan_moving_) {
+    pan_moving_ = true;
+    pan_ms_ = in.now_ms;
+  } else {
+    uint32_t deg = (uint32_t)(in.now_ms - pan_ms_) / PAN_MS_PER_DEG;
+    const uint8_t gap = pan_ < pan_target_ ? pan_target_ - pan_ : pan_ - pan_target_;
+    if (deg > gap) deg = gap;
+    pan_ = pan_ < pan_target_ ? pan_ + (uint8_t)deg : pan_ - (uint8_t)deg;
+    pan_ms_ += deg * PAN_MS_PER_DEG;
   }
 
   if (!t_started_) {

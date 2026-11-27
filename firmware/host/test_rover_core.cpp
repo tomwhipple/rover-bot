@@ -123,7 +123,7 @@ static void test_hello_and_state_line() {
   EXPECT(num(a, 3) == 123);
   EXPECT(num(a, 4) == 100);
   EXPECT(num(a, 5) == -50);
-  EXPECT(num(a, 6) == 33);
+  EXPECT(num(a, 6) == 90);          // the pan has only begun to move towards 33
   EXPECT(num(a, 7) == F_MOVING);
   EXPECT(num(a, 8) == 777);
   EXPECT(num(a, 9) == 42);
@@ -315,20 +315,41 @@ static void test_low_pack() {
 static void test_pan_and_stop() {
   Rig r;
   EXPECT(r.out.pan == 90);
-  r.send("P 0");
-  r.step();
-  EXPECT(r.out.pan == 0);
+  // A commanded angle is approached at one degree per PAN_MS_PER_DEG, never in one step.
   r.send("P 180");
   r.step();
+  EXPECT(r.out.pan == 90);
+  for (int deg = 1; deg <= 90; deg++) {
+    int before = r.out.pan;
+    r.run(rover::PAN_MS_PER_DEG);
+    EXPECT(r.out.pan - before == 1);
+  }
   EXPECT(r.out.pan == 180);
-  r.send("P 500");
+  r.run(100);
+  EXPECT(r.out.pan == 180 && num(r.lastT(), 6) == 180);
+  // One slow loop pass still moves no further than the elapsed time allows.
+  r.send("P 0");
   r.step();
+  r.step(10 * rover::PAN_MS_PER_DEG);
+  EXPECT(r.out.pan == 170);
+  r.run(180 * rover::PAN_MS_PER_DEG);
+  EXPECT(r.out.pan == 0);
+  r.send("P 500");
+  r.run(200 * rover::PAN_MS_PER_DEG);
   EXPECT(r.out.pan == 180);
   r.send("P -5");
-  r.step();
+  r.run(200 * rover::PAN_MS_PER_DEG);
   EXPECT(r.out.pan == 0);
-  r.send("P 45");
+  // A new target mid-move turns the pan round from where it is.
+  r.send("P 90");
   r.step();
+  r.run(20 * rover::PAN_MS_PER_DEG);
+  EXPECT(r.out.pan == 20);
+  r.send("P 0");
+  r.run(5 * rover::PAN_MS_PER_DEG);
+  EXPECT(r.out.pan == 15);
+  r.send("P 45");
+  r.run(40 * rover::PAN_MS_PER_DEG);
   EXPECT(r.out.pan == 45);
   EXPECT(r.take('E').empty());
   r.send("V 100 100 1");
