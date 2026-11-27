@@ -10,11 +10,12 @@
 // A 4-pin HC-SR04 takes two pins instead (the design's A1 trigger, A2 echo).
 const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
 
-// Pan servo calibration: pulse width straight ahead, and the change in pulse width for 90 degrees
-// of travel to the left. Not measured on this rover yet. The edges the pan stops at are
+// Pan servo calibration, measured on the rover with firmware/pan_cal: the pulse width that points
+// the camera straight ahead, and the change in pulse width for 90 degrees to the left (9.8 degrees
+// per 100 us, from camera images across 1450..2400 us). The edges the pan stops at are
 // PAN_EDGE_LEFT/RIGHT in rover_core.h.
-const int PAN_CENTER_US = 1500;
-const int PAN_US_PER_90 = 750;
+const int PAN_CENTER_US = 1450;
+const int PAN_US_PER_90 = 918;
 
 const unsigned long PING_PERIOD_US = 60000UL;
 const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had

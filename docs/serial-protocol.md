@@ -64,9 +64,8 @@ Enforced in the firmware; nothing upstream can override them.
   resumes. Range 999 (no echo) is clear.
 - Low pack: below 10500 mV nothing drives and `LOW_PACK` is set.
 - Command timeout: 300 ms after the last `V` the motors stop.
-- Pan edges: the pan stops at -60 and +60 degrees (`PAN_EDGE_RIGHT`, `PAN_EDGE_LEFT`), so no command
-  drives the servo into its end stops. The values are provisional until the servo is calibrated on
-  the rover.
+- Pan edges: the pan stops at -75 and +75 degrees (`PAN_EDGE_RIGHT`, `PAN_EDGE_LEFT`). Further out
+  the camera's ribbon cable is strained; the servo's own travel is wider.
 - Pan rate: the pan moves towards its target one degree every 16 ms (62.5 deg/s), so a full sweep takes
   2.9 s. `T` reports where the pan is (signed), not the target. The sketch turns the angle into a
   servo pulse from two calibration constants (`PAN_CENTER_US`, `PAN_US_PER_90` in `rover.ino`).

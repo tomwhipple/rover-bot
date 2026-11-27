@@ -15,10 +15,10 @@ constexpr int CMD_TIMEOUT_MS = 300;
 constexpr int T_PERIOD_MS = 50;
 constexpr int NO_ECHO_CM = 999;
 // Pan is in degrees, 0 straight ahead, + to the left. A P command names -90..90; the pan stops at
-// the edges below, which keep the horn off the servo's end stops. They are not measured on this
-// rover yet: +-60 is 1000..2000 us with the sketch's calibration, inside any hobby servo's travel.
-constexpr int PAN_EDGE_LEFT = 60;
-constexpr int PAN_EDGE_RIGHT = -60;
+// the edges below. Beyond them the camera's ribbon cable is strained, and they are inside the
+// servo's travel (685..2215 us with the sketch's calibration).
+constexpr int PAN_EDGE_LEFT = 75;
+constexpr int PAN_EDGE_RIGHT = -75;
 constexpr int PAN_DEFAULT = 0;
 constexpr int PAN_MS_PER_DEG = 16;  // the pan moves to a commanded angle at 62.5 deg/s
 #define ROVER_VERSION "2.1.0"
