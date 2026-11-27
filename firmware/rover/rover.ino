@@ -1,90 +1,105 @@
 // rover-cam firmware: aLaMode (ATmega328P) + Adafruit Motor Shield v1.
-// Line commands at 115200 baud:  M <left> <right> <ms> | P <deg> | S | ?
-// Limits live here so nothing upstream can override them.
+// Glue around rover_core; the protocol and limits live there.
+// Protocol: docs/serial-protocol.md.
 #include <AFMotor.h>
 #include <Servo.h>
 
-const int MAX_PWM = 150;        // ~60 % of 255
-const int MAX_MS = 2000;        // longest single move
-const int STANDOFF_CM = 80;     // biped is 56 cm tall; stay out of its fall
-const long MIN_PACK_MV = 10500; // no driving below 3.5 V/cell
+#include "rover_core.h"
 
 // HC-SR04: trigger A1, echo A2. 3-pin Ping))): set both to A1.
 const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = A1, PIN_ECHO = A2;
 
-AF_DCMotor left(3), right(4);   // M3/M4: PWM on D5/D6, keeps D11 free
-Servo pan;
-unsigned long stopAt = 0;
-bool moving = false, forward = false;
+const unsigned long PING_PERIOD_US = 60000UL;
+const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had
+const unsigned long PACK_PERIOD_MS = 20;
 
-long packMv() {                 // 10k over 3.3k divider on A0
+AF_DCMotor leftMotor(3), rightMotor(4);  // M3/M4: PWM on D5/D6, keeps D11 free
+Servo pan;
+rover::Core core;
+
+long packMv() {  // 10k over 3.3k divider on A0
   return (long)analogRead(PIN_VBAT) * 5000 / 1023 * 133 / 33;
 }
 
-int rangeCm() {                 // 999 = no echo (nothing within ~4 m)
-  pinMode(PIN_TRIG, OUTPUT);
-  digitalWrite(PIN_TRIG, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(PIN_TRIG, LOW);
-  pinMode(PIN_ECHO, INPUT);
-  unsigned long us = pulseIn(PIN_ECHO, HIGH, 25000);
-  return us ? us / 58 : 999;
+// Non-blocking range: trigger, then poll the echo pin once per loop pass.
+enum PingState { PING_IDLE, PING_WAIT_RISE, PING_WAIT_FALL };
+PingState pingState = PING_IDLE;
+unsigned long pingStartUs = 0, pingRiseUs = 0;
+uint16_t rangeCm = rover::NO_ECHO_CM;  // 999 = no echo
+
+void servicePing() {
+  unsigned long now = micros();
+  switch (pingState) {
+    case PING_IDLE:
+      if (now - pingStartUs < PING_PERIOD_US) return;
+      pinMode(PIN_TRIG, OUTPUT);
+      digitalWrite(PIN_TRIG, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(PIN_TRIG, LOW);
+      pinMode(PIN_ECHO, INPUT);
+      pingStartUs = micros();
+      pingState = PING_WAIT_RISE;
+      return;
+    case PING_WAIT_RISE:
+      if (digitalRead(PIN_ECHO)) {
+        pingRiseUs = now;
+        pingState = PING_WAIT_FALL;
+      } else if (now - pingStartUs > PING_TIMEOUT_US) {
+        rangeCm = rover::NO_ECHO_CM;
+        pingState = PING_IDLE;
+      }
+      return;
+    case PING_WAIT_FALL:
+      if (!digitalRead(PIN_ECHO)) {
+        unsigned long cm = (now - pingRiseUs) / 58;
+        rangeCm = cm > rover::NO_ECHO_CM ? rover::NO_ECHO_CM : (uint16_t)cm;
+        pingState = PING_IDLE;
+      } else if (now - pingStartUs > PING_TIMEOUT_US) {
+        rangeCm = rover::NO_ECHO_CM;
+        pingState = PING_IDLE;
+      }
+      return;
+  }
 }
 
 void spin(AF_DCMotor &m, int v) {
-  m.setSpeed(min(abs(v), MAX_PWM));
+  m.setSpeed(v < 0 ? -v : v);
   m.run(v > 0 ? FORWARD : v < 0 ? BACKWARD : RELEASE);
-}
-
-void stopMotors() {
-  spin(left, 0);
-  spin(right, 0);
-  moving = false;
-}
-
-void handle(char *line) {
-  int a, b, c;
-  if (line[0] == 'M' && sscanf(line + 1, "%d %d %d", &a, &b, &c) == 3) {
-    if (packMv() < MIN_PACK_MV) { Serial.println("ERR low pack"); return; }
-    forward = a + b > 0;
-    if (forward && rangeCm() < STANDOFF_CM) { Serial.println("ERR blocked"); return; }
-    spin(left, a);
-    spin(right, b);
-    stopAt = millis() + constrain(c, 0, MAX_MS);
-    moving = true;
-    Serial.println("OK");
-  } else if (line[0] == 'P' && sscanf(line + 1, "%d", &a) == 1) {
-    pan.write(constrain(a, 0, 180));
-    Serial.println("OK");
-  } else if (line[0] == 'S') {
-    stopMotors();
-    Serial.println("OK");
-  } else if (line[0] == '?') {
-    Serial.print("mv=");
-    Serial.print(packMv());
-    Serial.print(" cm=");
-    Serial.println(rangeCm());
-  } else {
-    Serial.println("ERR bad command");
-  }
 }
 
 void setup() {
   Serial.begin(115200);
   pan.attach(PIN_SERVO);
-  pan.write(90);
-  stopMotors();
+  pan.write(rover::PAN_DEFAULT);
+  spin(leftMotor, 0);
+  spin(rightMotor, 0);
 }
 
 void loop() {
-  static char buf[32];
-  static byte n = 0;
-  while (Serial.available()) {
-    char ch = Serial.read();
-    if (ch == '\n') { buf[n] = 0; n = 0; handle(buf); }
-    else if (n < sizeof(buf) - 1) buf[n++] = ch;
+  static unsigned long lastLoopUs = 0, packAt = 0;
+  static uint16_t packReading = 0;
+  static int16_t appliedL = 0, appliedR = 0;
+  static uint8_t appliedPan = rover::PAN_DEFAULT;
+  unsigned long startUs = micros();
+
+  while (Serial.available()) core.rx((uint8_t)Serial.read());
+
+  servicePing();
+  unsigned long ms = millis();
+  if (ms - packAt >= PACK_PERIOD_MS || packAt == 0) {
+    packAt = ms ? ms : 1;
+    long mv = packMv();
+    packReading = mv > 0xFFFF ? 0xFFFF : (uint16_t)mv;
   }
-  if (moving && ((long)(millis() - stopAt) >= 0 ||
-                 (forward && rangeCm() < STANDOFF_CM)))
-    stopMotors();
+
+  rover::Inputs in = {ms, packReading, rangeCm, (uint32_t)lastLoopUs};
+  rover::Outputs out = core.tick(in);
+
+  if (out.left != appliedL) { appliedL = out.left; spin(leftMotor, appliedL); }
+  if (out.right != appliedR) { appliedR = out.right; spin(rightMotor, appliedR); }
+  if (out.pan != appliedPan) { appliedPan = out.pan; pan.write(appliedPan); }
+
+  while (Serial.availableForWrite() > 0 && core.tx_pending()) Serial.write((uint8_t)core.tx_pop());
+
+  lastLoopUs = micros() - startUs;
 }
