@@ -5,9 +5,9 @@
 
 #include "rover_core.h"
 
-// 3-pin Ping))) on the motor shield's S1 header (D10): trigger and echo share the pin.
-// A 4-pin HC-SR04 takes two pins instead (the design's A1 trigger, A2 echo).
-const int PIN_SERVO = 9,  /* fixed: Timer1's OC1A */ PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
+// The pan servo is on the motor shield's S2 header (D9) and the 3-pin Ping))) on S1 (D10). Both pins
+// are fixed by the hardware they use: Timer1's OC1A, and pin-change interrupt PCINT2.
+const int PIN_SERVO = 9, PIN_VBAT = A0;
 
 // Pan servo calibration, measured on the rover with firmware/pan_cal: the pulse width that points
 // the camera straight ahead, and the change in pulse width for 90 degrees to the left (9.8 degrees
@@ -17,7 +17,11 @@ const int PAN_CENTER_US = 1450;
 const int PAN_US_PER_90 = 918;
 
 const unsigned long PING_PERIOD_US = 60000UL;
-const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had
+const unsigned long PING_TIMEOUT_US = 25000UL;  // from the trigger: an echo from about 4 m
+const unsigned int PING_TRIGGER_US = 5;
+const unsigned int PING_TRIGGER_TAIL_US = 10;   // low this long after the trigger before letting go
+const unsigned long PING_MIN_ECHO_US = 100;     // real echoes start at 115 us (2 cm)
+const unsigned long PING_US_PER_CM = 58;        // round trip at 345 m/s
 const unsigned long PACK_PERIOD_MS = 20;
 
 AF_DCMotor leftMotor(3), rightMotor(4);  // M3/M4: PWM on D5/D6, keeps D11 free
@@ -27,44 +31,72 @@ long packMv() {  // 10k over 3.3k divider on A0
   return (long)analogRead(PIN_VBAT) * 5000 / 1023 * 133 / 33;
 }
 
-// Non-blocking range: trigger, then poll the echo pin once per loop pass.
-enum PingState { PING_IDLE, PING_WAIT_RISE, PING_WAIT_FALL };
+// Range from the Ping))): its one signal pin is D10 (PB2, pin-change interrupt PCINT2). A ping is a
+// short high pulse from here; 750 us later the sensor holds the pin high for the echo's round trip.
+// The two edges are timed in the interrupt handler, to micros()'s 4 us. Outside that listening
+// window the pin is driven low: left floating, the servo pulse on D9 couples into the wire and
+// triggers the sensor again, 50 times a second.
+enum PingState { PING_IDLE, PING_LISTEN };
 PingState pingState = PING_IDLE;
-unsigned long pingStartUs = 0, pingRiseUs = 0;
+unsigned long pingStartUs = 0;
+volatile unsigned long pingRiseUs = 0, pingFallUs = 0;
+volatile uint8_t pingEdges = 0;        // 0 none, 1 rise seen, 2 fall seen
 uint16_t rangeCm = rover::NO_ECHO_CM;  // 999 = no echo
 
+inline void pingHoldLow() {
+  PCMSK0 &= ~_BV(PCINT2);
+  PORTB &= ~_BV(PB2);
+  DDRB |= _BV(PB2);
+}
+
+ISR(PCINT0_vect) {
+  const unsigned long t = micros();
+  const bool high = PINB & _BV(PB2);
+  if (high && pingEdges == 0) {
+    pingRiseUs = t;
+    pingEdges = 1;
+  } else if (!high && pingEdges == 1) {
+    pingFallUs = t;
+    pingEdges = 2;
+    pingHoldLow();
+  }
+}
+
+void pingBegin() {
+  pingHoldLow();
+  PCICR |= _BV(PCIE0);
+}
+
 void servicePing() {
-  unsigned long now = micros();
-  switch (pingState) {
-    case PING_IDLE:
-      if (now - pingStartUs < PING_PERIOD_US) return;
-      pinMode(PIN_TRIG, OUTPUT);
-      digitalWrite(PIN_TRIG, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(PIN_TRIG, LOW);
-      pinMode(PIN_ECHO, INPUT);
-      pingStartUs = micros();
-      pingState = PING_WAIT_RISE;
-      return;
-    case PING_WAIT_RISE:
-      if (digitalRead(PIN_ECHO)) {
-        pingRiseUs = now;
-        pingState = PING_WAIT_FALL;
-      } else if (now - pingStartUs > PING_TIMEOUT_US) {
-        rangeCm = rover::NO_ECHO_CM;
-        pingState = PING_IDLE;
-      }
-      return;
-    case PING_WAIT_FALL:
-      if (!digitalRead(PIN_ECHO)) {
-        unsigned long cm = (now - pingRiseUs) / 58;
-        rangeCm = cm > rover::NO_ECHO_CM ? rover::NO_ECHO_CM : (uint16_t)cm;
-        pingState = PING_IDLE;
-      } else if (now - pingStartUs > PING_TIMEOUT_US) {
-        rangeCm = rover::NO_ECHO_CM;
-        pingState = PING_IDLE;
-      }
-      return;
+  const unsigned long now = micros();
+  if (pingState == PING_IDLE) {
+    if (now - pingStartUs < PING_PERIOD_US) return;
+    PORTB |= _BV(PB2);  // the pin is an output, low, between pings
+    delayMicroseconds(PING_TRIGGER_US);
+    PORTB &= ~_BV(PB2);
+    // Released at once, the sensor misses up to a quarter of the triggers.
+    delayMicroseconds(PING_TRIGGER_TAIL_US);
+    DDRB &= ~_BV(PB2);
+    pingEdges = 0;
+    pingStartUs = micros();
+    PCIFR = _BV(PCIF0);
+    PCMSK0 |= _BV(PCINT2);
+    pingState = PING_LISTEN;
+    return;
+  }
+  noInterrupts();
+  const uint8_t edges = pingEdges;
+  const unsigned long us = pingFallUs - pingRiseUs;
+  interrupts();
+  if (edges == 2) {
+    // Shorter than the sensor's shortest echo: it is blinded by something against its face.
+    rangeCm = us < PING_MIN_ECHO_US ? 0 : (uint16_t)min((us + PING_US_PER_CM / 2) / PING_US_PER_CM,
+                                                        (unsigned long)rover::NO_ECHO_CM);
+    pingState = PING_IDLE;
+  } else if (now - pingStartUs > PING_TIMEOUT_US) {
+    pingHoldLow();
+    rangeCm = rover::NO_ECHO_CM;
+    pingState = PING_IDLE;
   }
 }
 
@@ -75,7 +107,7 @@ int panUs(int8_t deg) {  // deg is -90..90, + to the left
 // The pan pulse comes from Timer1's output compare on D9 (OC1A), not from the Servo library: a
 // pulse timed in an interrupt handler is late by a few microseconds whenever another interrupt
 // (serial, millis) is running, and the servo ticks at each one. Fast PWM with ICR1 as top: 20 ms
-// period, 0.5 us a count at 16 MHz. D10 (OC1B) is left an ordinary pin.
+// period, 0.5 us a count at 16 MHz. D10 (OC1B) is left an ordinary pin, for the Ping))).
 void panWriteUs(int us) { OCR1A = (uint16_t)(us * 2 - 1); }
 
 void panBegin(int us) {
@@ -96,6 +128,7 @@ void spin(AF_DCMotor &m, int v) {
 void setup() {
   Serial.begin(115200);
   panBegin(panUs(rover::PAN_DEFAULT));
+  pingBegin();
   spin(leftMotor, 0);
   spin(rightMotor, 0);
 }
