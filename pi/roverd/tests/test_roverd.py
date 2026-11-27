@@ -4,16 +4,19 @@ from __future__ import annotations
 
 import math
 import os
+import re
 import signal
+import socket
 import struct
 import subprocess
 import time
+import uuid
 
 import pytest
 
 import robo_v1_pb2 as pb
-from conftest import ROVERD_BIN, stop_roverd
-from fake_firmware import BLOCKED, CMD_TIMEOUT, LOW_PACK, MOVING, frame
+from conftest import ROVERD_BIN, Bus, start_roverd, stop_roverd
+from fake_firmware import BLOCKED, CMD_TIMEOUT, LOW_PACK, MOVING, FakeFirmware, frame
 
 pytestmark = pytest.mark.timeout(60)
 
@@ -494,3 +497,71 @@ def test_shutdown_sends_stop(rig_factory):
     rig.proc.send_signal(signal.SIGTERM)
     assert rig.proc.wait(5) == 0
     rig.fake.wait_received("S", since=t)
+
+
+# ---- where the adapter is ----
+
+def test_info_says_which_host_and_endpoints(rig):
+    info = rig.bus.wait("info")
+    assert info.hostname == socket.gethostname()
+    assert list(info.endpoints) == [rig.endpoint]          # a concrete listen endpoint is reported as is
+
+
+def _port_in_use(port: int) -> bool:
+    with socket.socket(socket.AF_INET6, socket.SOCK_STREAM) as s:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)   # as Zenoh does: TIME_WAIT is not "in use"
+        try:
+            s.bind(("::", port))
+        except OSError:
+            return True
+    return False
+
+
+def test_default_port_then_fallback_when_taken(tmp_path):
+    """Without ROBO_ZENOH_LISTEN roverd listens on every interface on 7447; a second roverd on the same
+    machine warns and listens on a free port instead. The only test that binds the fixed port."""
+    if _port_in_use(7447):
+        pytest.skip("port 7447 is in use on this machine")
+    first = start_roverd(tmp_path, port=7447, listen=False, name="first")
+    second = None
+    try:
+        info = first.bus.wait("info")
+        assert info.endpoints and all(e.endswith(":7447") for e in info.endpoints), list(info.endpoints)
+        assert "listening on tcp/[::]:7447" in first.log_text()
+
+        ns = "t" + uuid.uuid4().hex[:12]
+        fake = FakeFirmware(tmp_path / "second-tty")
+        env = dict(os.environ, ROBO_NS=ns, ROBO_ZENOH_MODE="peer", ROBO_ZENOH_SCOUTING="0")
+        env.pop("ROBO_ZENOH_LISTEN", None)
+        env.pop("ROBO_ZENOH_CONNECT", None)
+        log = tmp_path / "second.log"
+        with open(log, "wb") as fh:
+            proc = subprocess.Popen([str(ROVERD_BIN), "--serial", str(tmp_path / "second-tty")], env=env,
+                                    stdout=subprocess.DEVNULL, stderr=fh)
+        try:
+            deadline = time.monotonic() + 10
+            m = None
+            while time.monotonic() < deadline and m is None:
+                assert proc.poll() is None, log.read_text()
+                m = re.search(r"listening on tcp/\[::\]:(\d+)", log.read_text())
+                time.sleep(0.05)
+            assert m, log.read_text()
+            port = int(m.group(1))
+            text = log.read_text()
+            assert port != 7447 and "cannot listen on tcp/[::]:7447" in text, text
+            bus = Bus(f"tcp/127.0.0.1:{port}", ns)
+            try:
+                info2 = bus.wait("info", timeout=5)
+                assert info2.endpoints and all(e.endswith(f":{port}") for e in info2.endpoints)
+            finally:
+                bus.close()
+            assert proc.poll() is None
+            proc.send_signal(signal.SIGTERM)
+            assert proc.wait(10) == 0
+        finally:
+            if proc.poll() is None:
+                proc.kill()
+                proc.wait()
+            fake.close()
+    finally:
+        assert stop_roverd(first) == 0

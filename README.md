@@ -17,7 +17,10 @@ since the protocol change.
   shield (`AFMotor`), the pan servo and the range sensor. Protocol: [docs/serial-protocol.md](docs/serial-protocol.md).
 - `pi/roverd/` is `roverd`, the service for the Pi 4: it owns the serial port, relays commands from the
   [robo-control](../robo-control) bus to the firmware one for one, and publishes the rover's state.
-  It needs robo-control checked out beside this repo.
+  It needs robo-control checked out beside this repo. Without `ROBO_ZENOH_LISTEN` it listens on
+  every interface on TCP port 7447 (a free port, with a warning, if another adapter on the machine has
+  7447), so a console can reach it by address (`rover.local` in the console's Setup tab) as well as by
+  multicast; its `Info` carries the machine's hostname and those endpoints.
 - `sim/` is the simulated twin: a MuJoCo rover in a room, running `rover_core` as its firmware behind
   a pseudo serial port, so `roverd` drives it unchanged. See [sim/README.md](sim/README.md).
 - `robo/robot.json` describes the rover to the robo-control console.

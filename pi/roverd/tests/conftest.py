@@ -161,20 +161,27 @@ class Rig:
     log: Path
     log_fh: object
     started: float
+    endpoint: str
 
     def log_text(self) -> str:
         return self.log.read_text(errors="replace")
 
 
-def start_roverd(tmp_path: Path, fake_kwargs: dict | None = None, args: list[str] | None = None):
+def start_roverd(tmp_path: Path, fake_kwargs: dict | None = None, args: list[str] | None = None,
+                 port: int | None = None, listen: bool = True, name: str = "roverd"):
+    """listen=False leaves ROBO_ZENOH_LISTEN unset (the adapter's default); then `port` is where it is
+    expected to listen."""
     ns = "t" + uuid.uuid4().hex[:12]
-    port = free_port()
-    fake = FakeFirmware(tmp_path / "tty", **(fake_kwargs or {}))
-    env = dict(os.environ, ROBO_NS=ns, ROBO_ZENOH_MODE="peer",
-               ROBO_ZENOH_LISTEN=f"tcp/127.0.0.1:{port}", ROBO_ZENOH_SCOUTING="0")
+    port = port or free_port()
+    fake = FakeFirmware(tmp_path / f"{name}-tty", **(fake_kwargs or {}))
+    env = dict(os.environ, ROBO_NS=ns, ROBO_ZENOH_MODE="peer", ROBO_ZENOH_SCOUTING="0")
+    if listen:
+        env["ROBO_ZENOH_LISTEN"] = f"tcp/127.0.0.1:{port}"
+    else:
+        env.pop("ROBO_ZENOH_LISTEN", None)
     env.pop("ROBO_ZENOH_CONNECT", None)
-    log = tmp_path / "roverd.log"
-    cmd = [str(ROVERD_BIN), "--serial", str(tmp_path / "tty"),
+    log = tmp_path / f"{name}.log"
+    cmd = [str(ROVERD_BIN), "--serial", str(tmp_path / f"{name}-tty"),
            "--camera", "mast=http://127.0.0.1:8081/stream", "--camera", "overview=http://127.0.0.1:8082/x",
            "--simulated", "--description-commit", "abc123"]
     started = time.monotonic()
@@ -187,7 +194,7 @@ def start_roverd(tmp_path: Path, fake_kwargs: dict | None = None, args: list[str
         log_fh.close()
         raise
     bus = Bus(f"tcp/127.0.0.1:{port}", ns)
-    rig = Rig(fake, bus, proc, log, log_fh, started)
+    rig = Rig(fake, bus, proc, log, log_fh, started, f"tcp/127.0.0.1:{port}")
     try:
         bus.wait("control/state", timeout=5)
     except AssertionError:

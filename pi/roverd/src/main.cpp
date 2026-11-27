@@ -12,7 +12,8 @@ void usage(FILE* out) {
                  "              [--description-commit HASH]\n"
                  "       roverd --version\n"
                  "Bus settings come from ROBO_NS, ROBO_ZENOH_MODE, ROBO_ZENOH_LISTEN,\n"
-                 "ROBO_ZENOH_CONNECT and ROBO_ZENOH_SCOUTING.\n");
+                 "ROBO_ZENOH_CONNECT and ROBO_ZENOH_SCOUTING. Without ROBO_ZENOH_LISTEN it listens on\n"
+                 "tcp/[::]:7447 (a free port if that one is taken).\n");
 }
 
 }  // namespace

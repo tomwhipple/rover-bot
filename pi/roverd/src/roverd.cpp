@@ -71,9 +71,13 @@ enum class Inbound { Request, Intent, Stop };
 
 class Adapter {
 public:
-    explicit Adapter(const Options& opts)
+    explicit Adapter(const Options& opts) : Adapter(opts, robo::bus::open_adapter_session()) {}
+
+    Adapter(const Options& opts, robo::bus::AdapterSession bus)
         : opts_(opts),
-          session_(robo::bus::open_session_from_env()),
+          session_(std::move(bus.session)),
+          listen_(std::move(bus.listen)),
+          hostname_(robo::bus::host_name()),
           serial_(opts.serial),
           synced_(robo::bus::clock_synced()) {
         if (::pipe(wake_) != 0) throw std::runtime_error(std::string("pipe: ") + std::strerror(errno));
@@ -107,7 +111,7 @@ public:
 
         start_ms_ = mono_ms();
         log(std::string("version ") + version() + ", robot " + opts_.robot_id + ", serial " +
-            opts_.serial + ", ns " + robo::bus::ns());
+            opts_.serial + ", ns " + robo::bus::ns() + ", listening on " + listen_);
         publish_info();
         publish_control();
         next_info_ms_ = start_ms_ + INFO_PERIOD_MS;
@@ -233,6 +237,10 @@ private:
         for (const auto& [k, v] : opts_.cameras) (*m.mutable_cameras())[k] = v;
         if (hello_) {
             for (const auto& [k, v] : hello_->limits) (*m.mutable_limits())[k] = v;
+        }
+        m.set_hostname(hostname_);
+        for (const auto& e : robo::bus::advertised_endpoints(listen_, robo::bus::local_ipv4_addresses())) {
+            m.add_endpoints(e);
         }
         put(*pub_info_, m);
     }
@@ -545,6 +553,8 @@ private:
 
     Options opts_;
     zenoh::Session session_;
+    std::string listen_;
+    std::string hostname_;
     std::optional<zenoh::Publisher> pub_info_, pub_state_, pub_event_, pub_control_;
     SerialPort serial_;
     LineAssembler lines_;
