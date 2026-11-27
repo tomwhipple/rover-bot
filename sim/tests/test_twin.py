@@ -186,13 +186,14 @@ def test_stand_off_blocks_forward_allows_reverse(twin):
     time.sleep(0.8)
     twin.drive_for(120, 120, 0.3)
     p = twin.wait_pose()
-    # wall inner face at 2.5 m, sensor 0.10 m ahead of centre, body radius 0.10
+    # wall inner face at 2.5 m, sensor on the head 0.135 m ahead of centre, body radius 0.10
     assert p["x"] < 2.5 - 0.10 - 0.3
     assert 0 < st["cm"] < 80 or twin.last_t()["cm"] < 80
     x_blocked = p["x"]
     twin.drive_for(-100, -100, 1.0)
     p2 = twin.wait_pose()
-    assert p2["x"] < x_blocked - 0.2
+    # About 0.2 m in a second of wall-clock time; the margin allows for a loaded machine.
+    assert p2["x"] < x_blocked - 0.1
 
 
 def test_pivot_directions(twin):

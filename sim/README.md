@@ -11,7 +11,8 @@ the twin only moves bytes and applies the outputs.
 - **Physics** (`rover.xml`): differential drive, two driven wheels and a rear skid caster; a DC motor
   model per wheel (PWM to `(pack_v - 2.6 V) * |pwm|/255`, no-load speed proportional to voltage,
   torque linear in speed); pan servo joint, 90 degrees = straight ahead, above 90 = left.
-- **Range**: a forward ray from the `range` site, in cm, 999 beyond 4 m, refreshed every 60 ms.
+- **Range**: a ray from the `range` site on the pan head, along the pan direction, in cm, 999 beyond
+  4 m, refreshed every 60 ms.
 - **Cameras**: `mast` (on the pan joint, 0.28 m above the floor) and `overview` (fixed, room corner),
   640x480 JPEG, about 15 fps, MJPEG on `http://127.0.0.1:<port>/mast.mjpg` and `/overview.mjpg`, each part
   with `X-Timestamp-Ns` (capture time, UTC ns). A camera renders only while a client is connected.
@@ -31,5 +32,5 @@ The tests use the firmware library if it is built, else a test double in `tests/
 ## Nominal numbers (not measured)
 
 Wheel radius 0.033 m, track 0.18 m, body radius 0.10 m, mass 1.2 kg, motor 3.5 rad/s per volt and
-0.025 N m per volt stall, mast camera 0.08 m ahead of the centre at 0.28 m, range sensor 0.10 m ahead
+0.025 N m per volt stall, mast camera 0.08 m ahead of the centre at 0.28 m, range sensor on the pan head, 0.135 m ahead
 of the centre at 0.043 m, room 5 m x 5 m.

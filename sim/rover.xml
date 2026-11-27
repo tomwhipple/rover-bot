@@ -61,7 +61,6 @@
       <geom name="deck" type="cylinder" size="0.095 0.005" pos="0 0 0.06" material="deck" mass="0.001" contype="0" conaffinity="0"/>
       <geom name="caster" type="sphere" size="0.012" pos="-0.08 0 -0.031" friction="0.05 0.001 0.0001" mass="0.001"/>
       <geom name="mast_post" type="cylinder" size="0.008" fromto="0.08 0 0.06 0.08 0 0.237" material="mast" mass="0.001" contype="0" conaffinity="0"/>
-      <site name="range" pos="0.10 0 0.0" size="0.006"/>
 
       <body name="wheel_l" pos="0 0.09 -0.01">
         <joint name="wheel_l" type="hinge" axis="0 1 0" damping="0.002" frictionloss="0.02" armature="1e-4"/>
@@ -78,6 +77,8 @@
         <inertial pos="0.02 0 0" mass="0.05" diaginertia="1e-4 1e-4 1e-4"/>
         <geom name="head" type="box" size="0.03 0.04 0.02" pos="0.02 0 0" material="mast" mass="0.001" contype="0" conaffinity="0"/>
         <camera name="mast" pos="0.05 0 0" xyaxes="0 -1 0 0 0 1" fovy="60"/>
+        <!-- the range sensor rides on the head, just ahead of its front face, and turns with the pan -->
+        <site name="range" pos="0.055 0 0" size="0.006"/>
       </body>
     </body>
   </worldbody>
