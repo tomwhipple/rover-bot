@@ -37,6 +37,7 @@ TYPES = {
     "control/request": pb.ControlRequest,
     "cmd/intent": pb.Intent,
     "cmd/stop": pb.Stop,
+    "cmd/home": pb.Home,
 }
 
 
@@ -146,6 +147,9 @@ class Bus:
 
     def stop(self, sender: str, reason: str = "") -> None:
         self.put("cmd/stop", pb.Stop(header=self._header("cmd/stop"), sender_id=sender, reason=reason))
+
+    def home(self, cid: str) -> None:
+        self.put("cmd/home", pb.Home(header=self._header("cmd/home"), controller_id=cid))
 
     def take_and_wait(self, cid: str, role: int = pb.ROLE_HUMAN, label: str = "") -> None:
         t = time.monotonic()

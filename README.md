@@ -20,7 +20,10 @@ console receives the rover's state (2026-11-27); it has not been driven. `roverd
   It needs robo-control checked out beside this repo. Without `ROBO_ZENOH_LISTEN` it listens on
   every interface on TCP port 7447 (a free port, with a warning, if another adapter on the machine has
   7447), so a console can reach it by address (`rover.local` in the console's Setup tab) as well as by
-  multicast; its `Info` carries the machine's hostname and those endpoints.
+  multicast; its `Info` carries the machine's hostname and those endpoints. The rover's HOME state is
+  motors stopped and the pan straight ahead (0): on the console's HOME, `roverd` sends `S` and then
+  `P` with the home pan (`--home pan=DEG`, default 0; the launch recipe in `robo/robot.json` passes the
+  description's `home`).
 - `sim/` is the simulated twin: a MuJoCo rover in a room, running `rover_core` as its firmware behind
   a pseudo serial port, so `roverd` drives it unchanged. See [sim/README.md](sim/README.md).
 - `robo/robot.json` describes the rover to the robo-control console.

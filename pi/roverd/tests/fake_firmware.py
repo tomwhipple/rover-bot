@@ -66,6 +66,7 @@ class FakeFirmware:
         self.extra_flags = 0
         self.silent = False
         self.answer_hello = True
+        self.hold_pan = False  # a pan that never reaches its target: P is received but not applied
         # Firmware state.
         self._boot = time.monotonic()
         self._millis_start = millis_start
@@ -189,7 +190,7 @@ class FakeFirmware:
                 deg = int(tok[1])
                 if not -90 <= deg <= 90:
                     self._error(3, "pan out of range")
-                else:
+                elif not self.hold_pan:
                     self._pan = deg
             elif tok[0] == "S" and len(tok) == 1:
                 self._cmd = (0, 0)

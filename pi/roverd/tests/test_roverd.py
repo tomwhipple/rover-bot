@@ -61,6 +61,9 @@ def test_cli_version_and_usage():
     assert subprocess.run([str(ROVERD_BIN)], capture_output=True).returncode == 2
     assert subprocess.run([str(ROVERD_BIN), "--serial", "x", "--camera", "nourl"], capture_output=True).returncode == 2
     assert subprocess.run([str(ROVERD_BIN), "--bogus"], capture_output=True).returncode == 2
+    for bad in ("tilt=3", "pan=91", "pan=-91", "pan=", "pan=x", "0"):
+        out = subprocess.run([str(ROVERD_BIN), "--serial", "x", "--home", bad], capture_output=True, text=True)
+        assert out.returncode == 2 and "--home" in out.stderr, bad
 
 
 # ---- Info, hello ----
@@ -404,6 +407,112 @@ def test_stop_latches_until_retake(rig):
     bus.wait("control/state", lambda m: not m.stopped and m.holder_id == "console", since=t3)
     bus.intent("console", linear=0.5)
     fake.wait_received("V", since=t3)
+
+
+# ---- HOME ----
+
+def serial_since(fake, t: float) -> list[str]:
+    return [p for p in fake.received(None, t) if p[0] in "VPS"]
+
+
+def test_home_from_holder(rig):
+    bus, fake = rig.bus, rig.fake
+    assert bus.wait("state", lambda m: m.mode == "IDLE").at_home, "stopped and centred is home"
+    bus.take_and_wait("console")
+    t0 = time.monotonic()
+    for _ in range(6):
+        bus.intent("console", linear=0.5, pan=50)
+        time.sleep(0.05)
+    bus.wait("state", lambda m: m.mode == "MOVING" and actuator(m, "pan").applied == 50 and not m.at_home,
+             since=t0)
+    t = time.monotonic()
+    bus.home("console")
+    fake.wait_received("P", since=t)
+    assert serial_since(fake, t)[:2] == ["S", "P 0"]
+    homed = bus.wait_event("HOMED", since=t)
+    codes = [e.code for e in bus.events(since=t) if e.code.startswith("HOME")]
+    assert codes == ["HOME", "HOMED"], codes
+    assert bus.events("HOME", since=t)[0].severity == pb.SEVERITY_INFO and homed.severity == pb.SEVERITY_INFO
+    s = bus.wait("state", lambda m: m.at_home, since=t)
+    assert actuator(s, "left_wheel").applied == 0 and actuator(s, "pan").applied == 0
+    assert actuator(s, "pan").commanded == 0
+    # Home is a heartbeat: the lease outlives three seconds without an Intent after it.
+    for _ in range(2):
+        time.sleep(1.5)
+        bus.home("console")
+    time.sleep(1.0)
+    assert not bus.events("CONTROL_EXPIRED", since=t)
+    # Once home, the holder's Intents are relayed again.
+    t2 = time.monotonic()
+    bus.intent("console", linear=0.25, pan=0)
+    fake.wait_received("V", since=t2)
+    assert fake.received("P", since=t2) == [], "home pan already sent"
+
+
+def test_home_denied(rig):
+    bus, fake = rig.bus, rig.fake
+    t = time.monotonic()
+    bus.home("console")  # control is free
+    ev = bus.wait_event("HOME_DENIED", since=t)
+    assert ev.severity == pb.SEVERITY_WARNING and "console" in ev.text
+    bus.take_and_wait("console")
+    t = time.monotonic()
+    bus.home("stranger")
+    ev = bus.wait_event("HOME_DENIED", since=t)
+    assert "stranger" in ev.text and "control" in ev.text
+    bus.stop("bystander")
+    bus.wait("control/state", lambda m: m.stopped, since=t)
+    fake.wait_received("S", since=t)
+    time.sleep(0.1)
+    t2 = time.monotonic()
+    bus.home("console")
+    ev = bus.wait_event("HOME_DENIED", since=t2)
+    assert "stop" in ev.text
+    time.sleep(0.3)
+    assert serial_since(fake, t) == ["S"], "only the Stop's S reached the firmware"
+    assert not bus.events("HOME", since=t)
+
+
+def test_home_timeout_and_intents_while_homing(rig):
+    bus, fake = rig.bus, rig.fake
+    bus.take_and_wait("console")
+    t0 = time.monotonic()
+    bus.intent("console", pan=50)
+    bus.wait("state", lambda m: actuator(m, "pan").applied == 50, since=t0)
+    fake.hold_pan = True  # the pan never gets home
+    t = time.monotonic()
+    bus.home("console")
+    fake.wait_received("P", since=t)
+    for _ in range(40):  # 2 s of a stale stick and pan setpoint
+        bus.intent("console", linear=0.5, pan=50)
+        time.sleep(0.05)
+    assert serial_since(fake, t) == ["S", "P 0"], "no Intent relayed while homing"
+    assert bus.msgs("control/state")[-1].holder_id == "console", "Intents still count as heartbeats"
+    ev = bus.wait_event("HOME_TIMEOUT", since=t, timeout=3)
+    when = next(r.mono for r in bus.got("event", t) if r.msg.code == "HOME_TIMEOUT") - t
+    assert 2.9 < when < 3.5, when
+    assert ev.severity == pb.SEVERITY_WARNING and "pan 50" in ev.text
+    assert not bus.events("HOMED", since=t)
+    assert not bus.wait("state", since=time.monotonic()).at_home
+    t2 = time.monotonic()
+    bus.intent("console", linear=0.5, pan=50)
+    fake.wait_received("V", since=t2)
+    assert fake.received("P", since=t2) == ["P 50"]
+    fake.hold_pan = False
+
+
+def test_home_option(rig_factory):
+    rig = rig_factory(args=["--home", "pan=-30"])
+    bus, fake = rig.bus, rig.fake
+    assert not bus.wait("state", lambda m: m.mode == "IDLE").at_home, "pan 0 is not home at -30"
+    assert "home pan -30" in rig.log_text()
+    bus.take_and_wait("console")
+    t = time.monotonic()
+    bus.home("console")
+    bus.wait_event("HOMED", since=t)
+    assert serial_since(fake, t)[:2] == ["S", "P -30"]
+    s = bus.wait("state", lambda m: m.at_home, since=t)
+    assert actuator(s, "pan").applied == -30
 
 
 def test_lease_expiry(rig):

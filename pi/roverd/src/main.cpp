@@ -1,4 +1,6 @@
+#include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <cstring>
 #include <string>
 
@@ -9,11 +11,23 @@ namespace {
 void usage(FILE* out) {
     std::fprintf(out,
                  "usage: roverd --serial PATH [--robot-id ID] [--camera NAME=URL]... [--simulated]\n"
-                 "              [--description-commit HASH]\n"
+                 "              [--description-commit HASH] [--home NAME=VALUE]...\n"
                  "       roverd --version\n"
                  "Bus settings come from ROBO_NS, ROBO_ZENOH_MODE, ROBO_ZENOH_LISTEN,\n"
                  "ROBO_ZENOH_CONNECT and ROBO_ZENOH_SCOUTING. Without ROBO_ZENOH_LISTEN it listens on\n"
-                 "tcp/[::]:7447 (a free port if that one is taken).\n");
+                 "tcp/[::]:7447 (a free port if that one is taken).\n"
+                 "--home names a position channel's home value; the rover has pan (-90..90, default 0).\n");
+}
+
+// "pan=0" -> opts.home_pan; false on anything else.
+bool parse_home(const char* arg, roverd::Options& opts) {
+    const char* eq = std::strchr(arg, '=');
+    if (!eq || std::string(arg, eq) != "pan" || !eq[1]) return false;
+    char* end = nullptr;
+    const double v = std::strtod(eq + 1, &end);
+    if (*end || !std::isfinite(v) || v < -90 || v > 90) return false;
+    opts.home_pan = static_cast<int>(std::lround(v));
+    return true;
 }
 
 }  // namespace
@@ -37,7 +51,8 @@ int main(int argc, char** argv) {
             return 0;
         } else if (a == "--simulated") {
             opts.simulated = true;
-        } else if (a == "--serial" || a == "--robot-id" || a == "--camera" || a == "--description-commit") {
+        } else if (a == "--serial" || a == "--robot-id" || a == "--camera" || a == "--description-commit" ||
+                   a == "--home") {
             const char* v = value(a.c_str());
             if (!v) return 2;
             if (a == "--serial") {
@@ -46,6 +61,11 @@ int main(int argc, char** argv) {
                 opts.robot_id = v;
             } else if (a == "--description-commit") {
                 opts.description_commit = v;
+            } else if (a == "--home") {
+                if (!parse_home(v, opts)) {
+                    std::fprintf(stderr, "roverd: --home wants pan=DEG with DEG in -90..90, got '%s'\n", v);
+                    return 2;
+                }
             } else {
                 const char* eq = std::strchr(v, '=');
                 if (!eq || eq == v) {

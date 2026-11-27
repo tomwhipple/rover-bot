@@ -8,6 +8,7 @@
     {"name": "angular", "min": -1, "max": 1, "default": 0, "hold": false, "label": "turn (+ = left)"},
     {"name": "pan", "min": -90, "max": 90, "default": 0, "hold": true, "unit": "deg", "label": "camera pan (+ = left)"}
   ],
+  "home": {"pan": 0},
   "actuators": [
     {"name": "left_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "left wheel"},
     {"name": "right_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "right wheel"},
@@ -44,7 +45,7 @@
         "name": "adapter",
         "bus": "listen",
         "cmd": ["{repo}/build/roverd/roverd", "--serial", "{run_dir}/rover-tty", "--robot-id", "{robot_id}",
-                "--simulated", "--description-commit", "{commit}",
+                "--simulated", "--description-commit", "{commit}", "--home", "pan={home:pan}",
                 "--camera", "mast=http://127.0.0.1:{port:camera}/mast.mjpg",
                 "--camera", "overview=http://127.0.0.1:{port:camera}/overview.mjpg"]
       }

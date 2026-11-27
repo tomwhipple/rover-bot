@@ -12,6 +12,7 @@ struct Options {
     std::map<std::string, std::string> cameras;
     bool simulated = false;
     std::string description_commit;
+    int home_pan = 0;  // the pan, in degrees (0 straight ahead, + left), of the rover's HOME state
 };
 
 // Opens the bus from the ROBO_* environment and runs until SIGINT/SIGTERM. Returns the exit code.

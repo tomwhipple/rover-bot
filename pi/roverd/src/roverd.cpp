@@ -47,6 +47,7 @@ constexpr int64_t STATS_LOG_PERIOD_MS = 10000;
 // READY waits for a subscriber on the event topic: an event put before a peer has linked is lost.
 constexpr int64_t READY_POLL_MS = 100;
 constexpr int64_t READY_WAIT_MS = 10000;
+constexpr int64_t HOME_TIMEOUT_MS = 3000;
 
 std::atomic<int> g_wake_fd{-1};
 volatile std::sig_atomic_t g_quit = 0;
@@ -85,7 +86,7 @@ bool host_stopping() {
 
 void log(const std::string& s) { std::fprintf(stderr, "roverd: %s\n", s.c_str()); }
 
-enum class Inbound { Request, Intent, Stop };
+enum class Inbound { Request, Intent, Stop, Home };
 
 class Adapter {
 public:
@@ -111,6 +112,7 @@ public:
         subscribe("control/request", Inbound::Request);
         subscribe("cmd/intent", Inbound::Intent);
         subscribe("cmd/stop", Inbound::Stop);
+        subscribe("cmd/home", Inbound::Home);
     }
 
     ~Adapter() {
@@ -129,7 +131,8 @@ public:
 
         start_ms_ = mono_ms();
         log(std::string("version ") + version() + ", robot " + opts_.robot_id + ", serial " +
-            opts_.serial + ", ns " + robo::bus::ns() + ", listening on " + listen_);
+            opts_.serial + ", home pan " + std::to_string(opts_.home_pan) + ", ns " + robo::bus::ns() +
+            ", listening on " + listen_);
         publish_info();
         publish_control();
         next_info_ms_ = start_ms_ + INFO_PERIOD_MS;
@@ -190,7 +193,8 @@ public:
               host_stopping() ? host_name() + " is shutting down" : "roverd on " + host_name() + " is stopping");
         session_.close();
         log("relayed " + std::to_string(relayed_) + " intents, dropped " +
-            std::to_string(lease_.dropped()) + ", bad lines " + std::to_string(bad_lines_));
+            std::to_string(lease_.dropped()) + ", dropped while homing " + std::to_string(dropped_homing_) +
+            ", bad lines " + std::to_string(bad_lines_));
         return 0;
     }
 
@@ -327,8 +331,16 @@ private:
         m.set_deadline_misses(0);
         m.set_firmware_link_age_ms(last_heard_ms_ >= 0 ? static_cast<float>(now - last_heard_ms_) : -1.0f);
         m.set_last_intent_seq(last_intent_seq_);
+        m.set_at_home(link && at_home());
         put(*pub_state_, m);
     }
+
+    // Motors applied 0 and the pan at its home angle, by the last T line.
+    bool at_home() const {
+        return has_t_ && last_t_.left == 0 && last_t_.right == 0 && last_t_.pan == opts_.home_pan;
+    }
+
+    bool homing() const { return homing_since_ms_ >= 0; }
 
     // ---- serial ----
 
@@ -423,6 +435,10 @@ private:
             const auto sev = bit == FLAG_CMD_TIMEOUT ? pb::SEVERITY_INFO : pb::SEVERITY_WARNING;
             event(sev, flag_name(bit), "firmware flag set");
         }
+        if (homing() && now - homing_since_ms_ < HOME_TIMEOUT_MS && at_home()) {
+            homing_since_ms_ = -1;
+            event(pb::SEVERITY_INFO, "HOMED", "motors stopped, pan " + std::to_string(opts_.home_pan));
+        }
         publish_state(now, true, mapped, opts_.simulated ? clock_.firmware_ns() : 0);
     }
 
@@ -439,6 +455,7 @@ private:
                 case Inbound::Request: on_request(it.bytes, now); break;
                 case Inbound::Intent: on_intent(it.bytes, now); break;
                 case Inbound::Stop: on_stop(it.bytes, now); break;
+                case Inbound::Home: on_home(it.bytes, now); break;
             }
         }
         if (lease_.version() != control_version_) publish_control();
@@ -496,6 +513,11 @@ private:
         const auto r = lease_.accept_intent(in.controller_id(), now);
         if (r.expired) on_expired(now);
         if (r.result != robo::IntentResult::Relay) return;
+        // A stale stick or pan setpoint must not fight the home move.
+        if (homing()) {
+            ++dropped_homing_;
+            return;
+        }
         const auto& ch = in.channels();
         auto get = [&](const char* name) {
             const auto it = ch.find(name);
@@ -530,6 +552,28 @@ private:
         }
     }
 
+    void on_home(const std::string& bytes, int64_t now) {
+        pb::Home h;
+        if (!h.ParseFromString(bytes)) return;
+        const auto r = lease_.accept_home(h.controller_id(), now);
+        if (r.expired) on_expired(now);
+        const std::string who = h.controller_id().empty() ? "anonymous" : h.controller_id();
+        if (r.result == robo::HomeResult::DenyNotHolder) {
+            event(pb::SEVERITY_WARNING, "HOME_DENIED", who + ": does not hold control");
+            return;
+        }
+        if (r.result == robo::HomeResult::DenyStopped) {
+            event(pb::SEVERITY_WARNING, "HOME_DENIED", who + ": a stop is latched");
+            return;
+        }
+        send_stop();
+        send(cmd_pan(opts_.home_pan));
+        pan_cmd_ = opts_.home_pan;
+        if (serial_.is_open()) pan_sent_ = opts_.home_pan;
+        homing_since_ms_ = now;
+        event(pb::SEVERITY_INFO, "HOME", who + ": stop, pan " + std::to_string(opts_.home_pan));
+    }
+
     // ---- timers ----
 
     int64_t next_deadline(int64_t now) const {
@@ -540,6 +584,7 @@ private:
         d = std::min(d, std::max(silent_since + NO_LINK_AFTER_MS, next_no_link_ms_));
         if (bad_lines_ != bad_lines_reported_) d = std::min(d, next_bad_line_event_ms_);
         if (!ready_sent_) d = std::min(d, now + READY_POLL_MS);
+        if (homing()) d = std::min(d, homing_since_ms_ + HOME_TIMEOUT_MS);
         return std::max(d, now);
     }
 
@@ -550,6 +595,13 @@ private:
     }
 
     void periodic(int64_t now) {
+        if (homing() && now - homing_since_ms_ >= HOME_TIMEOUT_MS) {
+            homing_since_ms_ = -1;
+            event(pb::SEVERITY_WARNING, "HOME_TIMEOUT",
+                  "not home after " + std::to_string(HOME_TIMEOUT_MS) + " ms: wheels " +
+                      std::to_string(last_t_.left) + " " + std::to_string(last_t_.right) + ", pan " +
+                      std::to_string(last_t_.pan) + " (home " + std::to_string(opts_.home_pan) + ")");
+        }
         if (!ready_sent_ && (event_heard() || now - start_ms_ >= READY_WAIT_MS)) {
             ready_sent_ = true;
             event(pb::SEVERITY_INFO, "READY", std::string("roverd ") + version() + " on " + host_name());
@@ -579,6 +631,7 @@ private:
         if (now >= next_stats_ms_) {
             next_stats_ms_ = now + STATS_LOG_PERIOD_MS;
             log("relayed " + std::to_string(relayed_) + ", dropped " + std::to_string(lease_.dropped()) +
+                ", dropped while homing " + std::to_string(dropped_homing_) +
                 ", bad lines " + std::to_string(bad_lines_) + ", overlong " +
                 std::to_string(lines_.overlong()) + ", unknown " + std::to_string(unknown_lines_) +
                 ", clock restarts " + std::to_string(clock_.restarts()));
@@ -618,6 +671,8 @@ private:
     unsigned v_seq_ = 0;
     uint64_t last_intent_seq_ = 0;
     uint64_t relayed_ = 0;
+    uint64_t dropped_homing_ = 0;
+    int64_t homing_since_ms_ = -1;
     uint64_t bad_lines_ = 0, bad_lines_reported_ = 0, unknown_lines_ = 0;
     std::string last_open_error_;
 
