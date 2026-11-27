@@ -359,6 +359,22 @@ def test_pan_only_on_change(rig):
     assert order[:2] == ["V", "P"]
 
 
+def test_stop_forgets_the_pan_target(rig):
+    bus, fake = rig.bus, rig.fake
+    bus.take_and_wait("console")
+    t = time.monotonic()
+    bus.intent("console", pan=30)
+    fake.wait_received("P", since=t)
+    bus.stop("console", "STOP button")
+    fake.wait_received("S", since=t)
+    s = bus.wait("state", since=time.monotonic())
+    assert actuator(s, "pan").commanded == actuator(s, "pan").applied
+    bus.take_and_wait("console")
+    t2 = time.monotonic()
+    bus.intent("console", pan=30)
+    assert fake.wait_received("P", since=t2) == ["P 30"], "the same angle is sent again after a stop"
+
+
 def test_stop_latches_until_retake(rig):
     bus, fake = rig.bus, rig.fake
     bus.take_and_wait("console")

@@ -341,6 +341,9 @@ private:
         send(cmd_stop());
         last_v_ms_ = -1;
         commanded_ = {};
+        // S halts the pan too, so the firmware no longer holds the target sent before.
+        pan_cmd_.reset();
+        pan_sent_.reset();
     }
 
     void try_open(int64_t now) {

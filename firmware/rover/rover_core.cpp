@@ -226,6 +226,7 @@ void Core::command(const char *p) {
     v_pending_ = false;
     timed_out_ = false;
     cmd_l_ = cmd_r_ = 0;
+    pan_target_ = pan_;  // stop means everything: the pan stays where it is
   } else if (c == '?' && !p[1]) {
     send_hello();
   } else {

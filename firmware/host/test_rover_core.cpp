@@ -363,6 +363,18 @@ static void test_pan_and_stop() {
   r.send("P 45");
   r.run(130 * MS);
   EXPECT(r.out.pan == 45);
+  // S stops the pan where it is; it does not go on to its target.
+  r.send("P -45");
+  r.step();
+  r.run(10 * MS);
+  EXPECT(r.out.pan == 35);
+  r.send("S");
+  r.run(100 * MS);
+  EXPECT(r.out.pan == 35 && num(r.lastT(), 6) == 35);
+  r.send("P 45");
+  r.step();
+  r.run(10 * MS);
+  EXPECT(r.out.pan == 45);
   EXPECT(r.take('E').empty());
   r.send("V 100 100 1");
   r.step();

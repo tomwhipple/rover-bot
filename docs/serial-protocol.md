@@ -19,7 +19,7 @@ good checksum but a malformed command gets an `E` reply.
 |---|---|
 | `V <left> <right> <seq>` | Drive. PWM -255..255 per side (sign = direction), `seq` 0..4294967295. Values beyond ±150 are clamped to ±150. Valid for 300 ms; with no newer `V` the motors stop. |
 | `P <deg>` | Pan target in degrees: 0 is straight ahead, positive is to the left. Clamped to the pan's edges. Initial 0. The pan moves there at 62.5 deg/s. |
-| `S` | Stop now. |
+| `S` | Stop now: the motors stop and the pan stays where it is. |
 | `?` | Send the hello line. |
 
 Arguments are exact: one space between fields, no trailing text. A `V` whose PWM is outside ±255 is
