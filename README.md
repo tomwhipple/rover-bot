@@ -7,24 +7,31 @@ Design: [docs/design.md](docs/design.md)
 Wiring: [docs/wiring.svg](docs/wiring.svg) (PDF: [docs/wiring.pdf](docs/wiring.pdf)), exported from the KiCad 10
 project in `hardware/` (`hardware/gen_schematic.py` regenerates it).
 
-Status: first draft, not yet run on hardware.
+Status: runs in simulation; not yet run on hardware. The sketch has not been compiled for the ATmega
+since the protocol change.
 
 ## Layout
 
-- `firmware/rover/rover.ino` runs on the aLaMode. Needs the Adafruit Motor Shield
-  (v1) library, `AFMotor`. Board type: Arduino Uno.
-- `pi/rover.cpp` is `rover`, a C++ command-line tool for the Pi 4, run over SSH.
-  No dependencies beyond the standard library.
-  Snapshots use the stock `rpicam-still`.
+- `firmware/rover/` runs on the aLaMode (board type: Arduino Uno). `rover_core.{h,cpp}` holds the
+  serial protocol and every limit, with no Arduino dependency; `rover.ino` is the glue to the motor
+  shield (`AFMotor`), the pan servo and the range sensor. Protocol: [docs/serial-protocol.md](docs/serial-protocol.md).
+- `pi/roverd/` is `roverd`, the service for the Pi 4: it owns the serial port, relays commands from the
+  [robo-control](../robo-control) bus to the firmware one for one, and publishes the rover's state.
+  It needs robo-control checked out beside this repo.
+- `sim/` is the simulated twin: a MuJoCo rover in a room, running `rover_core` as its firmware behind
+  a pseudo serial port, so `roverd` drives it unchanged. See [sim/README.md](sim/README.md).
+- `robo/robot.json` describes the rover to the robo-control console.
+- `pi/rover.cpp` is the earlier SSH command-line tool. It speaks the previous serial protocol and does
+  not work with the current firmware.
 - `pi/flash-alamode.sh` flashes the aLaMode from the Pi: it pulses the reset on
   GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
   `avrdude` and `pinctrl`.
 
-Everything builds on the Pi: the Makefile rsyncs `pi/` and `firmware/` to
-`~/rover-cam` there. `make deploy` builds and installs `rover`. `make upload`
-compiles the firmware with `arduino-cli` and flashes it (run `make firmware-deps`
-once first). Arduino's avr-gcc runs on the Pi's arm64 but has no Apple Silicon
-build. All targets use `PI_HOST`, default `rover.local`.
+The firmware builds on the Pi: the Makefile rsyncs `pi/` and `firmware/` to
+`~/rover-cam` there, and `make upload` compiles the sketch with `arduino-cli` and flashes it (run
+`make firmware-deps` once first). Arduino's avr-gcc runs on the Pi's arm64 but has no Apple Silicon
+build. Those targets use `PI_HOST`, default `rover.local`. Building and installing `roverd` on the Pi
+is not set up yet.
 
 ## Pins (aLaMode)
 
@@ -40,15 +47,17 @@ build. All targets use `PI_HOST`, default `rover.local`.
 
 ## Use
 
+Drive the simulated rover from the console, in the robo-control repo:
+
 ```
-ssh rover rover snap > look.jpg
-ssh rover rover move 120 120 800
-ssh rover rover pan 60
-ssh rover rover status
+make run-console ROBOT=rover SIM=1
 ```
+
+Here: `make robo-control` builds `roverd` and the twin's firmware library, `make robo-test` runs the
+host tests (firmware core, twin, `roverd`), `make twin` runs the twin alone.
 
 ## Limits (in firmware)
 
-Moves end within 2 s, PWM is capped at 150, forward motion is refused inside
-80 cm, and nothing drives below 10.5 V on the pack. With no divider on A0 the
-pack check fails, so wire it (or lower `MIN_PACK_MV`) for bench tests.
+PWM is capped at 150, a drive command lasts 300 ms unless refreshed, forward motion is refused inside
+80 cm, and nothing drives below 10.5 V on the pack. With no divider on A0 the pack check fails, so wire
+it (or lower `MIN_PACK_MV`) for bench tests.
