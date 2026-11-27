@@ -8,6 +8,9 @@
 //   ?        report
 //
 // Every line is answered with "us=<now> target=<target>".
+//
+// pancal.py (run on the Pi) sends one command; sweep.py (run on the laptop) steps through the travel
+// and measures each step from the rover's camera.
 #include <AFMotor.h>
 #include <Servo.h>
 
