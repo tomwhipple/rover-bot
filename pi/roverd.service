@@ -1,0 +1,15 @@
+# roverd on the rover's Pi: installed as /etc/systemd/system/roverd.service.
+# Stop it before flashing the aLaMode: both use the serial port.
+[Unit]
+Description=roverd, the rover's bus adapter
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tw
+ExecStart=/usr/local/bin/roverd --serial /dev/serial0 --robot-id rover
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target
