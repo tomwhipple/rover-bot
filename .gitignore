@@ -11,3 +11,4 @@ fp-info-cache
 .DS_Store
 build/
 __pycache__/
+pi/rovercam

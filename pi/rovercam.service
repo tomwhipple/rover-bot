@@ -1,0 +1,14 @@
+# rovercam on the rover's Pi: installed as /etc/systemd/system/rovercam.service.
+[Unit]
+Description=rovercam, the rover's camera stream
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=tw
+ExecStart=/usr/local/bin/rovercam
+Restart=always
+RestartSec=2
+
+[Install]
+WantedBy=multi-user.target

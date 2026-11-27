@@ -6,61 +6,52 @@
 //   rover status         pack millivolts and front range in cm
 //   rover snap           JPEG on stdout:  ssh rover rover snap > look.jpg
 //
-// snap takes its camera settings from /etc/rover.conf (pi/rover.conf is the
-// installed copy's source); $ROVER_CONF names another file.
+// snap takes the picture from rovercam's stream when that is running (it holds the camera), else
+// from the stock rpicam-still. Settings: rover_conf.hpp.
+#include <arpa/inet.h>
 #include <fcntl.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <termios.h>
 #include <unistd.h>
 
 #include <cstdio>
 #include <cstdlib>
-#include <fstream>
 #include <map>
 #include <string>
 
+#include "rover_conf.hpp"
+
 static const char* PORT = "/dev/serial0";
-static const char* CONF = "/etc/rover.conf";
 
-using Conf = std::map<std::string, std::string>;
-
-static std::string trim(const std::string& s) {
-  const char* ws = " \t\r";
-  size_t a = s.find_first_not_of(ws);
-  if (a == std::string::npos) return "";
-  return s.substr(a, s.find_last_not_of(ws) - a + 1);
-}
-
-// Lines of "key = value"; '#' starts a comment. A missing file leaves the
-// defaults. An unknown key or a bad value is an error: a typo must not pass
-// for a setting.
-static Conf read_conf(Conf conf) {
-  const char* env = getenv("ROVER_CONF");
-  const std::string path = env && *env ? env : CONF;
-  std::ifstream in(path);
-  if (!in) {
-    if (env && *env) {
-      perror(path.c_str());
-      exit(1);
-    }
-    return conf;
+// One JPEG from rovercam, which holds the camera while it runs. False if it is not running.
+static bool snap_from_stream(int port) {
+  int fd = socket(AF_INET, SOCK_STREAM, 0);
+  sockaddr_in addr{};
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons((uint16_t)port);
+  addr.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
+  if (fd < 0 || connect(fd, (sockaddr*)&addr, sizeof addr) != 0) {
+    if (fd >= 0) close(fd);
+    return false;
   }
-  std::string line;
-  for (int n = 1; std::getline(in, line); n++) {
-    line = trim(line.substr(0, line.find('#')));
-    if (line.empty()) continue;
-    size_t eq = line.find('=');
-    std::string key = trim(line.substr(0, eq));
-    std::string val = eq == std::string::npos ? "" : trim(line.substr(eq + 1));
-    bool ok = conf.count(key) && !val.empty() && val.size() <= 5 &&
-              val.find_first_not_of("0123456789") == std::string::npos;
-    if (ok && key == "snap_rotation") ok = val == "0" || val == "180";
-    if (!ok) {
-      fprintf(stderr, "rover: %s:%d: bad setting: %s\n", path.c_str(), n, line.c_str());
-      exit(1);
-    }
-    conf[key] = val;
+  const char req[] = "GET /snap.jpg HTTP/1.0\r\n\r\n";
+  if (write(fd, req, sizeof req - 1) < 0) {
+    close(fd);
+    return false;
   }
-  return conf;
+  std::string reply;
+  char buf[65536];
+  ssize_t n;
+  while ((n = read(fd, buf, sizeof buf)) > 0) reply.append(buf, (size_t)n);
+  close(fd);
+  size_t body = reply.find("\r\n\r\n");
+  if (reply.compare(0, 12, "HTTP/1.0 200") != 0 || body == std::string::npos) {
+    fprintf(stderr, "rover: rovercam has no picture: %s\n", reply.substr(0, reply.find('\r')).c_str());
+    exit(1);
+  }
+  fwrite(reply.data() + body + 4, 1, reply.size() - body - 4, stdout);
+  return true;
 }
 
 // Send one firmware command and return its one-line reply.
@@ -96,16 +87,14 @@ int main(int argc, char** argv) {
       {"move", "M"}, {"pan", "P"}, {"stop", "S"}, {"status", "?"}};
   std::string cmd = argc > 1 ? argv[1] : "";
 
-  if (cmd == "snap") {  // one JPEG on stdout, from the stock camera tool
-    Conf c = read_conf({{"snap_width", "1296"},
-                        {"snap_height", "972"},
-                        {"snap_rotation", "0"},  // rpicam-still takes 0 or 180
-                        {"snap_warmup_ms", "500"}});
+  if (cmd == "snap") {  // one JPEG on stdout
+    rover_conf::Conf c = rover_conf::read("rover");
+    if (snap_from_stream(std::stoi(c["stream_port"]))) return 0;
     execlp("rpicam-still", "rpicam-still", "-n", "-o", "-",
            "-t", c["snap_warmup_ms"].c_str(),
            "--width", c["snap_width"].c_str(),
            "--height", c["snap_height"].c_str(),
-           "--rotation", c["snap_rotation"].c_str(), nullptr);
+           "--rotation", c["camera_rotation"].c_str(), nullptr);
     perror("rpicam-still");
     return 1;
   }

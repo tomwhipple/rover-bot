@@ -7,7 +7,8 @@ Wants=network-online.target
 
 [Service]
 User=tw
-ExecStart=/usr/local/bin/roverd --serial /dev/serial0 --robot-id rover
+# %H is this host's name: the console reaches the stream by mDNS. The port is stream_port in rover.conf.
+ExecStart=/usr/local/bin/roverd --serial /dev/serial0 --robot-id rover --camera mast=http://%H.local:8080/mast.mjpg
 Restart=always
 RestartSec=2
 

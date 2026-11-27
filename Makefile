@@ -26,7 +26,7 @@ all: pi
 help:
 	@echo "make pi             build pi/rover locally (compile check off the Pi)"
 	@echo "make test           build pi/rover and check its argument handling"
-	@echo "make deploy         build pi/rover.cpp on PI_HOST=$(PI_HOST), install to $(PI_PREFIX)/bin; $(PI_CONF) if absent"
+	@echo "make deploy         build pi/rover and pi/rovercam on PI_HOST=$(PI_HOST), install to $(PI_PREFIX)/bin; $(PI_CONF) if absent"
 	@echo "make firmware-deps  install arduino-cli, the AVR core, AFMotor and Servo on PI_HOST"
 	@echo "make firmware       compile firmware/rover on PI_HOST into ~/$(FW_BUILD)"
 	@echo "make upload         compile on PI_HOST, then flash the aLaMode from there"
@@ -35,27 +35,31 @@ help:
 	@echo "make robo-test      host tests: firmware core, twin, roverd"
 	@echo "make twin           run the simulated twin alone"
 
-pi: pi/rover
+pi: pi/rover pi/rovercam
 
-pi/rover: pi/rover.cpp
+pi/rover: pi/rover.cpp pi/rover_conf.hpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
+pi/rovercam: pi/rovercam.cpp pi/rover_conf.hpp
+	$(CXX) $(CXXFLAGS) -pthread -o $@ $<
+
 # Exit codes without hardware: 2 = usage error.
-test: pi/rover
+test: pi/rover pi/rovercam
 	@./pi/rover >/dev/null 2>&1; test $$? -eq 2 || { echo "FAIL: no args should exit 2"; exit 1; }
 	@./pi/rover bogus >/dev/null 2>&1; test $$? -eq 2 || { echo "FAIL: unknown command should exit 2"; exit 1; }
 	@./pi/rover 2>&1 | grep -q '^usage: rover' || { echo "FAIL: usage text missing"; exit 1; }
 	@mkdir -p build/test/bin && printf '#!/bin/sh\necho "$$@"\n' > build/test/bin/rpicam-still && chmod +x build/test/bin/rpicam-still
 	@PATH="build/test/bin:$$PATH" ROVER_CONF=pi/rover.conf ./pi/rover snap | grep -q -- '-t 500 --width 1296 --height 972 --rotation 180$$' || { echo "FAIL: snap does not pass pi/rover.conf"; exit 1; }
-	@printf 'snap_rotation = 90\n' > build/test/bad.conf; PATH="build/test/bin:$$PATH" ROVER_CONF=build/test/bad.conf ./pi/rover snap >/dev/null 2>&1; test $$? -eq 1 || { echo "FAIL: a bad setting should exit 1"; exit 1; }
-	@printf 'snap_rotatoin = 180\n' > build/test/bad.conf; PATH="build/test/bin:$$PATH" ROVER_CONF=build/test/bad.conf ./pi/rover snap >/dev/null 2>&1; test $$? -eq 1 || { echo "FAIL: an unknown key should exit 1"; exit 1; }
+	@sh pi/test_rovercam.sh
+	@printf 'camera_rotation = 90\n' > build/test/bad.conf; PATH="build/test/bin:$$PATH" ROVER_CONF=build/test/bad.conf ./pi/rover snap >/dev/null 2>&1; test $$? -eq 1 || { echo "FAIL: a bad setting should exit 1"; exit 1; }
+	@printf 'camera_rotatoin = 180\n' > build/test/bad.conf; PATH="build/test/bin:$$PATH" ROVER_CONF=build/test/bad.conf ./pi/rover snap >/dev/null 2>&1; test $$? -eq 1 || { echo "FAIL: an unknown key should exit 1"; exit 1; }
 	@echo "pi/rover: ok"
 
 sync:
-	rsync -a --delete --exclude /pi/rover pi firmware $(PI_HOST):$(PI_DIR)/
+	rsync -a --delete --exclude /pi/rover --exclude /pi/rovercam pi firmware $(PI_HOST):$(PI_DIR)/
 
 deploy: sync
-	ssh $(PI_HOST) 'g++ $(CXXFLAGS) -o $(PI_DIR)/pi/rover $(PI_DIR)/pi/rover.cpp && sudo install -m 755 $(PI_DIR)/pi/rover $(PI_PREFIX)/bin/rover && { test -e $(PI_CONF) || sudo install -m 644 $(PI_DIR)/pi/rover.conf $(PI_CONF); }'
+	ssh $(PI_HOST) 'g++ $(CXXFLAGS) -o $(PI_DIR)/pi/rover $(PI_DIR)/pi/rover.cpp && g++ $(CXXFLAGS) -pthread -o $(PI_DIR)/pi/rovercam $(PI_DIR)/pi/rovercam.cpp && sudo install -m 755 $(PI_DIR)/pi/rover $(PI_DIR)/pi/rovercam $(PI_PREFIX)/bin/ && { test -e $(PI_CONF) || sudo install -m 644 $(PI_DIR)/pi/rover.conf $(PI_CONF); }'
 
 firmware: sync
 	ssh $(PI_HOST) 'arduino-cli compile --fqbn $(FQBN) --output-dir $(FW_BUILD) $(PI_DIR)/firmware/rover'

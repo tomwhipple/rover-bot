@@ -8,8 +8,7 @@ Wiring: [docs/wiring.svg](docs/wiring.svg) (PDF: [docs/wiring.pdf](docs/wiring.p
 project in `hardware/` (`hardware/gen_schematic.py` regenerates it).
 
 Status: runs in simulation. On hardware the sketch runs on the aLaMode and `roverd` on the Pi, and the
-console receives the rover's state (2026-11-27); it has not been driven. `roverd` is started by hand
-there and has no camera stream to announce.
+console receives the rover's state (2026-11-27); it has not been driven. `roverd` and `rovercam` run there as services.
 
 ## Layout
 
@@ -27,8 +26,13 @@ there and has no camera stream to announce.
 - `robo/robot.json` describes the rover to the robo-control console.
 - `pi/rover.cpp` is the earlier SSH command-line tool. It speaks the previous serial protocol and does
   not work with the current firmware.
-  `rover snap` takes its camera settings (rotation, size, warm-up time) from `/etc/rover.conf` on the
-  Pi; `pi/rover.conf` is the copy `make deploy` installs when the Pi has none.
+  Its `rover snap` still works: it takes the picture from `rovercam` when that is running.
+- `pi/rovercam.cpp` is `rovercam`, the live camera: it runs `rpicam-vid` and serves its frames as MJPEG
+  over HTTP (port 8080; `/snap.jpg` gives one frame), which `roverd` announces to the console as the
+  `mast` camera. It holds the camera while it runs.
+- `/etc/rover.conf` on the Pi holds the camera settings for both (rotation, sizes, frame rate, port);
+  `pi/rover.conf` is the copy `make deploy` installs when the Pi has none. `pi/roverd.service` and
+  `pi/rovercam.service` start `roverd` and `rovercam` at boot.
 - `pi/flash-alamode.sh` flashes the aLaMode from the Pi: it pulses the reset on
   GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
   `avrdude` and `pinctrl`.
