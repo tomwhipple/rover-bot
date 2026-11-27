@@ -2,13 +2,12 @@
 // Glue around rover_core; the protocol and limits live there.
 // Protocol: docs/serial-protocol.md.
 #include <AFMotor.h>
-#include <Servo.h>
 
 #include "rover_core.h"
 
 // 3-pin Ping))) on the motor shield's S1 header (D10): trigger and echo share the pin.
 // A 4-pin HC-SR04 takes two pins instead (the design's A1 trigger, A2 echo).
-const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
+const int PIN_SERVO = 9,  /* fixed: Timer1's OC1A */ PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
 
 // Pan servo calibration, measured on the rover with firmware/pan_cal: the pulse width that points
 // the camera straight ahead, and the change in pulse width for 90 degrees to the left (9.8 degrees
@@ -22,7 +21,6 @@ const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had
 const unsigned long PACK_PERIOD_MS = 20;
 
 AF_DCMotor leftMotor(3), rightMotor(4);  // M3/M4: PWM on D5/D6, keeps D11 free
-Servo pan;
 rover::Core core;
 
 long packMv() {  // 10k over 3.3k divider on A0
@@ -74,6 +72,22 @@ int panUs(int8_t deg) {  // deg is -90..90, + to the left
   return PAN_CENTER_US + (int)((long)deg * PAN_US_PER_90 / 90);
 }
 
+// The pan pulse comes from Timer1's output compare on D9 (OC1A), not from the Servo library: a
+// pulse timed in an interrupt handler is late by a few microseconds whenever another interrupt
+// (serial, millis) is running, and the servo ticks at each one. Fast PWM with ICR1 as top: 20 ms
+// period, 0.5 us a count at 16 MHz. D10 (OC1B) is left an ordinary pin.
+void panWriteUs(int us) { OCR1A = (uint16_t)(us * 2 - 1); }
+
+void panBegin(int us) {
+  TCCR1A = 0;
+  TCCR1B = 0;
+  ICR1 = 39999;
+  panWriteUs(us);
+  TCCR1A = _BV(COM1A1) | _BV(WGM11);
+  TCCR1B = _BV(WGM13) | _BV(WGM12) | _BV(CS11);
+  pinMode(PIN_SERVO, OUTPUT);
+}
+
 void spin(AF_DCMotor &m, int v) {
   m.setSpeed(v < 0 ? -v : v);
   m.run(v > 0 ? FORWARD : v < 0 ? BACKWARD : RELEASE);
@@ -81,8 +95,7 @@ void spin(AF_DCMotor &m, int v) {
 
 void setup() {
   Serial.begin(115200);
-  pan.writeMicroseconds(panUs(rover::PAN_DEFAULT));
-  pan.attach(PIN_SERVO);
+  panBegin(panUs(rover::PAN_DEFAULT));
   spin(leftMotor, 0);
   spin(rightMotor, 0);
 }
@@ -109,7 +122,7 @@ void loop() {
 
   if (out.left != appliedL) { appliedL = out.left; spin(leftMotor, appliedL); }
   if (out.right != appliedR) { appliedR = out.right; spin(rightMotor, appliedR); }
-  if (out.pan != appliedPan) { appliedPan = out.pan; pan.writeMicroseconds(panUs(appliedPan)); }
+  if (out.pan != appliedPan) { appliedPan = out.pan; panWriteUs(panUs(appliedPan)); }
 
   while (Serial.availableForWrite() > 0 && core.tx_pending()) Serial.write((uint8_t)core.tx_pop());
 
