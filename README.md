@@ -26,6 +26,8 @@ since the protocol change.
 - `robo/robot.json` describes the rover to the robo-control console.
 - `pi/rover.cpp` is the earlier SSH command-line tool. It speaks the previous serial protocol and does
   not work with the current firmware.
+  `rover snap` takes its camera settings (rotation, size, warm-up time) from `/etc/rover.conf` on the
+  Pi; `pi/rover.conf` is the copy `make deploy` installs when the Pi has none.
 - `pi/flash-alamode.sh` flashes the aLaMode from the Pi: it pulses the reset on
   GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
   `avrdude` and `pinctrl`.
