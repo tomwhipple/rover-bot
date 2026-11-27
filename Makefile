@@ -14,7 +14,11 @@ FQBN     ?= arduino:avr:uno
 FW_BUILD := $(PI_DIR)/build/firmware
 CLI_URL  := https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_ARM64.tar.gz
 
-.PHONY: all help pi test sync deploy firmware firmware-deps upload clean
+# The console and bus live in the robo-control repo, beside this one.
+ROBO_CONTROL_DIR ?= ../robo-control
+PY               ?= $(ROBO_CONTROL_DIR)/.venv/bin/python
+
+.PHONY: all help pi test sync deploy firmware firmware-deps upload clean robo-control robo-test
 
 all: pi
 
@@ -26,6 +30,9 @@ help:
 	@echo "make firmware       compile firmware/rover on PI_HOST into ~/$(FW_BUILD)"
 	@echo "make upload         compile on PI_HOST, then flash the aLaMode from there"
 	@echo "make clean          remove the local build"
+	@echo "make robo-control   build what the robo-control console needs: roverd and the twin's firmware library"
+	@echo "make robo-test      host tests: firmware core, twin, roverd"
+	@echo "make twin           run the simulated twin alone"
 
 pi: pi/rover
 
@@ -57,3 +64,10 @@ upload: firmware
 
 clean:
 	rm -f pi/rover
+	rm -rf build
+
+robo-control: rover-core-lib roverd
+
+robo-test: firmware-host-test sim-test roverd-test
+
+include mk/*.mk

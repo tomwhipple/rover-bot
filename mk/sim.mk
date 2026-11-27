@@ -1,5 +1,5 @@
 # Simulated twin: MuJoCo rover driven through a pty by the real firmware core.
-PY ?= /Users/tw/code/robo-control/.venv/bin/python
+PY ?= $(ROBO_CONTROL_DIR)/.venv/bin/python
 
 .PHONY: sim-test twin
 

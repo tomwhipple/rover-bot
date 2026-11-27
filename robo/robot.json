@@ -1,0 +1,54 @@
+{
+  "id": "rover",
+  "name": "Rover",
+  "kind": "diff_drive",
+  "repo_dir": "rover-cam",
+  "intent_channels": [
+    {"name": "linear", "min": -1, "max": 1, "default": 0, "hold": false, "label": "forward"},
+    {"name": "angular", "min": -1, "max": 1, "default": 0, "hold": false, "label": "turn (+ = left)"},
+    {"name": "pan", "min": 0, "max": 180, "default": 90, "hold": true, "unit": "deg", "label": "camera pan"}
+  ],
+  "actuators": [
+    {"name": "left_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "left wheel"},
+    {"name": "right_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "right wheel"},
+    {"name": "pan", "unit": "deg", "min": 0, "max": 180, "label": "camera pan"}
+  ],
+  "sensors": [
+    {"name": "range", "unit": "cm", "min": 0, "max": 400, "warn_below": 80, "label": "front range"},
+    {"name": "pack", "unit": "V", "min": 9, "max": 12.6, "warn_below": 10.5, "label": "pack"}
+  ],
+  "power": {"nominal_v": 11.1, "min_v": 10.5, "max_v": 12.6},
+  "geometry": {
+    "measured": false,
+    "body_radius_m": 0.10,
+    "wheel_radius_m": 0.033,
+    "track_m": 0.18,
+    "wheel_x_m": 0.0,
+    "caster_x_m": -0.08,
+    "mast_x_m": 0.08,
+    "range_sensor_x_m": 0.10,
+    "range_max_cm": 400,
+    "standoff_cm": 80,
+    "pan_zero_deg": 90
+  },
+  "model": "sim/rover.xml",
+  "launch": {
+    "sim": [
+      {
+        "name": "twin",
+        "cmd": ["{python}", "{repo}/sim/rover_twin.py", "--pty-link", "{run_dir}/rover-tty",
+                "--http-port", "{port:camera}", "--dump-pose-file", "{run_dir}/pose.json"],
+        "ready_file": "{run_dir}/rover-tty"
+      },
+      {
+        "name": "adapter",
+        "bus": "listen",
+        "cmd": ["{repo}/build/roverd/roverd", "--serial", "{run_dir}/rover-tty", "--robot-id", "{robot_id}",
+                "--simulated", "--description-commit", "{commit}",
+                "--camera", "mast=http://127.0.0.1:{port:camera}/mast.mjpg",
+                "--camera", "overview=http://127.0.0.1:{port:camera}/overview.mjpg"]
+      }
+    ],
+    "real": []
+  }
+}
