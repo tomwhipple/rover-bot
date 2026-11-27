@@ -18,7 +18,7 @@ good checksum but a malformed command gets an `E` reply.
 | Payload | Meaning |
 |---|---|
 | `V <left> <right> <seq>` | Drive. PWM -255..255 per side (sign = direction), `seq` 0..4294967295. Values beyond ±150 are clamped to ±150. Valid for 300 ms; with no newer `V` the motors stop. |
-| `P <deg>` | Pan target, clamped to 0..180. Initial 90. The pan moves there at 62.5 deg/s. |
+| `P <deg>` | Pan target in degrees: 0 is straight ahead, positive is to the left. Clamped to the pan's edges. Initial 0. The pan moves there at 62.5 deg/s. |
 | `S` | Stop now. |
 | `?` | Send the hello line. |
 
@@ -29,7 +29,7 @@ malformed.
 
 | Payload | Meaning |
 |---|---|
-| `H rover 2.0.0 pwm_max=150 standoff_cm=80 min_mv=10500 timeout_ms=300` | Hello, at boot and on `?`. |
+| `H rover 2.1.0 pwm_max=150 standoff_cm=80 min_mv=10500 timeout_ms=300` | Hello, at boot and on `?`. |
 | `T <ms> <mv> <cm> <left> <right> <pan> <flags> <loop_us> <seq>` | State, every 50 ms. |
 | `E <code> <text>` | A command was malformed or refused. |
 
@@ -64,8 +64,12 @@ Enforced in the firmware; nothing upstream can override them.
   resumes. Range 999 (no echo) is clear.
 - Low pack: below 10500 mV nothing drives and `LOW_PACK` is set.
 - Command timeout: 300 ms after the last `V` the motors stop.
+- Pan edges: the pan stops at -60 and +60 degrees (`PAN_EDGE_RIGHT`, `PAN_EDGE_LEFT`), so no command
+  drives the servo into its end stops. The values are provisional until the servo is calibrated on
+  the rover.
 - Pan rate: the pan moves towards its target one degree every 16 ms (62.5 deg/s), so a full sweep takes
-  2.9 s. `T` reports where the pan is, not the target.
+  2.9 s. `T` reports where the pan is (signed), not the target. The sketch turns the angle into a
+  servo pulse from two calibration constants (`PAN_CENTER_US`, `PAN_US_PER_90` in `rover.ino`).
 
 ## Host library
 

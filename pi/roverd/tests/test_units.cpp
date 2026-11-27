@@ -115,8 +115,9 @@ static void test_mix() {
     CHECK(w.left == 150 && w.right == 150);
     w = mix(std::nan(""), 0.5, 150);
     CHECK(w.left == -75 && w.right == 75);
-    CHECK(pan_degrees(-5) == std::optional<int>(0));
-    CHECK(pan_degrees(200) == std::optional<int>(180));
+    CHECK(pan_degrees(-5) == std::optional<int>(-5));
+    CHECK(pan_degrees(-200) == std::optional<int>(-90));
+    CHECK(pan_degrees(200) == std::optional<int>(90));
     CHECK(pan_degrees(44.6) == std::optional<int>(45));
     CHECK(!pan_degrees(std::nan("")));
 }

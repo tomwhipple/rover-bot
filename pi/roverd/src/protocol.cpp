@@ -171,7 +171,7 @@ Wheels mix(double linear, double angular, int pwm_max) {
 
 std::optional<int> pan_degrees(double value) {
     if (std::isnan(value)) return std::nullopt;
-    return static_cast<int>(std::lround(std::clamp(value, 0.0, 180.0)));
+    return static_cast<int>(std::lround(std::clamp(value, -90.0, 90.0)));
 }
 
 }  // namespace roverd

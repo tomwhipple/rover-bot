@@ -10,6 +10,12 @@
 // A 4-pin HC-SR04 takes two pins instead (the design's A1 trigger, A2 echo).
 const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
 
+// Pan servo calibration: pulse width straight ahead, and the change in pulse width for 90 degrees
+// of travel to the left. Not measured on this rover yet. The edges the pan stops at are
+// PAN_EDGE_LEFT/RIGHT in rover_core.h.
+const int PAN_CENTER_US = 1500;
+const int PAN_US_PER_90 = 750;
+
 const unsigned long PING_PERIOD_US = 60000UL;
 const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had
 const unsigned long PACK_PERIOD_MS = 20;
@@ -63,6 +69,10 @@ void servicePing() {
   }
 }
 
+int panUs(int8_t deg) {  // deg is -90..90, + to the left
+  return PAN_CENTER_US + (int)((long)deg * PAN_US_PER_90 / 90);
+}
+
 void spin(AF_DCMotor &m, int v) {
   m.setSpeed(v < 0 ? -v : v);
   m.run(v > 0 ? FORWARD : v < 0 ? BACKWARD : RELEASE);
@@ -70,8 +80,8 @@ void spin(AF_DCMotor &m, int v) {
 
 void setup() {
   Serial.begin(115200);
+  pan.writeMicroseconds(panUs(rover::PAN_DEFAULT));
   pan.attach(PIN_SERVO);
-  pan.write(rover::PAN_DEFAULT);
   spin(leftMotor, 0);
   spin(rightMotor, 0);
 }
@@ -80,7 +90,7 @@ void loop() {
   static unsigned long lastLoopUs = 0, packAt = 0;
   static uint16_t packReading = 0;
   static int16_t appliedL = 0, appliedR = 0;
-  static uint8_t appliedPan = rover::PAN_DEFAULT;
+  static int8_t appliedPan = rover::PAN_DEFAULT;
   unsigned long startUs = micros();
 
   while (Serial.available()) core.rx((uint8_t)Serial.read());
@@ -98,7 +108,7 @@ void loop() {
 
   if (out.left != appliedL) { appliedL = out.left; spin(leftMotor, appliedL); }
   if (out.right != appliedR) { appliedR = out.right; spin(rightMotor, appliedR); }
-  if (out.pan != appliedPan) { appliedPan = out.pan; pan.write(appliedPan); }
+  if (out.pan != appliedPan) { appliedPan = out.pan; pan.writeMicroseconds(panUs(appliedPan)); }
 
   while (Serial.availableForWrite() > 0 && core.tx_pending()) Serial.write((uint8_t)core.tx_pop());
 

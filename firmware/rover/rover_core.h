@@ -14,9 +14,14 @@ constexpr int MIN_PACK_MV = 10500;
 constexpr int CMD_TIMEOUT_MS = 300;
 constexpr int T_PERIOD_MS = 50;
 constexpr int NO_ECHO_CM = 999;
-constexpr int PAN_DEFAULT = 90;
+// Pan is in degrees, 0 straight ahead, + to the left. A P command names -90..90; the pan stops at
+// the edges below, which keep the horn off the servo's end stops. They are not measured on this
+// rover yet: +-60 is 1000..2000 us with the sketch's calibration, inside any hobby servo's travel.
+constexpr int PAN_EDGE_LEFT = 60;
+constexpr int PAN_EDGE_RIGHT = -60;
+constexpr int PAN_DEFAULT = 0;
 constexpr int PAN_MS_PER_DEG = 16;  // the pan moves to a commanded angle at 62.5 deg/s
-#define ROVER_VERSION "2.0.0"
+#define ROVER_VERSION "2.1.0"
 
 enum Flag : uint8_t {
   F_MOVING = 1,
@@ -43,7 +48,7 @@ struct Inputs {
 struct Outputs {
   int16_t left;
   int16_t right;
-  uint8_t pan;
+  int8_t pan;
 };
 
 class Core {
@@ -82,7 +87,8 @@ class Core {
   int16_t cmd_l_, cmd_r_;
   uint32_t seq_, last_v_ms_, next_t_ms_, loop_max_us_;
   bool have_cmd_, v_pending_, timed_out_, bad_seen_, blocked_seen_, t_started_;
-  uint8_t pan_, pan_target_, refusing_;
+  int8_t pan_, pan_target_;
+  uint8_t refusing_;
   bool pan_moving_;
   uint32_t pan_ms_;
   int16_t applied_l_, applied_r_;

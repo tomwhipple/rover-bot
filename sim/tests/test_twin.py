@@ -157,7 +157,7 @@ def test_state_lines(twin):
     gaps = [b[0] - a[0] for a, b in zip(ts[-12:], ts[-11:])]
     assert 0.03 < sum(gaps) / len(gaps) < 0.07
     st = twin.last_t()
-    assert st["mv"] == 11800 and st["flags"] == 0 and st["pan"] == 90
+    assert st["mv"] == 11800 and st["flags"] == 0 and st["pan"] == 0
     assert st["cm"] == 999 or st["cm"] > 80
 
 
@@ -208,15 +208,15 @@ def test_pivot_directions(twin):
 
 
 def test_pan(twin):
-    twin.send("P 150")
+    twin.send("P 60")
     time.sleep(1.5)
-    assert twin.last_t()["pan"] == 150
-    assert abs(twin.wait_pose()["pan_deg"] - 150) < 3
-    twin.send("P 30")
+    assert twin.last_t()["pan"] == 60
+    assert abs(twin.wait_pose()["pan_deg"] - 60) < 3
+    twin.send("P -60")
     time.sleep(0.5)
-    assert 110 < twin.last_t()["pan"] < 130, "the pan moves at a limited rate"
+    assert 20 < twin.last_t()["pan"] < 40, "the pan moves at a limited rate"
     time.sleep(2.5)
-    assert abs(twin.wait_pose()["pan_deg"] - 30) < 3
+    assert abs(twin.wait_pose()["pan_deg"] + 60) < 3
 
 
 def test_bad_checksum_flag(twin):

@@ -6,12 +6,12 @@
   "intent_channels": [
     {"name": "linear", "min": -1, "max": 1, "default": 0, "hold": false, "label": "forward"},
     {"name": "angular", "min": -1, "max": 1, "default": 0, "hold": false, "label": "turn (+ = left)"},
-    {"name": "pan", "min": 0, "max": 180, "default": 90, "hold": true, "unit": "deg", "label": "camera pan"}
+    {"name": "pan", "min": -90, "max": 90, "default": 0, "hold": true, "unit": "deg", "label": "camera pan (+ = left)"}
   ],
   "actuators": [
     {"name": "left_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "left wheel"},
     {"name": "right_wheel", "unit": "pwm", "min": -150, "max": 150, "label": "right wheel"},
-    {"name": "pan", "unit": "deg", "min": 0, "max": 180, "label": "camera pan"}
+    {"name": "pan", "unit": "deg", "min": -90, "max": 90, "label": "camera pan"}
   ],
   "sensors": [
     {"name": "range", "unit": "cm", "min": 0, "max": 400, "warn_below": 80, "label": "front range"},
@@ -29,7 +29,7 @@
     "range_sensor_x_m": 0.10,
     "range_max_cm": 400,
     "standoff_cm": 80,
-    "pan_zero_deg": 90
+    "pan_zero_deg": 0
   },
   "model": "sim/rover.xml",
   "launch": {

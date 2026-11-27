@@ -140,7 +140,7 @@ void Core::send_state(const Inputs &in, bool moving, bool blocked, bool low) {
   l.c(' ');
   l.s(applied_r_);
   l.c(' ');
-  l.u(pan_);
+  l.s(pan_);
   l.c(' ');
   l.u(flags);
   l.c(' ');
@@ -219,7 +219,8 @@ void Core::command(const char *p) {
       send_error(E_ARGUMENT, "bad P arguments");
       return;
     }
-    pan_target_ = neg ? 0 : a > 180 ? 180 : (uint8_t)a;
+    const int deg = a > 90 ? (neg ? -90 : 90) : (neg ? -(int)a : (int)a);
+    pan_target_ = (int8_t)(deg > PAN_EDGE_LEFT ? PAN_EDGE_LEFT : deg < PAN_EDGE_RIGHT ? PAN_EDGE_RIGHT : deg);
   } else if (c == 'S' && !p[1]) {
     have_cmd_ = false;
     v_pending_ = false;
@@ -270,9 +271,9 @@ Outputs Core::tick(const Inputs &in) {
     pan_ms_ = in.now_ms;
   } else {
     uint32_t deg = (uint32_t)(in.now_ms - pan_ms_) / PAN_MS_PER_DEG;
-    const uint8_t gap = pan_ < pan_target_ ? pan_target_ - pan_ : pan_ - pan_target_;
+    const uint32_t gap = (uint32_t)(pan_ < pan_target_ ? pan_target_ - pan_ : pan_ - pan_target_);
     if (deg > gap) deg = gap;
-    pan_ = pan_ < pan_target_ ? pan_ + (uint8_t)deg : pan_ - (uint8_t)deg;
+    pan_ = (int8_t)(pan_ < pan_target_ ? pan_ + (int)deg : pan_ - (int)deg);
     pan_ms_ += deg * PAN_MS_PER_DEG;
   }
 
@@ -312,7 +313,7 @@ RC_EXPORT void rc_host_rx(void *rc, const uint8_t *data, size_t n) {
 RC_EXPORT void rc_host_tick(void *rc, uint32_t now_ms, uint16_t pack_mv,
                             uint16_t range_cm, uint32_t loop_us,
                             int16_t *left_pwm, int16_t *right_pwm,
-                            uint8_t *pan_deg) {
+                            int8_t *pan_deg) {
   rover::Inputs in = {now_ms, pack_mv, range_cm, loop_us};
   rover::Outputs o = static_cast<rover::Core *>(rc)->tick(in);
   *left_pwm = o.left;

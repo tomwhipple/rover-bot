@@ -71,7 +71,7 @@ class FakeFirmware:
         self._millis_start = millis_start
         self._cmd = (0, 0)
         self._seq = 0
-        self._pan = 90
+        self._pan = 0
         self._last_v = None
         self._timed_out = False
         self._bad_since_t = False
@@ -124,7 +124,7 @@ class FakeFirmware:
             self._millis_start = millis_start
             self._cmd = (0, 0)
             self._seq = 0
-            self._pan = 90
+            self._pan = 0
             self._last_v = None
             self._send(f"H rover {self.version} pwm_max={self.pwm_max} standoff_cm={self.standoff_cm} "
                        f"min_mv={self.min_mv} timeout_ms={self.timeout_ms}")
@@ -187,7 +187,7 @@ class FakeFirmware:
                 self._timed_out = False
             elif tok[0] == "P" and len(tok) == 2:
                 deg = int(tok[1])
-                if not 0 <= deg <= 180:
+                if not -90 <= deg <= 90:
                     self._error(3, "pan out of range")
                 else:
                     self._pan = deg

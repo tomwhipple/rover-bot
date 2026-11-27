@@ -53,7 +53,7 @@ def load_core(path):
     lib.rc_host_rx.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t]
     lib.rc_host_tick.argtypes = [
         ctypes.c_void_p, ctypes.c_uint32, ctypes.c_uint16, ctypes.c_uint16, ctypes.c_uint32,
-        ctypes.POINTER(ctypes.c_int16), ctypes.POINTER(ctypes.c_int16), ctypes.POINTER(ctypes.c_uint8)]
+        ctypes.POINTER(ctypes.c_int16), ctypes.POINTER(ctypes.c_int16), ctypes.POINTER(ctypes.c_int8)]
     lib.rc_host_tx.restype = ctypes.c_size_t
     lib.rc_host_tx.argtypes = [ctypes.c_void_p, ctypes.c_char_p, ctypes.c_size_t]
     return lib
@@ -212,7 +212,7 @@ def main():
     v_motor = max(pack_v - L293D_DROP_V, 0.0)
     left = ctypes.c_int16(0)
     right = ctypes.c_int16(0)
-    pan = ctypes.c_uint8(90)
+    pan = ctypes.c_int8(0)
     txbuf = ctypes.create_string_buffer(512)
     tx_pending = b""
     range_cm = RANGE_NONE_CM
@@ -237,7 +237,7 @@ def main():
         w, qx, qy, qz = q[qa + 3:qa + 7]
         yaw = math.degrees(math.atan2(2 * (w * qz + qx * qy), 1 - 2 * (qy * qy + qz * qz)))
         state = {"t": t_sim, "x": float(q[qa]), "y": float(q[qa + 1]), "yaw_deg": yaw,
-                 "pan_deg": math.degrees(q[qadr["pan"]]) + 90, "range_cm": range_cm,
+                 "pan_deg": math.degrees(q[qadr["pan"]]), "range_cm": range_cm,
                  "left_pwm": left.value, "right_pwm": right.value, "pan_cmd": pan.value,
                  "wheel_l": float(data.qvel[vadr["wheel_l"]]), "wheel_r": float(data.qvel[vadr["wheel_r"]])}
         tmp = args.dump_pose_file + ".tmp"
@@ -276,7 +276,7 @@ def main():
                         v = math.copysign(abs(pwm) / 255.0 * v_motor, pwm)
                         tau = kt * (v - data.qvel[vadr[side]] / kv)
                     data.ctrl[act] = tau
-                data.ctrl[act_pan] = math.radians(min(pan.value, 180) - 90)
+                data.ctrl[act_pan] = math.radians(max(-90, min(pan.value, 90)))
                 mujoco.mj_step(model, data)
                 sim_t += STEP_S
                 while True:

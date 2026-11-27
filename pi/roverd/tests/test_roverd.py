@@ -127,7 +127,7 @@ def test_state_mapping_and_cadence(rig):
     assert s.loop_time_ms == pytest.approx(1.5)
     assert 0 <= s.firmware_link_age_ms < 100
     assert list(s.flags) == []
-    assert actuator(s, "pan").applied == 90
+    assert actuator(s, "pan").applied == 0
     assert bus.events("SERIAL_LOST") == [] and len(bus.events("SERIAL_OPEN")) <= 1, "port stays open"
 
     # One State per T line: in simulated mode sim_time_ns is the firmware's millis().
@@ -344,16 +344,16 @@ def test_pan_only_on_change(rig):
     bus, fake = rig.bus, rig.fake
     bus.take_and_wait("console")
     t = time.monotonic()
-    seq = [dict(pan=90), dict(pan=90), dict(pan=100), dict(), dict(pan=100.4), dict(pan=250),
-           dict(linear=0.1), dict(pan=-20), dict(pan=0)]
+    seq = [dict(pan=0), dict(pan=0), dict(pan=10), dict(), dict(pan=10.4), dict(pan=250),
+           dict(linear=0.1), dict(pan=-250), dict(pan=-20)]
     for ch in seq:
         bus.intent("console", **ch)
         time.sleep(0.04)
     fake.wait_received("V", count=len(seq), since=t)
     time.sleep(0.2)
-    assert fake.received("P", t) == ["P 90", "P 100", "P 180", "P 0"]
+    assert fake.received("P", t) == ["P 0", "P 10", "P 90", "P -90", "P -20"]
     s = bus.wait("state", since=time.monotonic())
-    assert actuator(s, "pan").commanded == 0 and actuator(s, "pan").applied == 0
+    assert actuator(s, "pan").commanded == -20 and actuator(s, "pan").applied == -20
     # Each P follows the V of the same Intent.
     order = [p.split()[0] for p in fake.received(None, t) if p[0] in "VP"]
     assert order[:2] == ["V", "P"]

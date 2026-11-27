@@ -44,7 +44,7 @@ struct Rig {
   uint32_t now = 1000;
   uint16_t mv = 12000, cm = 999;
   uint32_t loop_us = 0;
-  Outputs out{0, 0, 90};
+  Outputs out{0, 0, 0};
   std::vector<Line> lines;
   std::string partial;
 
@@ -100,11 +100,11 @@ static void test_hello_and_state_line() {
   Rig r;
   auto h = r.take('H');
   EXPECT(h.size() == 1);
-  EXPECT(h[0].payload == "H rover 2.0.0 pwm_max=150 standoff_cm=80 min_mv=10500 timeout_ms=300");
+  EXPECT(h[0].payload == "H rover 2.1.0 pwm_max=150 standoff_cm=80 min_mv=10500 timeout_ms=300");
   r.send("?");
   r.drain();
   h = r.take('H');
-  EXPECT(h.size() == 1 && h[0].payload.find("H rover 2.0.0") == 0);
+  EXPECT(h.size() == 1 && h[0].payload.find("H rover 2.1.0") == 0);
 
   r.mv = 11800;
   r.cm = 123;
@@ -123,7 +123,7 @@ static void test_hello_and_state_line() {
   EXPECT(num(a, 3) == 123);
   EXPECT(num(a, 4) == 100);
   EXPECT(num(a, 5) == -50);
-  EXPECT(num(a, 6) == 90);          // the pan has only begun to move towards 33
+  EXPECT(num(a, 6) == 0);           // the pan has only begun to move towards 33
   EXPECT(num(a, 7) == F_MOVING);
   EXPECT(num(a, 8) == 777);
   EXPECT(num(a, 9) == 42);
@@ -313,43 +313,55 @@ static void test_low_pack() {
 }
 
 static void test_pan_and_stop() {
+  const int L = rover::PAN_EDGE_LEFT, R = rover::PAN_EDGE_RIGHT, MS = rover::PAN_MS_PER_DEG;
+  CHECK(L > 45 && L <= 90 && R < -45 && R >= -90);
   Rig r;
-  EXPECT(r.out.pan == 90);
+  EXPECT(r.out.pan == 0);
   // A commanded angle is approached at one degree per PAN_MS_PER_DEG, never in one step.
-  r.send("P 180");
+  r.send("P 40");
   r.step();
-  EXPECT(r.out.pan == 90);
-  for (int deg = 1; deg <= 90; deg++) {
+  EXPECT(r.out.pan == 0);
+  for (int deg = 1; deg <= 40; deg++) {
     int before = r.out.pan;
-    r.run(rover::PAN_MS_PER_DEG);
+    r.run(MS);
     EXPECT(r.out.pan - before == 1);
   }
-  EXPECT(r.out.pan == 180);
   r.run(100);
-  EXPECT(r.out.pan == 180 && num(r.lastT(), 6) == 180);
+  EXPECT(r.out.pan == 40 && num(r.lastT(), 6) == 40);
   // One slow loop pass still moves no further than the elapsed time allows.
-  r.send("P 0");
+  r.send("P -40");
   r.step();
-  r.step(10 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 170);
-  r.run(180 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 0);
-  r.send("P 500");
-  r.run(200 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 180);
-  r.send("P -5");
-  r.run(200 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 0);
+  r.step(10 * MS);
+  EXPECT(r.out.pan == 30);
+  r.run(80 * MS);
+  EXPECT(r.out.pan == -40 && num(r.lastT(), 6) == -40);
+  // The pan stops at its edges, whatever is asked for.
+  const char *past_left[] = {"P 90", "P 91", "P 500", "P 4294967295"};
+  for (const char *cmd : past_left) {
+    r.send("P 0");
+    r.run(200 * MS);
+    r.send(cmd);
+    r.run(200 * MS);
+    EXPECT(r.out.pan == L && num(r.lastT(), 6) == L);
+  }
+  const char *past_right[] = {"P -90", "P -91", "P -500"};
+  for (const char *cmd : past_right) {
+    r.send("P 0");
+    r.run(200 * MS);
+    r.send(cmd);
+    r.run(200 * MS);
+    EXPECT(r.out.pan == R && num(r.lastT(), 6) == R);
+  }
   // A new target mid-move turns the pan round from where it is.
-  r.send("P 90");
-  r.step();
-  r.run(20 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 20);
   r.send("P 0");
-  r.run(5 * rover::PAN_MS_PER_DEG);
-  EXPECT(r.out.pan == 15);
+  r.step();
+  r.run(20 * MS);
+  EXPECT(r.out.pan == R + 20);
+  r.send("P -90");
+  r.run(5 * MS);
+  EXPECT(r.out.pan == R + 15);
   r.send("P 45");
-  r.run(40 * rover::PAN_MS_PER_DEG);
+  r.run(130 * MS);
   EXPECT(r.out.pan == 45);
   EXPECT(r.take('E').empty());
   r.send("V 100 100 1");
