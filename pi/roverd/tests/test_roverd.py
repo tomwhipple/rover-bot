@@ -452,6 +452,23 @@ def test_flag_rising_edge_one_event(rig):
     fake.extra_flags = 0
 
 
+def test_ready_once_a_subscriber_is_listening(rig):
+    ev = rig.bus.wait_event("READY", timeout=3)
+    assert ev.severity == pb.SEVERITY_INFO and ev.text.startswith("roverd ")
+    time.sleep(0.5)
+    assert len(rig.bus.events("READY")) == 1
+
+
+def test_shutdown_event_on_sigterm(rig):
+    rig.bus.wait_event("READY", timeout=3)
+    t = time.monotonic()
+    rig.proc.send_signal(signal.SIGTERM)
+    ev = rig.bus.wait_event("SHUTDOWN", since=t, timeout=5)
+    assert ev.severity == pb.SEVERITY_WARNING and "stopping" in ev.text
+    assert rig.proc.wait(10) == 0
+    assert rig.fake.received("S", since=t), "motors stopped before the bus is told"
+
+
 def test_firmware_error_event(rig):
     t = time.monotonic()
     rig.fake.send_line("E 7 pan out of range")

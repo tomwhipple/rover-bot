@@ -44,6 +44,9 @@ constexpr int64_t REOPEN_PERIOD_MS = 500;
 constexpr int64_t HELLO_RETRY_MS = 1000;
 constexpr int64_t BAD_LINE_EVENT_PERIOD_MS = 5000;
 constexpr int64_t STATS_LOG_PERIOD_MS = 10000;
+// READY waits for a subscriber on the event topic: an event put before a peer has linked is lost.
+constexpr int64_t READY_POLL_MS = 100;
+constexpr int64_t READY_WAIT_MS = 10000;
 
 std::atomic<int> g_wake_fd{-1};
 volatile std::sig_atomic_t g_quit = 0;
@@ -64,6 +67,21 @@ int64_t mono_ms() {
 }
 
 int64_t wall_ns() { return static_cast<int64_t>(robo::bus::now_ns()); }
+
+std::string host_name() {
+    char buf[256] = {0};
+    return ::gethostname(buf, sizeof buf - 1) == 0 && buf[0] ? buf : "unknown host";
+}
+
+// True when roverd is being stopped because its host is shutting down or rebooting (systemd).
+bool host_stopping() {
+    FILE* p = ::popen("systemctl is-system-running 2>/dev/null", "r");
+    if (!p) return false;
+    char buf[32] = {0};
+    const bool got = std::fgets(buf, sizeof buf, p) != nullptr;
+    ::pclose(p);
+    return got && std::string(buf).rfind("stopping", 0) == 0;
+}
 
 void log(const std::string& s) { std::fprintf(stderr, "roverd: %s\n", s.c_str()); }
 
@@ -168,6 +186,8 @@ public:
         log("shutting down");
         send(cmd_stop());
         serial_.close();
+        event(pb::SEVERITY_WARNING, "SHUTDOWN",
+              host_stopping() ? host_name() + " is shutting down" : "roverd on " + host_name() + " is stopping");
         session_.close();
         log("relayed " + std::to_string(relayed_) + " intents, dropped " +
             std::to_string(lease_.dropped()) + ", bad lines " + std::to_string(bad_lines_));
@@ -516,10 +536,21 @@ private:
         const int64_t silent_since = has_t_ ? last_t_ms_ : start_ms_;
         d = std::min(d, std::max(silent_since + NO_LINK_AFTER_MS, next_no_link_ms_));
         if (bad_lines_ != bad_lines_reported_) d = std::min(d, next_bad_line_event_ms_);
+        if (!ready_sent_) d = std::min(d, now + READY_POLL_MS);
         return std::max(d, now);
     }
 
+    bool event_heard() {
+        zenoh::ZResult err = 0;
+        const auto status = pub_event_->get_matching_status(&err);
+        return err == 0 && status.matching;
+    }
+
     void periodic(int64_t now) {
+        if (!ready_sent_ && (event_heard() || now - start_ms_ >= READY_WAIT_MS)) {
+            ready_sent_ = true;
+            event(pb::SEVERITY_INFO, "READY", std::string("roverd ") + version() + " on " + host_name());
+        }
         const int64_t silent_since = has_t_ ? last_t_ms_ : start_ms_;
         if (now - silent_since >= NO_LINK_AFTER_MS && now >= next_no_link_ms_) {
             if (has_t_ && !no_link_reported_) {
@@ -587,6 +618,7 @@ private:
     uint64_t bad_lines_ = 0, bad_lines_reported_ = 0, unknown_lines_ = 0;
     std::string last_open_error_;
 
+    bool ready_sent_ = false;
     int64_t start_ms_ = 0;
     int64_t last_heard_ms_ = -1;
     int64_t last_t_ms_ = 0;
