@@ -27,7 +27,8 @@
     "wheel_x_m": 0.0,
     "caster_x_m": -0.08,
     "mast_x_m": 0.08,
-    "range_sensor_x_m": 0.10,
+    "range_on": "pan",
+    "range_sensor_x_m": 0.02,
     "range_max_cm": 400,
     "standoff_cm": 80,
     "pan_zero_deg": 0
