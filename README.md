@@ -7,8 +7,9 @@ Design: [docs/design.md](docs/design.md)
 Wiring: [docs/wiring.svg](docs/wiring.svg) (PDF: [docs/wiring.pdf](docs/wiring.pdf)), exported from the KiCad 10
 project in `hardware/` (`hardware/gen_schematic.py` regenerates it).
 
-Status: runs in simulation; not yet run on hardware. The sketch has not been compiled for the ATmega
-since the protocol change.
+Status: runs in simulation. On hardware the sketch runs on the aLaMode and `roverd` on the Pi, and the
+console receives the rover's state (2026-11-27); it has not been driven. `roverd` is started by hand
+there and has no camera stream to announce.
 
 ## Layout
 
@@ -35,8 +36,10 @@ since the protocol change.
 The firmware builds on the Pi: the Makefile rsyncs `pi/` and `firmware/` to
 `~/rover-cam` there, and `make upload` compiles the sketch with `arduino-cli` and flashes it (run
 `make firmware-deps` once first). Arduino's avr-gcc runs on the Pi's arm64 but has no Apple Silicon
-build. Those targets use `PI_HOST`, default `rover.local`. Building and installing `roverd` on the Pi
-is not set up yet.
+build. Those targets use `PI_HOST`, default `rover.local`. `roverd` builds on the Pi by hand,
+with no make target yet: it needs `cmake`, `libprotobuf-dev`, `protobuf-compiler` and the zenoh-c and
+zenoh-cpp Debian packages of the version robo-control uses, and robo-control's `core/` and `schemas/`
+at `-DROBO_CONTROL_DIR`. It owns the serial port: stop it before flashing.
 
 ## Pins (aLaMode)
 
@@ -45,10 +48,11 @@ is not set up yet.
 | D0/D1 | serial to the Pi, 115200 |
 | D4, D7, D8, D12 | motor shield latch |
 | D5, D6 | PWM for M3 (left) and M4 (right) |
-| D9 | pan servo signal |
+| D9 | pan servo signal (shield header S2) |
+| D10 | Ping))) ultrasonic sensor, trigger and echo on one pin (shield header S1) |
 | A0 | pack voltage, 10k over 3.3k divider |
 | D2, D3 | reserved for wheel encoders (odometry, for self-driving and SLAM later) |
-| A1 / A2 | ultrasonic trigger / echo (a 3-pin Ping))) uses A1 alone) |
+| A1 / A2 | free (a 4-pin HC-SR04 would use them: trigger / echo) |
 
 ## Use
 

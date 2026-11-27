@@ -6,8 +6,9 @@
 
 #include "rover_core.h"
 
-// HC-SR04: trigger A1, echo A2. 3-pin Ping))): set both to A1.
-const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = A1, PIN_ECHO = A2;
+// 3-pin Ping))) on the motor shield's S1 header (D10): trigger and echo share the pin.
+// A 4-pin HC-SR04 takes two pins instead (the design's A1 trigger, A2 echo).
+const int PIN_SERVO = 9, PIN_VBAT = A0, PIN_TRIG = 10, PIN_ECHO = 10;
 
 const unsigned long PING_PERIOD_US = 60000UL;
 const unsigned long PING_TIMEOUT_US = 25000UL;  // ~4.3 m, as pulseIn had
