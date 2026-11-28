@@ -8,6 +8,9 @@ PI_SERIAL ?= /dev/serial0
 PI_CONF   ?= /etc/rover.conf
 CXX       ?= g++
 CXXFLAGS  ?= -std=c++17 -O2 -Wall
+# Added to the local builds (`make pi`, `make test`, the pre-push hook) but not to `make deploy`,
+# so a newer compiler on the Pi cannot break a deploy over a new warning.
+PI_WARN   ?= -Wextra -Werror
 
 # Firmware: aLaMode = Arduino Uno. Arduino ships avr-gcc for the Pi (arm64)
 # but only for Intel Macs, so it compiles on the Pi too.
@@ -19,7 +22,7 @@ CLI_URL  := https://downloads.arduino.cc/arduino-cli/arduino-cli_latest_Linux_AR
 ROBO_CONTROL_DIR ?= ../robo-control
 PY               ?= $(ROBO_CONTROL_DIR)/.venv/bin/python
 
-.PHONY: all help pi test sync deploy firmware firmware-deps upload clean robo-control robo-test
+.PHONY: all help hooks check pi test sync deploy firmware firmware-deps upload clean robo-control robo-test
 
 all: pi
 
@@ -34,14 +37,17 @@ help:
 	@echo "make robo-control   build what the robo-control console needs: roverd and the twin's firmware library"
 	@echo "make robo-test      host tests: firmware core, twin, roverd"
 	@echo "make twin           run the simulated twin alone"
+	@echo "make hooks          enable the pre-push hook (git config core.hooksPath .githooks)"
+	@echo "make check          what the hook runs: compile, tests, cppcheck, clang-tidy, mypy (see tools/check.sh)"
+	@echo "make cppcheck tidy mypy   the static analysis alone"
 
 pi: pi/rover pi/rovercam
 
 pi/rover: pi/rover.cpp pi/rover_conf.hpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
+	$(CXX) $(CXXFLAGS) $(PI_WARN) -o $@ $<
 
 pi/rovercam: pi/rovercam.cpp pi/rover_conf.hpp
-	$(CXX) $(CXXFLAGS) -pthread -o $@ $<
+	$(CXX) $(CXXFLAGS) $(PI_WARN) -pthread -o $@ $<
 
 # Exit codes without hardware: 2 = usage error.
 test: pi/rover pi/rovercam

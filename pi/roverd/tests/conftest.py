@@ -17,6 +17,7 @@ import uuid
 from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
+from typing import IO
 
 import pytest
 import zenoh
@@ -163,7 +164,7 @@ class Rig:
     bus: Bus
     proc: subprocess.Popen
     log: Path
-    log_fh: object
+    log_fh: IO[bytes]
     started: float
     endpoint: str
 

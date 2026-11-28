@@ -37,7 +37,7 @@ def homography(a, b):
     m = cv2.BFMatcher().knnMatch(da, db, k=2)
     good = [x for x, y in m if x.distance < 0.75 * y.distance]
     if len(good) < 12: return None, len(good), 0.0
-    pa = np.float32([ka[g.queryIdx].pt for g in good]); pb = np.float32([kb[g.trainIdx].pt for g in good])
+    pa = np.array([ka[g.queryIdx].pt for g in good], dtype=np.float32); pb = np.array([kb[g.trainIdx].pt for g in good], dtype=np.float32)
     Hm, mask = cv2.findHomography(pa, pb, cv2.RANSAC, 3.0)
     if Hm is None: return None, len(good), 0.0
     inl = mask.ravel().astype(bool)
@@ -49,11 +49,13 @@ def yaw(Hm, f):
     if np.linalg.det(R) < 0: R = -R
     ang = math.degrees(math.acos(max(-1, min(1, (np.trace(R) - 1) / 2))))
     return ang
-log = json.load(open(f"{D}/sweep.json")) if os.path.exists(f"{D}/sweep.json") else {"centre": CENTRE, "sides": {}}
+log: dict = json.load(open(f"{D}/sweep.json")) if os.path.exists(f"{D}/sweep.json") else {"centre": CENTRE, "sides": {}}
 for side, sign in [x for x in (("left", +1), ("right", -1)) if WHICH in ("both", x[0])]:
     move(CENTRE, 2.5); time.sleep(0.5)
     prev_img, prev_us = snap(CENTRE), CENTRE
-    steps, total, rates = [], 0.0, []
+    steps: list[dict] = []
+    total = 0.0
+    rates: list[float] = []
     us = CENTRE
     while True:
         step = 100 if abs(us - CENTRE) < 500 else 50

@@ -174,7 +174,7 @@ static void test_checksum() {
   EXPECT(r.take('E').empty());
   // lower-case hex is accepted
   std::string w = wrap("V 20 20 9");
-  for (auto &ch : w) if (ch >= 'A' && ch <= 'F') ch = ch - 'A' + 'a';
+  for (auto &ch : w) if (ch >= 'A' && ch <= 'F') ch = static_cast<char>(ch - 'A' + 'a');
   r.raw(w);
   r.step();
   EXPECT(r.out.left == 20);
@@ -322,7 +322,7 @@ static void test_pan_and_stop() {
   r.step();
   EXPECT(r.out.pan == 0);
   for (int deg = 1; deg <= 40; deg++) {
-    int before = r.out.pan;
+    int before{r.out.pan};
     r.run(MS);
     EXPECT(r.out.pan - before == 1);
   }

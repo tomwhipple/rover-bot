@@ -60,6 +60,7 @@ static void test_line_assembler() {
 static void test_parse_hello() {
     auto h = parse_hello("H rover 2.0.1 pwm_max=120 standoff_cm=80 min_mv=10500 timeout_ms=250");
     CHECK(h.has_value());
+    if (!h) return;  // CHECK does not stop the test
     CHECK(h->name == "rover");
     CHECK(h->version == "2.0.1");
     CHECK(h->pwm_max == 120);
@@ -75,6 +76,7 @@ static void test_parse_hello() {
 static void test_parse_telemetry() {
     auto t = parse_telemetry("T 4294967295 11100 999 -150 150 90 6 1234 65535");
     CHECK(t.has_value());
+    if (!t) return;
     CHECK(t->ms == 4294967295u);
     CHECK(t->mv == 11100);
     CHECK(t->cm == 999);

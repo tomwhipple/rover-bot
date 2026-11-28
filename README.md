@@ -48,6 +48,29 @@ with no make target yet: it needs `cmake`, `libprotobuf-dev`, `protobuf-compiler
 zenoh-cpp Debian packages of the version robo-control uses, and robo-control's `core/` and `schemas/`
 at `-DROBO_CONTROL_DIR`. It owns the serial port: stop it before flashing.
 
+## Pre-push hook
+
+`make hooks` once per clone turns on `.githooks/pre-push` (`git config core.hooksPath .githooks`; it
+holds in every worktree). Before a push goes out it runs `make check` (`tools/check.sh`), which runs
+every step, times each, and fails the push if any failed:
+
+1. Compile: `pi/rover` and `pi/rovercam` (`-Wall -Wextra -Werror`), the firmware core host library and
+   host test (`-Wall -Wextra -Werror`), `roverd` (`-Wall -Wextra -Wshadow -Wconversion -Werror`). The
+   Arduino sketch too, if `arduino-cli` is on PATH; otherwise it prints `skipped: arduino-cli not
+   installed` (the sketch builds on the Pi).
+2. Tests: `make test` and `make robo-test`.
+3. Static analysis: `cppcheck` (warning and portability findings, `firmware/` and `pi/`), `clang-tidy`
+   (`bugprone-*` and narrowing conversions, set in `.clang-tidy`), and `mypy` over `sim/`,
+   `pi/roverd/tests/` and `firmware/pan_cal/` (settings in `mypy.ini`; it runs from the robo-control
+   venv, `$(PY) -m mypy`). A missing tool fails the step with an install hint
+   (`brew install cppcheck llvm`; with Homebrew's llvm the hook finds `clang-tidy` even though it is
+   not on PATH).
+
+`ROBO_CONTROL_DIR` and `PY` are as for `make robo-test`. `ROVER_HOOK_SKIP=cppcheck,clang-tidy,mypy,arduino
+git push` skips those steps for one push and says so loudly. `ROVER_CHECK_WRAP='cmd args'` runs the whole
+check under a wrapper command (a lock, a sandbox: the bus tests open zenoh sessions on the network).
+`git push --no-verify` skips the hook. `make cppcheck`, `make tidy` and `make mypy` run the analysis alone.
+
 ## Pins (aLaMode)
 
 | Pin | Use |

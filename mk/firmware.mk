@@ -15,7 +15,7 @@ FW_TEST := $(CORE_BUILD)/test_rover_core
 FW_SRCS := firmware/rover/rover_core.cpp
 FW_HDRS := firmware/rover/rover_core.h
 
-.PHONY: rover-core-lib firmware-host-test
+.PHONY: rover-core-lib firmware-host-build firmware-host-test
 
 rover-core-lib: $(FW_LIB)
 
@@ -27,6 +27,8 @@ $(FW_TEST): firmware/host/test_rover_core.cpp $(FW_SRCS) $(FW_HDRS)
 	@mkdir -p $(CORE_BUILD)
 	$(FW_CXX) $(FW_STD) -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=undefined \
 	  -o $@ firmware/host/test_rover_core.cpp $(FW_SRCS)
+
+firmware-host-build: $(FW_TEST) ## build the host test without running it
 
 $(CORE_BUILD)/.firmware-host-test.ok: $(FW_TEST)
 	$(FW_TEST)

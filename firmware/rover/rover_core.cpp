@@ -16,7 +16,7 @@ struct LineBuf {
   void u(uint32_t v) {
     char t[10];
     uint8_t k = 0;
-    do { t[k++] = '0' + v % 10; v /= 10; } while (v);
+    do { t[k++] = static_cast<char>('0' + v % 10); v /= 10; } while (v);
     while (k) c(t[--k]);
   }
   void s(int32_t v) {
@@ -60,7 +60,7 @@ int hexval(char c) {
 }
 
 int16_t clamp_pwm(int v) {
-  return v > PWM_MAX ? PWM_MAX : v < -PWM_MAX ? -PWM_MAX : v;
+  return static_cast<int16_t>(v > PWM_MAX ? PWM_MAX : v < -PWM_MAX ? -PWM_MAX : v);
 }
 
 }  // namespace

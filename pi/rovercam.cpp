@@ -74,7 +74,7 @@ void camera_loop(const std::string& cmd) {
             frame.clear();
             in_frame = false;
             frames++;
-          } else if (frame.size() > 8u * 1024 * 1024) {
+          } else if (frame.size() > size_t{8} * 1024 * 1024) {
             in_frame = false;  // not a JPEG stream after all
           }
         }

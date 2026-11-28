@@ -10,6 +10,7 @@
 #include <deque>
 #include <mutex>
 #include <optional>
+#include <stdexcept>
 #include <utility>
 #include <vector>
 
@@ -245,7 +246,7 @@ private:
         e.set_severity(sev);
         e.set_code(code);
         e.set_text(text);
-        put(*pub_event_, e);
+        put(need(pub_event_), e);
         log("event " + code + ": " + text);
     }
 
@@ -266,7 +267,7 @@ private:
         for (const auto& e : robo::bus::advertised_endpoints(listen_, robo::bus::local_ipv4_addresses())) {
             m.add_endpoints(e);
         }
-        put(*pub_info_, m);
+        put(need(pub_info_), m);
     }
 
     void publish_control() {
@@ -277,7 +278,7 @@ private:
         m.set_holder_label(lease_.holder_label());
         m.set_held_since_ns(lease_.held() ? held_since_ns_ : 0);
         m.set_stopped(lease_.stopped());
-        put(*pub_control_, m);
+        put(need(pub_control_), m);
         control_version_ = lease_.version();
         next_control_ms_ = mono_ms() + CONTROL_PERIOD_MS;
     }
@@ -332,7 +333,7 @@ private:
         m.set_firmware_link_age_ms(last_heard_ms_ >= 0 ? static_cast<float>(now - last_heard_ms_) : -1.0f);
         m.set_last_intent_seq(last_intent_seq_);
         m.set_at_home(link && at_home());
-        put(*pub_state_, m);
+        put(need(pub_state_), m);
     }
 
     // Motors applied 0 and the pan at its home angle, by the last T line.
@@ -590,7 +591,7 @@ private:
 
     bool event_heard() {
         zenoh::ZResult err = 0;
-        const auto status = pub_event_->get_matching_status(&err);
+        const auto status = need(pub_event_).get_matching_status(&err);
         return err == 0 && status.matching;
     }
 
@@ -643,6 +644,12 @@ private:
     std::string listen_;
     std::string hostname_;
     std::optional<zenoh::Publisher> pub_info_, pub_state_, pub_event_, pub_control_;
+
+    // The publishers are declared once the session is up, before anything publishes.
+    static zenoh::Publisher& need(std::optional<zenoh::Publisher>& p) {
+        if (!p) throw std::logic_error("roverd: publishing before the publishers are declared");
+        return *p;
+    }
     SerialPort serial_;
     LineAssembler lines_;
     ClockMap clock_;
