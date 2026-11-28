@@ -9,7 +9,7 @@ CPP_DIRS      := firmware pi
 CPP_TIDY_PLAIN:= firmware/rover/rover_core.cpp firmware/host/test_rover_core.cpp pi/rover.cpp pi/rovercam.cpp
 CPP_TIDY_ROVERD := pi/roverd/src/clock_map.cpp pi/roverd/src/main.cpp pi/roverd/src/protocol.cpp \
                    pi/roverd/src/roverd.cpp pi/roverd/src/serial_port.cpp pi/roverd/tests/test_units.cpp
-PY_CHECKED    := sim pi/roverd/tests $(wildcard firmware/pan_cal/*.py)
+PY_CHECKED    := sim pi/roverd/tests tools/hw_check.py $(wildcard firmware/pan_cal/*.py)
 
 .PHONY: hooks prepush lint cppcheck tidy mypy sketch-compile
 
