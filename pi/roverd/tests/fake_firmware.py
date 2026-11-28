@@ -73,7 +73,7 @@ class FakeFirmware:
         self._cmd = (0, 0)
         self._seq = 0
         self._pan = 0
-        self._last_v = None
+        self._last_v: float | None = None
         self._timed_out = False
         self._bad_since_t = False
         self._buf = b""

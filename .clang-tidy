@@ -1,0 +1,11 @@
+# clang-tidy for the C++ in firmware/ and pi/ (`make tidy`, part of `make check`). Type and bug
+# checks only, no style. Findings fail the run.
+Checks: >
+  -*,
+  bugprone-*,
+  -bugprone-easily-swappable-parameters,
+  -bugprone-narrowing-conversions,
+  cppcoreguidelines-narrowing-conversions,
+  clang-analyzer-*
+WarningsAsErrors: '*'
+HeaderFilterRegex: '.*/(firmware|pi)/.*'

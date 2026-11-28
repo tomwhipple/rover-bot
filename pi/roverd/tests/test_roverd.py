@@ -42,7 +42,11 @@ def expected_wheels(linear: float, angular: float, pwm_max: int) -> tuple[int, i
 
 
 def drives(fake, since: float = 0.0) -> list[tuple[int, int, int]]:
-    return [tuple(int(x) for x in p.split()[1:]) for p in fake.received("V", since)]
+    out: list[tuple[int, int, int]] = []
+    for p in fake.received("V", since):
+        left, right, seq = (int(x) for x in p.split()[1:])
+        out.append((left, right, seq))
+    return out
 
 
 def actuator(state, name):
@@ -347,7 +351,7 @@ def test_pan_only_on_change(rig):
     bus, fake = rig.bus, rig.fake
     bus.take_and_wait("console")
     t = time.monotonic()
-    seq = [dict(pan=0), dict(pan=0), dict(pan=10), dict(), dict(pan=10.4), dict(pan=250),
+    seq: list[dict[str, float]] = [dict(pan=0), dict(pan=0), dict(pan=10), dict(), dict(pan=10.4), dict(pan=250),
            dict(linear=0.1), dict(pan=-250), dict(pan=-20)]
     for ch in seq:
         bus.intent("console", **ch)

@@ -1,0 +1,12 @@
+#!/bin/sh
+# Pre-push hook: the code must compile, the tests must pass, the static analysis must be clean.
+# Enable once per clone with `make hooks`. The work is `make check` (tools/check.sh); see the
+# README, "Pre-push hook".
+set -eu
+
+# git runs hooks with GIT_DIR, GIT_INDEX_FILE and friends set. Anything below that runs git in
+# another directory (a test's temporary clone, say) would act on the pushing worktree instead.
+for v in $(env | sed -n 's/^\(GIT_[A-Za-z0-9_]*\)=.*/\1/p'); do unset "$v"; done
+
+cd "$(dirname "$0")/.."
+exec make check

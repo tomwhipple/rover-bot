@@ -55,6 +55,7 @@ class Twin:
             cmd.append("--no-render")
         self.proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True,
                                      env={**os.environ, **(env or {})})
+        assert self.proc.stdout is not None and self.proc.stderr is not None
         line = self.proc.stdout.readline()
         m = re.match(r"READY pty=(\S+) http=(\d+)", line)
         if not m:
@@ -266,7 +267,7 @@ def test_render_streams(lib, tmp_path):
             c = http.client.HTTPConnection("127.0.0.1", t.http_port, timeout=20)
             c.request("GET", "/%s.mjpg" % name)
             r = c.getresponse()
-            assert "multipart/x-mixed-replace" in r.getheader("Content-Type")
+            assert "multipart/x-mixed-replace" in (r.getheader("Content-Type") or "")
             hd, body = read_part(r)
             ts = int(hd["X-Timestamp-Ns"])
             assert abs(time.time_ns() - ts) < 5e9

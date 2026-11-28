@@ -122,7 +122,7 @@ class Server(ThreadingHTTPServer):
 class Encoder(threading.Thread):
     def __init__(self, streams):
         super().__init__(daemon=True)
-        self.q = queue.Queue(maxsize=4)
+        self.q: queue.Queue = queue.Queue(maxsize=4)
         self.streams = streams
 
     def run(self):
@@ -197,7 +197,8 @@ def main():
     streams = {"/mast.mjpg": Stream(), "/overview.mjpg": Stream()}
     cams = {"/mast.mjpg": "mast", "/overview.mjpg": "overview"}
     port = 0
-    renderer = encoder = None
+    renderer = None
+    encoder: Encoder | None = None
     if not args.no_render:
         server = Server(("127.0.0.1", args.http_port), make_handler(streams, stop))
         port = server.server_address[1]
@@ -295,7 +296,7 @@ def main():
             if renderer and sim_t >= next_render:
                 next_render = sim_t + 1.0 / RENDER_FPS
                 for path, st in streams.items():
-                    if st.clients > 0 and not encoder.q.full():
+                    if encoder is not None and st.clients > 0 and not encoder.q.full():
                         renderer.update_scene(data, camera=cams[path])
                         encoder.q.put((path, renderer.render().copy(), time.time_ns()))
             if args.dump_pose_file and sim_t >= next_dump:
@@ -306,7 +307,8 @@ def main():
         stop.set()
         if renderer:
             server.shutdown()
-            encoder.q.put(None)
+            if encoder is not None:
+                encoder.q.put(None)
         core.rc_host_free(rc)
         if link is not None:
             try:

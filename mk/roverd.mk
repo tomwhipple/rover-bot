@@ -14,7 +14,7 @@ ROVERD_BUILD  := build/roverd$(if $(_roverd_asan),-asan)
 ROVERD_BIN    := $(ROVERD_BUILD)/roverd
 _roverd_rc    := $(abspath $(ROBO_CONTROL_DIR))
 _roverd_flags := -DROBO_CONTROL_DIR=$(_roverd_rc) -DROBO_SANITIZE=$(if $(_roverd_asan),ON,OFF) \
-                 -DCMAKE_BUILD_TYPE=RelWithDebInfo
+                 -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_EXPORT_COMPILE_COMMANDS=ON
 _roverd_proto := $(_roverd_rc)/schemas/robo_v1.proto
 _roverd_py    := $(ROVERD_BUILD)/py
 _roverd_deps  := $(wildcard pi/roverd/CMakeLists.txt pi/roverd/src/*.cpp pi/roverd/src/*.hpp \
