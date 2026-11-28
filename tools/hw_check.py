@@ -299,43 +299,55 @@ class Check:
         r.status = "PASS" if len(rows) == 9 and all(row["n"] > 0 for row in rows) else "FAIL"
 
     def check_refusal(self) -> None:
-        r = self.result(5, "drive refused for low pack (linear 0.3 for 2 s)")
-        s = self.fresh_state()
-        guard = (s.mode == "LOW_PACK" and "LOW_PACK" in s.flags and s.pack_v < LOW_PACK_V)
-        r.note(f"precondition: mode {s.mode}, flags {list(s.flags)}, pack {s.pack_v:.2f} V -> "
-               f"{'holds' if guard else 'DOES NOT HOLD'}")
-        if not guard:
-            r.status = "SKIP"
-            raise Abort("the low-pack precondition does not hold: no motion is sent")
-        seq0 = s.last_intent_seq
-        t0 = time.time_ns()
-        try:
-            self.ctl.set_motion("linear", 0.3)
-            self.ctl.set_motion_engaged(True)
-            end = time.monotonic() + 2.0
-            while time.monotonic() < end:
-                self.rec.check_safe()
-                for x in self.rec.states_since(t0):
-                    for w in ("left_wheel", "right_wheel"):
-                        if actuator(x.msg, w).applied != 0:
-                            raise Abort(f"{w} applied {actuator(x.msg, w).applied} during the refusal step")
-                time.sleep(0.02)
-        finally:
-            self._zero_motion()
-        time.sleep(0.3)
-        states = self.rec.states_since(t0)
-        cmd = [(actuator(x.msg, "left_wheel").commanded, actuator(x.msg, "right_wheel").commanded) for x in states]
-        app = {(actuator(x.msg, "left_wheel").applied, actuator(x.msg, "right_wheel").applied) for x in states}
-        modes = {x.msg.mode for x in states}
-        seqs = [x.msg.last_intent_seq for x in states]
-        evs = self.rec.events_since(t0)
-        r.note(f"{len(states)} States: commanded (left, right) seen {sorted(set(cmd))}; applied {sorted(app)}; "
-               f"modes {sorted(modes)}; last_intent_seq {seq0} -> {seqs[-1] if seqs else '-'}")
-        r.note("events: " + ("; ".join(ev_str(e) for e in evs) or "none"))
-        r.data = {"commanded": sorted(set(cmd)), "applied": sorted(app), "modes": sorted(modes),
-                  "events": [ev_str(e) for e in evs]}
-        asked = any(abs(c[0] - 45) < 1 and abs(c[1] - 45) < 1 for c in cmd)
-        r.status = "PASS" if app == {(0.0, 0.0)} and modes == {"LOW_PACK"} and asked else "FAIL"
+        """Forward 0.3, then reverse 0.3, 2 s each. Forward inside the stand-off is refused as blocked
+        first (the firmware reports one refusal code, blocked before low pack); reverse is not subject to
+        the stand-off, so only the low-pack limit can refuse it."""
+        r = self.result(5, "drive refused for low pack (linear +0.3, then -0.3, 2 s each)")
+        ok = True
+        for linear in (0.3, -0.3):
+            s = self.fresh_state()
+            guard = (s.mode == "LOW_PACK" and "LOW_PACK" in s.flags and s.pack_v < LOW_PACK_V)
+            r.note(f"linear {linear:+g}: precondition: mode {s.mode}, flags {list(s.flags)}, pack {s.pack_v:.2f} V "
+                   f"-> {'holds' if guard else 'DOES NOT HOLD'}")
+            if not guard:
+                r.status = "SKIP"
+                raise Abort("the low-pack precondition does not hold: no motion is sent")
+            seq0 = s.last_intent_seq
+            t0 = time.time_ns()
+            try:
+                self.ctl.set_motion("linear", linear)
+                self.ctl.set_motion_engaged(True)
+                end = time.monotonic() + 2.0
+                while time.monotonic() < end:
+                    self.rec.check_safe()
+                    for x in self.rec.states_since(t0):
+                        for w in ("left_wheel", "right_wheel"):
+                            if actuator(x.msg, w).applied != 0:
+                                raise Abort(f"{w} applied {actuator(x.msg, w).applied} during the refusal step")
+                    time.sleep(0.02)
+            finally:
+                self._zero_motion()
+            time.sleep(0.4)
+            states = self.rec.states_since(t0)
+            cmd = sorted({(actuator(x.msg, "left_wheel").commanded, actuator(x.msg, "right_wheel").commanded)
+                          for x in states})
+            app = sorted({(actuator(x.msg, "left_wheel").applied, actuator(x.msg, "right_wheel").applied)
+                          for x in states})
+            modes = sorted({x.msg.mode for x in states})
+            flags = sorted({f for x in states for f in x.msg.flags})
+            seqs = [x.msg.last_intent_seq for x in states]
+            evs = [ev_str(e) for e in self.rec.events_since(t0)]
+            r.note(f"  {len(states)} States: commanded (left, right) {cmd}; applied {app}; modes {modes}; flags "
+                   f"{flags}; last_intent_seq {seq0} -> {seqs[-1] if seqs else '-'}")
+            r.note("  events: " + ("; ".join(evs) or "none"))
+            r.data[f"{linear:+g}"] = {"commanded": cmd, "applied": app, "modes": modes, "flags": flags,
+                                      "events": evs}
+            pwm = linear * 150
+            asked = any(abs(c[0] - pwm) < 1 and abs(c[1] - pwm) < 1 for c in cmd)
+            ok = ok and app == [(0.0, 0.0)] and modes == ["LOW_PACK"] and asked
+            if linear < 0:
+                ok = ok and any(e.startswith("FIRMWARE_ERROR: 4") for e in evs)
+        r.status = "PASS" if ok else "FAIL"
 
     def check_home(self) -> None:
         r = self.result(6, "HOME from pan +40")
@@ -436,7 +448,11 @@ class Check:
         r.note(f"firmware_link_age_ms: median {statistics.median(ages):.1f}, max {max(ages):.1f}")
         r.note(f"source_time - receive time here: median {statistics.median(offs):+.1f} ms "
                f"(min {min(offs):+.1f}, max {max(offs):+.1f}); Header.synced {sorted(synced)}; this host "
-               f"reports synced {busmod.clock_synced()}")
+               f"reports synced {busmod.clock_synced()} (the offset holds this host's clock error as well as the "
+               f"latency)")
+        packs = [x.msg.pack_v for x in run]
+        r.note(f"pack_v: median {statistics.median(packs):.2f} V, min {min(packs):.2f}, max {max(packs):.2f}, "
+               f"{len(set(packs))} distinct values")
         r.data = {"rate_hz": rate, "loop_ms_max": max(loops), "deadline_misses": misses,
                   "link_age_ms_median": statistics.median(ages), "offset_ms_median": statistics.median(offs),
                   "offset_ms_min": min(offs), "offset_ms_max": max(offs), "synced": sorted(synced)}

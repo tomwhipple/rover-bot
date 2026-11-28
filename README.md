@@ -8,7 +8,9 @@ Wiring: [docs/wiring.svg](docs/wiring.svg) (PDF: [docs/wiring.pdf](docs/wiring.p
 project in `hardware/` (`hardware/gen_schematic.py` regenerates it).
 
 Status: runs in simulation. On hardware the sketch runs on the aLaMode and `roverd` on the Pi, and the
-console receives the rover's state (2026-11-27); it has not been driven. `roverd` and `rovercam` run there as services.
+console receives the rover's state (2026-11-27); it has not been driven. With the drive motors unpowered,
+the command path passes `make hw-check` (2026-11-28). `roverd` and `rovercam` run there as services, installed by
+`make deploy`.
 
 ## Layout
 
@@ -40,13 +42,36 @@ console receives the rover's state (2026-11-27); it has not been driven. `roverd
   GPIO18 (header pin 12), then runs `avrdude` over `/dev/serial0`. The Pi needs
   `avrdude` and `pinctrl`.
 
-The firmware builds on the Pi: the Makefile rsyncs `pi/` and `firmware/` to
-`~/rover-cam` there, and `make upload` compiles the sketch with `arduino-cli` and flashes it (run
-`make firmware-deps` once first). Arduino's avr-gcc runs on the Pi's arm64 but has no Apple Silicon
-build. Those targets use `PI_HOST`, default `rover.local`. `roverd` builds on the Pi by hand,
-with no make target yet: it needs `cmake`, `libprotobuf-dev`, `protobuf-compiler` and the zenoh-c and
-zenoh-cpp Debian packages of the version robo-control uses, and robo-control's `core/` and `schemas/`
-at `-DROBO_CONTROL_DIR`. It owns the serial port: stop it before flashing.
+## On the Pi
+
+Everything for the rover builds on the Pi, over ssh to `PI_HOST` (default `rover.local`): the
+Makefile copies `pi/` and `firmware/` to `~/rover-cam` there by checksum, so only changed files
+land and only what they feed rebuilds.
+
+- `make deploy` also copies robo-control's `core/` and `schemas/` (from `ROBO_CONTROL_DIR`) to
+  `~/robo-control`, then runs `pi/deploy.sh` on the Pi: it builds `rover`, `rovercam` and `roverd`
+  (CMake, Release) where their sources changed, installs each program to `/usr/local/bin` and each
+  unit (`pi/roverd.service`, `pi/rovercam.service`) to `/etc/systemd/system` only where it differs
+  from the installed one, and restarts a service only when its program, unit or record changed. A
+  failed build stops it with the installed programs untouched; with nothing changed it takes a few
+  seconds and restarts nothing. The record, `/usr/local/share/rover/deployed.json`, holds both
+  repos' commits and whether the deployed trees (this repo's `pi/`, `firmware/` and `robo/`;
+  robo-control's `core/` and `schemas/`) differed from them. `roverd.service` passes the rover commit
+  (from `deployed.env`) as `--description-commit`, which `Info.description_commit` carries, and the
+  description's home as `--home pan=0`. The Pi needs `cmake`, `g++`, `libprotobuf-dev`,
+  `protobuf-compiler` and the zenoh-c and zenoh-cpp Debian packages of the version robo-control uses
+  (1.10.2); `deploy` names any that are missing.
+- `make deployed` prints what the Pi runs: the record, `roverd --version` and its arguments, the
+  firmware's last hello and the services' states.
+- `make upload` compiles the sketch with `arduino-cli` and flashes the aLaMode, with `roverd`, which
+  owns the serial port, stopped meanwhile (run `make firmware-deps` once first). Arduino's avr-gcc
+  runs on the Pi's arm64 but has no Apple Silicon build.
+- `make hw-check` (`tools/hw_check.py`) checks the command path on the real rover from this machine,
+  over the bus, as an agent: Info, take, pan moves and their rate, a range scan across the pan, the
+  low-pack refusal of a drive command, HOME, a Stop from another identity, lease expiry, State timing
+  and the clock offset, the mast camera; `ARGS=--restart` also restarts `roverd`. The drive motors
+  must be unpowered: it sends nothing unless the firmware reports `LOW_PACK`, aborts if that clears,
+  and ends with HOME and a release.
 
 ## Pre-push hook
 
