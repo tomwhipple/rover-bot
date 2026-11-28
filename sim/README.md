@@ -33,4 +33,4 @@ The tests use the firmware library if it is built, else a test double in `tests/
 
 Wheel radius 0.033 m, track 0.18 m, body radius 0.10 m, mass 1.2 kg, motor 3.5 rad/s per volt and
 0.025 N m per volt stall, mast camera 0.08 m ahead of the centre at 0.28 m, range sensor on the pan head, 0.135 m ahead
-of the centre at 0.043 m, room 5 m x 5 m.
+of the centre at 0.28 m, room 5 m x 5 m.
