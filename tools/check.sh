@@ -9,6 +9,9 @@
 #
 # POSIX sh, and no GNU-only options: it runs on macOS (bash 3.2, BSD tools) too.
 set -u
+# Tests must not write bytecode: sim/tests/__pycache__ is tracked, and a run would dirty it.
+PYTHONDONTWRITEBYTECODE=1
+export PYTHONDONTWRITEBYTECODE
 
 cd "$(dirname "$0")/.."
 for v in $(env | sed -n 's/^\(GIT_[A-Za-z0-9_]*\)=.*/\1/p'); do unset "$v"; done
