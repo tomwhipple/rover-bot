@@ -12,3 +12,7 @@ fp-info-cache
 build/
 __pycache__/
 pi/rovercam
+
+# Python
+__pycache__/
+*.pyc

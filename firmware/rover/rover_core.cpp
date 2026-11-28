@@ -9,7 +9,7 @@ struct LineBuf {
   uint8_t n = 1;  // b[0] is reserved for '$'
 
   void c(char ch) {
-    if (n + 5 >= sizeof(b)) return;
+    if (n + 5u >= sizeof(b)) return;
     b[n++] = ch;
   }
   void str(const char *s) { while (*s) c(*s++); }
