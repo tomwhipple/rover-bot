@@ -5,12 +5,13 @@
 .DEFAULT_GOAL := help
 
 ##@ Variables
-## PI_HOST=host   the Pi's ssh name (default rover.local): deploy, firmware-deps, firmware, upload
+## PI_HOST=host   the Pi's ssh name (default rover.local): deploy, deployed, firmware-deps, firmware, upload
 ## PI_DIR=dir     the checkout's directory on the Pi, under ~ (default rover-cam)
+## PI_RC_DIR=dir  where deploy puts robo-control's core/ and schemas/ on the Pi, under ~ (default robo-control)
 ## SIM=0|1        console: 1 (default) opens the console on the local simulation, 0 on the real rover
-## ARGS="..."     more arguments for the program behind the target (console)
-## ROBO_CONTROL_DIR=dir  the robo-control checkout (default ../robo-control): roverd, console, tests
-## PY=path        the Python interpreter (default: robo-control's .venv): sim-test, roverd-test, mypy
+## ARGS="..."     more arguments for the program behind the target (console, hw-check)
+## ROBO_CONTROL_DIR=dir  the robo-control checkout (default ../robo-control): roverd, console, tests, deploy, hw-check
+## PY=path        the Python interpreter (default: robo-control's .venv): sim-test, roverd-test, mypy, hw-check
 ## PYTEST_WORKERS=n  pytest-xdist workers for sim-test and roverd-test (default 8, a capped count; 0 = one process)
 ## PREPUSH_SERIAL=1  prepush: run the gates one at a time, not side by side
 ## ROVERD_SANITIZE=1  build roverd with ASan/UBSan into build/roverd-asan (roverd, roverd-test)
@@ -18,6 +19,7 @@
 # Everything for the rover is built on the Pi, in ~/$(PI_DIR) there.
 PI_HOST   ?= rover.local
 PI_DIR    ?= rover-cam
+PI_RC_DIR ?= robo-control
 PI_PREFIX ?= /usr/local
 PI_SERIAL ?= /dev/serial0
 PI_CONF   ?= /etc/rover.conf

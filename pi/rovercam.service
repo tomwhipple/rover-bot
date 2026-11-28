@@ -1,4 +1,4 @@
-# rovercam on the rover's Pi: installed as /etc/systemd/system/rovercam.service.
+# rovercam on the rover's Pi: installed as /etc/systemd/system/rovercam.service by `make deploy`.
 [Unit]
 Description=rovercam, the rover's camera stream
 After=network-online.target
