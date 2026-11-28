@@ -10,8 +10,9 @@ of the roverd service. It ends with HOME and a release, and leaves no publisher 
 
 Safety: it refuses to start unless the rover reports LOW_PACK with the pack under 10.5 V, and aborts
 (motion zero, Stop, release) the moment a State arrives without LOW_PACK. The only motion it sends is
-the low-pack refusal step's, under that guard. The pan stays within +-60 degrees. A human holding
-control makes it stop before it sends anything.
+the low-pack refusal step's, under that guard. The pan stays within --pan-min..--pan-max (default
+-15..+60, the head's free travel), never beyond +-60 degrees. A human holding control makes it stop
+before it sends anything.
 
 Needs robo-control on PYTHONPATH (its root and build/gen/py); the Makefile sets it.
 """
@@ -256,9 +257,11 @@ class Check:
         r.status = "PASS" if c.holder_id == self.ctl.id and c.holder_role == pb.ROLE_AGENT else "FAIL"
 
     def check_pan(self) -> None:
-        r = self.result(3, "pan +30, -30, 0")
+        """The pan's reported position is the firmware's, not a measurement: the servo has no feedback."""
+        lo = self.args.pan_min
+        r = self.result(3, f"pan +30, {lo:+g}, 0")
         ok = True
-        for target in (30.0, -30.0, 0.0):
+        for target in (30.0, lo, 0.0):
             t_src, t_wall = self.move_pan(target)
             s = self.fresh_state()
             a = actuator(s, "pan")
@@ -266,18 +269,21 @@ class Check:
                    f"moved in {t_src:.3f} s by State times, {t_wall:.3f} s from command to arrival here")
             r.data[f"{target:+g}"] = {"src_s": t_src, "wall_s": t_wall}
             ok = ok and abs(a.applied - target) < 0.5 and abs(a.commanded - target) < 0.5
-        move = r.data["-30"]["src_s"]
-        r.note(f"the 60 degree move (+30 -> -30): {move:.3f} s, {60 / move:.1f} deg/s "
-               f"(firmware: {PAN_RATE} deg/s, {60 / PAN_RATE:.3f} s; State every 50 ms)")
-        ok = ok and abs(60 / move - PAN_RATE) < 0.15 * PAN_RATE
+        span = 30.0 - lo
+        move = r.data[f"{lo:+g}"]["src_s"]
+        r.note(f"the {span:g} degree move (+30 -> {lo:+g}): {move:.3f} s, {span / move:.1f} deg/s "
+               f"(firmware: {PAN_RATE} deg/s, {span / PAN_RATE:.3f} s; State every 50 ms)")
+        ok = ok and abs(span / move - PAN_RATE) < 0.15 * PAN_RATE
         r.status = "PASS" if ok else "FAIL"
 
     def check_scan(self) -> None:
-        r = self.result(4, "range across the pan, -60..+60 in 15 degree steps")
+        lo, hi = self.args.pan_min, self.args.pan_max
+        r = self.result(4, f"range across the pan, {lo:+g}..{hi:+g} in 15 degree steps")
         rows: list[dict[str, Any]] = []
-        for target in (-15.0, -30.0, -45.0):  # out to the first step, 15 degrees at a time
-            self.move_pan(target)
-        for target in (float(d) for d in range(-60, 61, 15)):
+        steps = [lo + 15.0 * i for i in range(int((hi - lo) // 15) + 1)]
+        for target in sorted({min(0.0, lo + 15.0 * k) for k in range(int(-lo // 15) + 1)}, reverse=True):
+            self.move_pan(target)  # out to the first step, 15 degrees at a time
+        for target in steps:
             self.move_pan(target)
             time.sleep(0.15)
             t0 = time.time_ns()
@@ -294,9 +300,10 @@ class Check:
             mx = "-" if row["max_cm"] is None else f"{row['max_cm']:.0f}"
             r.note(f"{row['pan']:+6.0f}   {med:>8}  {mn:>4} {mx:>4}  {row['valid']}/{row['n']}")
         r.data["scan"] = rows
-        for target in (45.0, 30.0, 15.0, 0.0):
-            self.move_pan(target)
-        r.status = "PASS" if len(rows) == 9 and all(row["n"] > 0 for row in rows) else "FAIL"
+        for target in sorted({max(0.0, steps[-1] - 15.0 * k) for k in range(int(steps[-1] // 15) + 1)},
+                             reverse=True):
+            self.move_pan(target)  # back to 0, 15 degrees at a time
+        r.status = "PASS" if len(rows) == len(steps) and all(row["n"] > 0 for row in rows) else "FAIL"
 
     def check_refusal(self) -> None:
         """Forward 0.3, then reverse 0.3, 2 s each. Forward inside the stand-off is refused as blocked
@@ -369,6 +376,7 @@ class Check:
     def check_stop(self) -> None:
         r = self.result(7, "Stop from another (non-holder) identity")
         other = Controller(self.bus, self.desc, role=pb.ROLE_AGENT, label="hw check stop (agent)", subscribe=False)
+        time.sleep(0.3)  # after HOME: let the relayed Intents (none while homing) show in State again
         seq0 = self.fresh_state().last_intent_seq
         sent0 = self.ctl.intents_sent
         t0 = time.time_ns()
@@ -381,8 +389,11 @@ class Check:
         time.sleep(1.5)
         seqs = {x.msg.last_intent_seq for x in self.rec.states_since(ev.t_ns + 200_000_000)}
         sent = self.ctl.intents_sent - sent0
-        r.note(f"over 1.5 s this controller sent {sent} more Intents; State.last_intent_seq: before the Stop "
-               f"{seq0}, after it {sorted(seqs)}")
+        at_ev = [x for x in self.rec.states_since(t0) if x.t_ns <= ev.t_ns]
+        r.note(f"STOP event {(ev.t_ns - t0) / 1e6:.0f} ms after the Stop was sent")
+        r.note(f"over 1.5 s this controller sent {sent} more Intents; State.last_intent_seq: {seq0} when the "
+               f"Stop was sent, {at_ev[-1].msg.last_intent_seq if at_ev else '-'} at the STOP event, from 200 ms "
+               f"after it {sorted(seqs)}")
         r.data = {"seq_before": seq0, "seqs_after": sorted(seqs), "intents_sent_after": sent}
         r.status = "PASS" if c.stopped and len(seqs) == 1 and sent > 20 else "FAIL"
 
@@ -603,11 +614,18 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--restart", action="store_true", help="also restart the roverd service (ssh PI_HOST, sudo)")
     ap.add_argument("--pi-host", default=os.environ.get("PI_HOST", "rover.local"))
+    # The rover's head is stopped about 16 degrees right of centre by the Pi's power cable (camera
+    # frames, 2026-11-28); the firmware's edge is -75, so the check keeps right of that itself.
+    ap.add_argument("--pan-min", type=float, default=-15.0,
+                    help="the rightmost pan the check commands (default -15: the head's free travel)")
+    ap.add_argument("--pan-max", type=float, default=60.0, help="the leftmost pan the check commands")
     ap.add_argument("--dwell", type=float, default=0.8, help="seconds of range samples per scan step")
     ap.add_argument("--camera-s", type=float, default=3.0, help="seconds of camera stream to read")
     ap.add_argument("--frame", default=str(REPO / "build" / "hw-check" / "mast.jpg"), help="where to save a frame")
     ap.add_argument("--json", default=str(REPO / "build" / "hw-check" / "result.json"))
     args = ap.parse_args()
+    if not -PAN_LIMIT <= args.pan_min <= -15 or not 45 <= args.pan_max <= PAN_LIMIT:
+        ap.error(f"--pan-min must be in -{PAN_LIMIT:g}..-15 and --pan-max in 45..{PAN_LIMIT:g}")
     if busmod.namespace() != "robo":
         print(f"hw-check: ROBO_NS={busmod.namespace()}: the real rover is on the default namespace, robo")
         return 2

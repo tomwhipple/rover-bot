@@ -69,7 +69,9 @@ land and only what they feed rebuilds.
 - `make hw-check` (`tools/hw_check.py`) checks the command path on the real rover from this machine,
   over the bus, as an agent: Info, take, pan moves and their rate, a range scan across the pan, the
   low-pack refusal of a drive command, HOME, a Stop from another identity, lease expiry, State timing
-  and the clock offset, the mast camera; `ARGS=--restart` also restarts `roverd`. The drive motors
+  and the clock offset, the mast camera; `ARGS=--restart` also restarts `roverd`. It pans no further
+  right than `--pan-min` (default -15): the Pi's power cable stops the head about 16 degrees right of
+  centre, inside the firmware's -75 edge. The drive motors
   must be unpowered: it sends nothing unless the firmware reports `LOW_PACK`, aborts if that clears,
   and ends with HOME and a release.
 
