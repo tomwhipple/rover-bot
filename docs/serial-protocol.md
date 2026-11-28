@@ -72,7 +72,7 @@ Enforced in the firmware; nothing upstream can override them.
 
 ## Host library
 
-The same source builds as a host library (`make -f mk/firmware.mk rover-core-lib` gives
+The same source builds as a host library (`make rover-core-lib` gives
 `build/librover_core.dylib` or `.so`) with this C ABI:
 
 ```c
@@ -89,5 +89,5 @@ the maximum since the last `T`. A new instance has the hello line queued. A comm
 its 300 ms window starts, at the next `rc_host_tick`. The transmit queue holds 160 bytes; a line that
 does not fit is dropped whole.
 
-`make -f mk/firmware.mk firmware-host-test` builds and runs `firmware/host/test_rover_core.cpp` under
+`make host` builds and runs `firmware/host/test_rover_core.cpp` under
 ASan and UBSan.

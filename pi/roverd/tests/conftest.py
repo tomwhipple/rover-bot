@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import os
+import random
 import signal
 import socket
 import subprocess
@@ -43,6 +44,21 @@ TYPES = {
 
 
 def free_port() -> int:
+    """A loopback TCP port nobody listens on right now. Under pytest-xdist each worker draws from its
+    own slice of 20000-32000 (below the ephemeral range), so two workers cannot pick the same port
+    between the probe and the bind."""
+    w = os.environ.get("PYTEST_XDIST_WORKER", "")
+    if w.startswith("gw") and w[2:].isdigit():
+        width = 12000 // 16
+        lo = 20000 + (int(w[2:]) % 16) * width
+        for _ in range(200):
+            port = random.randrange(lo, lo + width)
+            with socket.socket() as s:
+                try:
+                    s.bind(("127.0.0.1", port))
+                except OSError:
+                    continue
+            return port
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]

@@ -158,7 +158,7 @@ def main():
                 libpath = p
                 break
     if not libpath or not pathlib.Path(libpath).exists():
-        sys.exit("firmware library not found; run: make -f mk/firmware.mk rover-core-lib")
+        sys.exit("firmware library not found; run: make rover-core-lib")
     core = load_core(libpath)
     rc = core.rc_host_new()
 

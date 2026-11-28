@@ -189,7 +189,9 @@ def test_commanded_vs_applied(rig):
     for _ in range(6):
         bus.intent("console", linear=-0.5, angular=0.0)
         time.sleep(0.05)
-    s = bus.wait("state", lambda m: m.mode == "MOVING", since=t)
+    # A state is a snapshot of one T line: the first MOVING one can still carry the previous
+    # command's wheels, so wait for the one that shows the reverse applied.
+    s = bus.wait("state", lambda m: m.mode == "MOVING" and actuator(m, "left_wheel").applied == -75, since=t)
     assert actuator(s, "left_wheel").applied == -75 and actuator(s, "left_wheel").active
     assert actuator(s, "left_wheel").commanded == -75
 

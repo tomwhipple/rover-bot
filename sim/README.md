@@ -2,7 +2,7 @@
 
 `rover_twin.py` stands in for the rover's microcontroller and the physical rover. It loads the
 firmware core as a host library (`build/librover_core.dylib`, built by
-`make -f mk/firmware.mk rover-core-lib`) through its C ABI (`rc_host_*`, docs/interfaces.md section 4)
+`make rover-core-lib`) through its C ABI (`rc_host_*`, docs/interfaces.md section 4)
 and runs it once per 1 ms of simulated time, in real time. The protocol and limits are the firmware's;
 the twin only moves bytes and applies the outputs.
 
@@ -20,7 +20,7 @@ the twin only moves bytes and applies the outputs.
 
 ## Run
 
-    make twin                      # interactive; prints READY pty=... http=...
+    make sim                       # interactive; prints READY pty=... http=...
     make sim-test                  # tests (use ROVER_CORE_LIB=path to pick another library)
 
     rover_twin.py [--pty-link PATH] [--http-port N] [--pack-mv 11800] [--no-render]

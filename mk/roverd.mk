@@ -21,7 +21,7 @@ _roverd_deps  := $(wildcard pi/roverd/CMakeLists.txt pi/roverd/src/*.cpp pi/rove
                    $(_roverd_rc)/core/CMakeLists.txt $(_roverd_rc)/core/src/*.cpp \
                    $(_roverd_rc)/core/include/robo/*.hpp) $(_roverd_proto)
 
-.PHONY: roverd roverd-test _roverd_force
+.PHONY: roverd _roverd_units _roverd_force
 
 # Rewritten only when the CMake flags change, so changing them reconfigures.
 $(ROVERD_BUILD)/.vars: _roverd_force
@@ -33,16 +33,15 @@ $(ROVERD_BIN): $(_roverd_deps) $(ROVERD_BUILD)/.vars
 	cmake --build $(ROVERD_BUILD) --parallel --target roverd
 	@touch $@
 
+# roverd's unit-test binary, built once and alone (generated), so that roverd-test and tidy, which
+# run side by side in the pre-push hook, find it up to date.
+_roverd_units: $(ROVERD_BIN)
+	cmake --build $(ROVERD_BUILD) --parallel --target roverd_units
+
 roverd: $(ROVERD_BIN) ## build pi/roverd (the rover's bus adapter) into build/roverd
 
 $(_roverd_py)/robo_v1_pb2.py: $(_roverd_proto)
 	@mkdir -p $(@D)
 	protoc -I$(_roverd_rc)/schemas --python_out=$(@D) $<
-
-roverd-test: $(ROVERD_BIN) $(_roverd_py)/robo_v1_pb2.py ## build roverd and run its unit and bus tests
-	cmake --build $(ROVERD_BUILD) --parallel --target roverd_units
-	$(ROVERD_BUILD)/roverd_units
-	ROVERD_BIN=$(abspath $(ROVERD_BIN)) PYTHONPATH=$(abspath $(_roverd_py)) PYTHONDONTWRITEBYTECODE=1 \
-	  $(PY) -m pytest -q -p no:cacheprovider pi/roverd/tests
 
 .DEFAULT_GOAL := $(_roverd_prev_goal)

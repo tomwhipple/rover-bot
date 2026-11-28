@@ -51,14 +51,17 @@ at `-DROBO_CONTROL_DIR`. It owns the serial port: stop it before flashing.
 ## Pre-push hook
 
 `make hooks` once per clone turns on `.githooks/pre-push` (`git config core.hooksPath .githooks`; it
-holds in every worktree). Before a push goes out it runs `make check` (`tools/check.sh`), which runs
-every step, times each, and fails the push if any failed:
+holds in every worktree). Before a push goes out it runs `make prepush` (`tools/prepush.sh`), which
+builds step 1 one after another, then runs the gates of steps 2 and 3 side by side, each with its
+log in `build/prepush-logs/<stamp>-<pid>/` (`PREPUSH_SERIAL=1`: one at a time), and fails the push if
+any failed:
 
 1. Compile: `pi/rover` and `pi/rovercam` (`-Wall -Wextra -Werror`), the firmware core host library and
    host test (`-Wall -Wextra -Werror`), `roverd` (`-Wall -Wextra -Wshadow -Wconversion -Werror`). The
    Arduino sketch too, if `arduino-cli` is on PATH; otherwise it prints `skipped: arduino-cli not
    installed` (the sketch builds on the Pi).
-2. Tests: `make test` and `make robo-test`.
+2. Tests: `make test` (the firmware core's host test, the twin, `roverd`, the Pi programs); the
+   Python suites run in `PYTEST_WORKERS` pytest-xdist workers (default 8, 0 = one process).
 3. Static analysis: `cppcheck` (warning and portability findings, `firmware/` and `pi/`), `clang-tidy`
    (`bugprone-*` and narrowing conversions, set in `.clang-tidy`), and `mypy` over `sim/`,
    `pi/roverd/tests/` and `firmware/pan_cal/` (settings in `mypy.ini`; it runs from the robo-control
@@ -66,10 +69,10 @@ every step, times each, and fails the push if any failed:
    (`brew install cppcheck llvm`; with Homebrew's llvm the hook finds `clang-tidy` even though it is
    not on PATH).
 
-`ROBO_CONTROL_DIR` and `PY` are as for `make robo-test`. `ROVER_HOOK_SKIP=cppcheck,clang-tidy,mypy,arduino
+`ROBO_CONTROL_DIR` and `PY` are as for `make test`. `ROVER_HOOK_SKIP=cppcheck,clang-tidy,mypy,arduino
 git push` skips those steps for one push and says so loudly. `ROVER_CHECK_WRAP='cmd args'` runs the whole
 check under a wrapper command (a lock, a sandbox: the bus tests open zenoh sessions on the network).
-`git push --no-verify` skips the hook. `make cppcheck`, `make tidy` and `make mypy` run the analysis alone.
+`git push --no-verify` skips the hook. `make lint` runs all the analysis; `make cppcheck`, `make tidy` and `make mypy` run one each.
 
 ## Pins (aLaMode)
 
@@ -86,14 +89,16 @@ check under a wrapper command (a lock, a sandbox: the bus tests open zenoh sessi
 
 ## Use
 
-Drive the simulated rover from the console, in the robo-control repo:
+Drive the simulated rover from the console (`make console` calls the robo-control repo):
 
 ```
-make run-console ROBOT=rover SIM=1
+make console            # the rover's console on its local simulation
+make console SIM=0     # the real rover
 ```
 
-Here: `make robo-control` builds `roverd` and the twin's firmware library, `make robo-test` runs the
-host tests (firmware core, twin, `roverd`), `make twin` runs the twin alone.
+Here: `make robo-control` builds `roverd` and the twin's firmware library, `make test` runs the
+tests on this machine (firmware core, twin, `roverd`, the Pi programs), `make sim` runs the twin
+alone. `make` lists every target.
 
 ## Limits (in firmware)
 

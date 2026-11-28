@@ -1,5 +1,4 @@
-# Rover firmware core: host library and host test. Standalone:
-#   make -f mk/firmware.mk firmware-host-test rover-core-lib
+# Rover firmware core: host library and host test (`make host`, in mk/test.mk). Still the Build section.
 CORE_BUILD ?= build
 FW_CXX   ?= c++
 FW_STD   := -std=c++11 -Wall -Wextra -Werror
@@ -15,9 +14,9 @@ FW_TEST := $(CORE_BUILD)/test_rover_core
 FW_SRCS := firmware/rover/rover_core.cpp
 FW_HDRS := firmware/rover/rover_core.h
 
-.PHONY: rover-core-lib firmware-host-build firmware-host-test
+.PHONY: rover-core-lib firmware-host-build
 
-rover-core-lib: $(FW_LIB)
+rover-core-lib: $(FW_LIB) ## the firmware core as a host library, build/librover_core
 
 $(FW_LIB): $(FW_SRCS) $(FW_HDRS)
 	@mkdir -p $(CORE_BUILD)
@@ -28,10 +27,8 @@ $(FW_TEST): firmware/host/test_rover_core.cpp $(FW_SRCS) $(FW_HDRS)
 	$(FW_CXX) $(FW_STD) -O1 -g -fsanitize=address,undefined -fno-sanitize-recover=undefined \
 	  -o $@ firmware/host/test_rover_core.cpp $(FW_SRCS)
 
-firmware-host-build: $(FW_TEST) ## build the host test without running it
+firmware-host-build: $(FW_TEST)
 
-$(CORE_BUILD)/.firmware-host-test.ok: $(FW_TEST)
+$(CORE_BUILD)/.host.ok: $(FW_TEST)
 	$(FW_TEST)
 	@touch $@
-
-firmware-host-test: $(CORE_BUILD)/.firmware-host-test.ok
